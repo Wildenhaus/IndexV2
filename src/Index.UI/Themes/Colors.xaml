@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--#region Colors-->
+
+    <Color x:Key="Colors.Background.Deeper"  R="016" G="016" B="016" A="255" />
+    <Color x:Key="Colors.Background.Deep"    R="024" G="024" B="024" A="255" />
+    <Color x:Key="Colors.Background.Static"  R="032" G="032" B="032" A="255" />
+    <Color x:Key="Colors.Background.Hover"   R="048" G="048" B="048" A="255" />
+    <Color x:Key="Colors.Background.Pressed" R="064" G="064" B="064" A="255" />
+
+    <Color x:Key="Colors.Foreground.Deeper"  R="075" G="075" B="075" A="255" />
+    <Color x:Key="Colors.Foreground.Deep"    R="100" G="100" B="100" A="255" />
+    <Color x:Key="Colors.Foreground.Static"  R="200" G="200" B="200" A="255" />
+    <Color x:Key="Colors.Foreground.Hover"   R="225" G="225" B="225" A="255" />
+    <Color x:Key="Colors.Foreground.Pressed" R="255" G="255" B="255" A="255" />
+
+    <!--#endregion-->
+
+    <!--#region Brushes-->
+
+    <SolidColorBrush x:Key="Brushes.Background.Deeper"  Color="{DynamicResource Colors.Background.Deeper}" />
+    <SolidColorBrush x:Key="Brushes.Background.Deep"    Color="{DynamicResource Colors.Background.Deep}" />
+    <SolidColorBrush x:Key="Brushes.Background.Static"  Color="{DynamicResource Colors.Background.Static}" />
+    <SolidColorBrush x:Key="Brushes.Background.Hover"   Color="{DynamicResource Colors.Background.Hover}" />
+    <SolidColorBrush x:Key="Brushes.Background.Pressed" Color="{DynamicResource Colors.Background.Pressed}" />
+
+    <SolidColorBrush x:Key="Brushes.Foreground.Deeper"  Color="{DynamicResource Colors.Foreground.Deeper}" />
+    <SolidColorBrush x:Key="Brushes.Foreground.Deep"    Color="{DynamicResource Colors.Foreground.Deep}" />
+    <SolidColorBrush x:Key="Brushes.Foreground.Static"  Color="{DynamicResource Colors.Foreground.Static}" />
+    <SolidColorBrush x:Key="Brushes.Foreground.Hover"   Color="{DynamicResource Colors.Foreground.Hover}" />
+    <SolidColorBrush x:Key="Brushes.Foreground.Pressed" Color="{DynamicResource Colors.Foreground.Pressed}" />
+
+    <!--#endregion-->
+
+</ResourceDictionary>

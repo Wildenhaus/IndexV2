@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/ListView.xaml" />
+        
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxButton.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxGridView.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxWindow.xaml" />
+
+    </ResourceDictionary.MergedDictionaries>
+    
+</ResourceDictionary>

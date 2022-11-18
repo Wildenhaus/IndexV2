@@ -1,0 +1,140 @@
+﻿<windows:IxDialogWindow x:Class="Index.App.Views.LauncherView"
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                        xmlns:controls="clr-namespace:Index.UI.Controls;assembly=Index.UI"
+                        xmlns:prism="http://prismlibrary.com/"
+                        xmlns:ui="clr-namespace:Index.UI;assembly=Index.UI"
+                        xmlns:windows="clr-namespace:Index.UI.Windows;assembly=Index.UI"
+                        Title="Index Launcher"
+                        Width="800"
+                        Height="450"
+                        prism:ViewModelLocator.AutoWireViewModel="True"
+                        mc:Ignorable="d">
+    <windows:IxWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Index.UI;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </windows:IxWindow.Resources>
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+
+        <!--#region Configuration List-->
+        <ListView x:Name="gameConfigList"
+                  Panel.ZIndex="99"
+                  DockPanel.Dock="Top"
+                  ItemsSource="{Binding Path=Items}"
+                  SelectedItem="{Binding Path=SelectedItem}">
+            <ListView.View>
+                <controls:IxGridView AutoSizeColumnWidth="True">
+                    <GridView.Columns>
+
+                        <!--#region Column: Game Icon-->
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border Width="40"
+                                            Height="40"
+                                            Margin="4"
+                                            VerticalAlignment="Center"
+                                            CornerRadius="3"
+                                            BorderThickness="2">
+                                        <Border.BorderBrush>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Offset="0" Color="#909090" />
+                                                <GradientStop Offset="1" Color="#303030" />
+                                            </LinearGradientBrush>
+                                        </Border.BorderBrush>
+                                        <Border.Background>
+                                            <ImageBrush Stretch="Uniform"
+                                                        ImageSource="{Binding Path=GameIcon}" />
+                                        </Border.Background>
+                                        <Border.Effect>
+                                            <DropShadowEffect Opacity="1"
+                                                              BlurRadius="15"
+                                                              ShadowDepth="1"
+                                                              Color="#000" />
+                                        </Border.Effect>
+                                    </Border>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <!--#endregion-->
+
+                        <!--#region Column: Game Name-->
+                        <GridViewColumn Header="Game">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid Height="48"
+                                          VerticalAlignment="Center">
+                                        <TextBlock VerticalAlignment="Center"
+                                                   FontSize="12"
+                                                   Text="{Binding Path=GameName}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <!--#endregion-->
+
+                        <!--#region Column: Game Path-->
+                        <GridViewColumn Header="Path">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid Height="48"
+                                          VerticalAlignment="Center">
+                                        <TextBlock VerticalAlignment="Center"
+                                                   FontSize="12"
+                                                   Text="{Binding Path=GamePath}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <!--#endregion-->
+
+                    </GridView.Columns>
+                </controls:IxGridView>
+            </ListView.View>
+            <ListView.Effect>
+                <DropShadowEffect BlurRadius="20"
+                                  Opacity="0.6"
+                                  Direction="270" />
+            </ListView.Effect>
+        </ListView>
+        <!--#endregion-->
+
+        <DockPanel Grid.Row="1"
+                   Height="30px"
+                   HorizontalAlignment="Stretch">
+            <StackPanel HorizontalAlignment="Left"
+                        DockPanel.Dock="Left"
+                        Orientation="Horizontal">
+                <controls:IxButton Icon="{x:Static ui:SegoeIcon.Add}"
+                                   Command="{Binding AddGamePathCommand}" />
+                <controls:IxButton Icon="{x:Static ui:SegoeIcon.Cancel}"
+                                   Command="{Binding RemoveGamePathCommand}"
+                                   IsEnabled="{Binding ElementName=gameConfigList, Path=SelectedItems.Count}" />
+                <controls:IxButton Content="Manage Plugins"
+                                   Icon="{x:Static ui:SegoeIcon.Setting}" />
+            </StackPanel>
+
+            <StackPanel HorizontalAlignment="Right"
+                        DockPanel.Dock="Right"
+                        Orientation="Horizontal">
+                <controls:IxButton Content="Launch"
+                                   Icon="{x:Static ui:SegoeIcon.Play}"
+                                   Command="{Binding LaunchCommand}"
+                                   CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                                   IsEnabled="{Binding ElementName=gameConfigList, Path=SelectedItems.Count}" />
+            </StackPanel>
+        </DockPanel>
+
+    </Grid>
+</windows:IxDialogWindow>
