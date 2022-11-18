@@ -1,15 +1,12 @@
-﻿using System.Windows.Media;
-
-namespace Index.App.Models
+﻿namespace Index.Domain.Models
 {
 
-  public class LauncherItem
+  public interface IEditorEnvironment
   {
 
     public string GameId { get; set; }
     public string GameName { get; set; }
     public string GamePath { get; set; }
-    public ImageSource? GameIcon { get; set; }
 
   }
 

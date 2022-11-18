@@ -9,6 +9,7 @@
                   Title="EditorView"
                   Width="800"
                   Height="450"
+                  WindowStartupLocation="CenterScreen"
                   mc:Ignorable="d">
     <ContentControl prism:RegionManager.RegionName="EditorContent" />
 </windows:IxWindow>

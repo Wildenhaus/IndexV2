@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Index.Domain.Entities
 {
@@ -10,7 +7,9 @@ namespace Index.Domain.Entities
   public class EntityBase
   {
 
-
+    [Key]
+    [DatabaseGenerated( DatabaseGeneratedOption.Identity )]
+    public long Id { get; set; }
 
   }
 

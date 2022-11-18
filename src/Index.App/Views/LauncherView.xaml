@@ -10,6 +10,7 @@
                         Title="Index Launcher"
                         Width="800"
                         Height="450"
+                        WindowStartupLocation="CenterScreen"
                         prism:ViewModelLocator.AutoWireViewModel="True"
                         mc:Ignorable="d">
     <windows:IxWindow.Resources>
@@ -117,9 +118,9 @@
                         DockPanel.Dock="Left"
                         Orientation="Horizontal">
                 <controls:IxButton Icon="{x:Static ui:SegoeIcon.Add}"
-                                   Command="{Binding AddGamePathCommand}" />
+                                   Command="{Binding ScanPathCommand}" />
                 <controls:IxButton Icon="{x:Static ui:SegoeIcon.Cancel}"
-                                   Command="{Binding RemoveGamePathCommand}"
+                                   Command="{Binding RemoveSelectedPathCommand}"
                                    IsEnabled="{Binding ElementName=gameConfigList, Path=SelectedItems.Count}" />
                 <controls:IxButton Content="Manage Plugins"
                                    Icon="{x:Static ui:SegoeIcon.Setting}" />

@@ -1,9 +1,9 @@
-﻿using Prism.Mvvm;
+﻿using Index.Domain.ViewModels;
 
 namespace Index.App.ViewModels
 {
 
-  public class EditorViewModel : BindableBase
+  public class EditorViewModel : ViewModelBase
   {
   }
 

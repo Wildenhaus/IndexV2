@@ -12,7 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Index.Domain\Index.Domain.csproj" />
     <ProjectReference Include="..\Index.UI\Index.UI.csproj" />
+    <ProjectReference Include="..\Modules\Index.Modules.Database\Index.Modules.Database.csproj" />
+    <ProjectReference Include="..\Modules\Index.Modules.FileDialogs\Index.Modules.FileDialogs.csproj" />
   </ItemGroup>
 
   <ItemGroup>
