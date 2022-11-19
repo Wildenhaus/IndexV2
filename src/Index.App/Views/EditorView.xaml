@@ -6,10 +6,21 @@
                   xmlns:local="clr-namespace:Index.App.Views"
                   xmlns:windows="clr-namespace:Index.UI.Windows;assembly=Index.UI"
                   xmlns:prism="http://prismlibrary.com/"
-                  Title="EditorView"
-                  Width="800"
-                  Height="450"
+                  Width="1280"
+                  Height="720"
+                  Title="{Binding WindowTitle}"
                   WindowStartupLocation="CenterScreen"
                   mc:Ignorable="d">
-    <ContentControl prism:RegionManager.RegionName="EditorContent" />
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+
+        <ContentControl Grid.Column="0"
+                        prism:RegionManager.RegionName="FileExplorerContent" />
+
+    </Grid>
+    
 </windows:IxWindow>

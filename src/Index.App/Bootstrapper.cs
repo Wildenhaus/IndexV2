@@ -7,6 +7,7 @@ using Index.Domain.GameProfiles;
 using Index.Domain.Models;
 using Index.Modules.Database;
 using Index.Modules.FileDialogs;
+using Index.Modules.FileExplorer;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Modularity;
@@ -21,7 +22,7 @@ namespace Index.App
 
     protected override DependencyObject CreateShell()
     {
-      return new Window();
+      return Container.Resolve<EditorView>();
     }
 
     protected override void ConfigureModuleCatalog( IModuleCatalog moduleCatalog )
@@ -30,6 +31,7 @@ namespace Index.App
 
       moduleCatalog.AddModule<DatabaseModule>();
       moduleCatalog.AddModule<FileDialogsModule>();
+      moduleCatalog.AddModule<FileExplorerModule>();
     }
 
     protected override void RegisterTypes( IContainerRegistry containerRegistry )
@@ -39,6 +41,11 @@ namespace Index.App
       containerRegistry.RegisterSingleton<IFileSystem, FileSystem>();
     }
 
+    protected override void Initialize()
+    {
+      base.Initialize();
+    }
+
     protected override void OnInitialized()
     {
       if ( !ShowLauncher() )
@@ -46,8 +53,8 @@ namespace Index.App
 
       InitializeEditor();
 
-      //if ( Shell is Window window )
-      //  window.Show();
+      if ( Shell is Window window )
+        window.Show();
     }
 
     #endregion
