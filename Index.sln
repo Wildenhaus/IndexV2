@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Index.Modules.Database", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Index.Modules.FileDialogs", "src\Modules\Index.Modules.FileDialogs\Index.Modules.FileDialogs.csproj", "{493D57FF-1FB1-4DA3-9727-A45C6183F34D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Index.Modules.FileExplorer", "Index.Modules.FileExplorer\Index.Modules.FileExplorer.csproj", "{328232AA-79B3-4F12-BF4A-63BF1969A812}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Index.Modules.FileExplorer", "src\Modules\Index.Modules.FileExplorer\Index.Modules.FileExplorer.csproj", "{328232AA-79B3-4F12-BF4A-63BF1969A812}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
