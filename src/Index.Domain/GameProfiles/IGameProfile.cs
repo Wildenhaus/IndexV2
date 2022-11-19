@@ -12,7 +12,8 @@
     public string Author { get; }
     public Version Version { get; }
 
-    public abstract IGamePathIdentificationRule IdentificationRule { get; }
+    public IFileSystemLoader FileSystemLoader { get; }
+    public IGamePathIdentificationRule IdentificationRule { get; }
 
     #endregion
 

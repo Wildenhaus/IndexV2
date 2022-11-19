@@ -3,8 +3,7 @@
 namespace Index.Domain.GameProfiles
 {
 
-  public abstract class FileSystemLoaderBase<TProfile> : IFileSystemLoader<TProfile>
-    where TProfile : class, IGameProfile
+  public abstract class FileSystemLoaderBase : IFileSystemLoader
   {
 
     #region Data Members

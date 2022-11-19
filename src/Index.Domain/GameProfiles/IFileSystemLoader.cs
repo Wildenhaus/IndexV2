@@ -11,9 +11,4 @@ namespace Index.Domain.GameProfiles
 
   }
 
-  public interface IFileSystemLoader<TProfile> : IFileSystemLoader
-    where TProfile : class, IGameProfile
-  {
-  }
-
 }

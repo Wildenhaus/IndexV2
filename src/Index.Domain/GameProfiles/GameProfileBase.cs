@@ -11,6 +11,7 @@
     public abstract string Author { get; }
     public virtual Version Version => DefaultGetVersion();
 
+    public abstract IFileSystemLoader FileSystemLoader { get; }
     public abstract IGamePathIdentificationRule IdentificationRule { get; }
 
     #endregion

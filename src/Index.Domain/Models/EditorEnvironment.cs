@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Index.Domain.FileSystem;
+using Index.Domain.GameProfiles;
 
 namespace Index.Domain.Models
 {
@@ -12,6 +9,15 @@ namespace Index.Domain.Models
     public string GameId { get; set; }
     public string GameName { get; set; }
     public string GamePath { get; set; }
+    public IGameProfile GameProfile { get; set; }
+
+    public IFileSystem FileSystem { get; }
+
+    public EditorEnvironment( IFileSystem fileSystem )
+    {
+      FileSystem = fileSystem;
+    }
+
   }
 
 }

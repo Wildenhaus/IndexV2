@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Index.App.Models;
+using Index.Domain.FileSystem;
+using Index.Domain.GameProfiles;
 using Index.Domain.Models;
 using Index.Domain.ViewModels;
+using Prism.Ioc;
 
 namespace Index.App.ViewModels
 {
@@ -22,7 +25,9 @@ namespace Index.App.ViewModels
 
     #region Data Members
 
+    private IContainerProvider _container;
     private IEditorEnvironment _environment;
+
     private string _status;
 
     #endregion
@@ -39,8 +44,9 @@ namespace Index.App.ViewModels
 
     #region Constructor
 
-    public EditorLoadingViewModel( IEditorEnvironment editorEnvironment )
+    public EditorLoadingViewModel( IContainerProvider container, IEditorEnvironment editorEnvironment )
     {
+      _container = container;
       _environment = editorEnvironment;
 
       _status = "Initializing...";
@@ -55,8 +61,7 @@ namespace Index.App.ViewModels
     {
       try
       {
-        await RunTask( "Initializing FileSystem", () => Task.Delay( 1000 ) );
-        await RunTask( "Initializing Database", () => Task.Delay( 2500 ) );
+        await RunTask( "Initializing FileSystem", InitializeFileSystem );
 
         Complete?.Invoke( this, EventArgs.Empty );
       }
@@ -64,6 +69,15 @@ namespace Index.App.ViewModels
       {
         Faulted?.Invoke( this, EventArgs.Empty );
       }
+    }
+
+    private async Task InitializeFileSystem()
+    {
+      var loader = _environment.GameProfile.FileSystemLoader;
+      var fileSystem = _environment.FileSystem;
+
+      loader.SetBasePath( _environment.GamePath );
+      await fileSystem.LoadDevices( loader );
     }
 
     private async Task RunTask( string status, Func<Task> taskFactory )

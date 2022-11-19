@@ -61,10 +61,12 @@ namespace Index.App
       if ( !shouldLaunch )
         return false;
 
+      var profileManager = Container.Resolve<IGameProfileManager>();
       var editorEnvironment = Container.Resolve<IEditorEnvironment>();
       editorEnvironment.GameId = launcherView.Parameters.Get<string>( "GameId" );
       editorEnvironment.GameName = launcherView.Parameters.Get<string>( "GameName" );
       editorEnvironment.GamePath = launcherView.Parameters.Get<string>( "GamePath" );
+      editorEnvironment.GameProfile = profileManager.Profiles[ editorEnvironment.GameId ];
 
       return true;
     }

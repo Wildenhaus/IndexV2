@@ -1,4 +1,5 @@
 ﻿using Index.Domain.GameProfiles;
+using Index.Profiles.HaloCEA.FileSystem;
 
 namespace Index.Profiles.HaloCEA
 {
@@ -12,9 +13,8 @@ namespace Index.Profiles.HaloCEA
     public override string GameName => "Halo: Combat Evolved Anniversary";
     public override string Author => "Haus";
 
-    public override IGamePathIdentificationRule IdentificationRule
-      => new CEAGamePathIdentificationRule();
-
+    public override IFileSystemLoader FileSystemLoader => new CEAFileSystemLoader();
+    public override IGamePathIdentificationRule IdentificationRule => new CEAGamePathIdentificationRule();
 
     #endregion
 
