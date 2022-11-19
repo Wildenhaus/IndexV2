@@ -40,6 +40,16 @@ namespace Index.App.ViewModels
       set => SetProperty( ref _status, value );
     }
 
+    public string VersionName
+    {
+      get
+      {
+        var assembly = GetType().Assembly;
+        var version = assembly.GetName().Version.ToString();
+        return $"v{version}";
+      }
+    }
+
     #endregion
 
     #region Constructor
