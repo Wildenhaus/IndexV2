@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Index.App.Models;
+using Index.App.ViewModels;
 using Index.App.Views;
 using Index.Domain.FileSystem;
 using Index.Domain.GameProfiles;
@@ -22,7 +23,7 @@ namespace Index.App
 
     protected override DependencyObject CreateShell()
     {
-      return Container.Resolve<EditorView>();
+      return new Window();
     }
 
     protected override void ConfigureModuleCatalog( IModuleCatalog moduleCatalog )
@@ -53,8 +54,9 @@ namespace Index.App
 
       InitializeEditor();
 
-      if ( Shell is Window window )
-        window.Show();
+      var editor = Container.Resolve<EditorView>();
+      editor.Closed += ( s, e ) => Environment.Exit( 0 );
+      editor.Show();
     }
 
     #endregion
