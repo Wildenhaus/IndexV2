@@ -28,8 +28,7 @@
         </EventTrigger>
     </UserControl.Triggers>
 
-    <Viewbox Width="{Binding Size}"
-             Height="{Binding Size}">
+    <Viewbox>
         <Canvas x:Name="PART_Canvas"
                 Width="24"
                 Height="24"

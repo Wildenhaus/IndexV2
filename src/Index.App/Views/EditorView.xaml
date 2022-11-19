@@ -6,6 +6,7 @@
                   xmlns:local="clr-namespace:Index.App.Views"
                   xmlns:windows="clr-namespace:Index.UI.Windows;assembly=Index.UI"
                   xmlns:prism="http://prismlibrary.com/"
+                  prism:ViewModelLocator.AutoWireViewModel="True"
                   Width="1280"
                   Height="720"
                   Title="{Binding WindowTitle}"
