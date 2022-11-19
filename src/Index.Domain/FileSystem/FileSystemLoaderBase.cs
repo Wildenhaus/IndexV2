@@ -1,6 +1,4 @@
-﻿using Index.Domain.FileSystem;
-
-namespace Index.Domain.GameProfiles
+﻿namespace Index.Domain.FileSystem
 {
 
   public abstract class FileSystemLoaderBase : IFileSystemLoader

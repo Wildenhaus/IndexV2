@@ -1,4 +1,6 @@
-﻿namespace Index.Domain.GameProfiles
+﻿using Index.Domain.FileSystem;
+
+namespace Index.Domain.GameProfiles
 {
 
   public interface IGameProfile

@@ -1,4 +1,5 @@
-﻿using Index.Domain.GameProfiles;
+﻿using Index.Domain.FileSystem;
+using Index.Domain.GameProfiles;
 using Index.Profiles.HaloCEA.FileSystem;
 
 namespace Index.Profiles.HaloCEA

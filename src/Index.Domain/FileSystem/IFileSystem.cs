@@ -1,6 +1,4 @@
-﻿using Index.Domain.GameProfiles;
-
-namespace Index.Domain.FileSystem
+﻿namespace Index.Domain.FileSystem
 {
 
   public interface IFileSystem : IDisposable
