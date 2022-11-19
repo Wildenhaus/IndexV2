@@ -13,5 +13,17 @@
         </Grid.RowDefinitions>
 
         <TextBox Grid.Row="0" />
+
+        <TreeView Grid.Row="1" 
+                  ItemsSource="{Binding Files}"
+                  VirtualizingPanel.IsVirtualizing="True"
+                  VirtualizingPanel.VirtualizationMode="Recycling">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding Name}" />
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        
     </Grid>
 </UserControl>
