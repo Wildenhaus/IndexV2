@@ -10,9 +10,9 @@ namespace Index.Jobs
 
     event EventHandler Cancelled;
     event EventHandler Completed;
-    event EventHandler Faulted;
     event EventHandler Initialized;
     event EventHandler Started;
+    event EventHandler<Exception> Faulted;
 
     #endregion
 
@@ -30,6 +30,7 @@ namespace Index.Jobs
     string UnitName { get; }
 
     Task Completion { get; }
+    Exception Exception { get; }
 
     #endregion
 

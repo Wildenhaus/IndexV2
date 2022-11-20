@@ -11,9 +11,9 @@ namespace Index.Jobs
 
     public event EventHandler? Cancelled;
     public event EventHandler? Completed;
-    public event EventHandler? Faulted;
     public event EventHandler? Initialized;
     public event EventHandler? Started;
+    public event EventHandler<Exception>? Faulted;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -90,6 +90,17 @@ namespace Index.Jobs
     public Task Completion
     {
       get => _executeCompletionSource.Task;
+    }
+
+    public Exception Exception
+    {
+      get;
+      protected set;
+    }
+
+    protected CancellationToken CancellationToken
+    {
+      get => _cancellationTokenSource.Token;
     }
 
     protected bool IsCancellationRequested
@@ -206,19 +217,20 @@ namespace Index.Jobs
 
     protected void RaiseCancelledEvent() => Cancelled?.Invoke( this, EventArgs.Empty );
     protected void RaiseCompletedEvent() => Completed?.Invoke( this, EventArgs.Empty );
-    protected void RaiseFaultedEvent() => Faulted?.Invoke( this, EventArgs.Empty );
     protected void RaiseInitializedEvent() => Initialized?.Invoke( this, EventArgs.Empty );
     protected void RaiseStartedEvent() => Started?.Invoke( this, EventArgs.Empty );
+    protected void RaiseFaultedEvent( Exception exception ) => Faulted?.Invoke( this, exception );
 
-    private void HandleException( Exception ex )
+    protected void HandleException( Exception exception )
     {
+      Exception = exception;
       State = JobState.Faulted;
-      StatusList.AddError( "Job", ex );
+      StatusList.AddError( "Job", exception );
 
       _initializationCompletionSource.TrySetResult();
       _executeCompletionSource.TrySetResult();
 
-      RaiseFaultedEvent();
+      RaiseFaultedEvent( exception );
     }
 
     private void HandleCancellation()
