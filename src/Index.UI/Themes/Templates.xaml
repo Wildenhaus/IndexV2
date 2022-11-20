@@ -4,8 +4,9 @@
     <ResourceDictionary.MergedDictionaries>
 
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/ListView.xaml" />
-        
+
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxButton.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxContextMenu.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxGridView.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxWindow.xaml" />
 

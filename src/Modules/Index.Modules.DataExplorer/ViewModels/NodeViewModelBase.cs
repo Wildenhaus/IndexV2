@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
 using Index.Domain.ViewModels;
+using Index.UI.Controls.Menus;
 
 namespace Index.Modules.DataExplorer.ViewModels
 {
@@ -42,6 +44,11 @@ namespace Index.Modules.DataExplorer.ViewModels
       get => _children.Count == 0;
     }
 
+    public ContextMenu ContextMenu
+    {
+      get => BuildContextMenu();
+    }
+
     #endregion
 
     #region Constructor
@@ -51,6 +58,28 @@ namespace Index.Modules.DataExplorer.ViewModels
       _isExpanded = false;
       _isVisible = true;
       _children = new ObservableCollection<TViewModel>();
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private ContextMenu BuildContextMenu()
+    {
+      var builder = new MenuViewModelBuilder();
+      OnConfigureContextMenu( builder );
+
+      if ( builder.Items.Count == 0 )
+        return null;
+
+      var menu = new ContextMenu();
+      menu.ItemsSource = builder.Items;
+
+      return menu;
+    }
+
+    protected virtual void OnConfigureContextMenu( MenuViewModelBuilder builder )
+    {
     }
 
     #endregion

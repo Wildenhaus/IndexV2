@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:menus="clr-namespace:Index.UI.Controls.Menus">
+
+    <menus:MenuItemTemplateSelector x:Key="MenuItemTemplateSelector" />
+
+    <HierarchicalDataTemplate DataType="{x:Type menus:MenuItemViewModel}"
+                              ItemsSource="{Binding Children}">
+        <MenuItem Header="{Binding Header}"
+                  Command="{Binding Command}"
+                  CommandParameter="{Binding CommandParameter}"
+                  Icon="{Binding ImageSource}" />
+    </HierarchicalDataTemplate>
+    
+    <DataTemplate DataType="{x:Type menus:MenuSeparatorViewModel}">
+        <Separator />
+    </DataTemplate>
+    
+    <Style TargetType="{x:Type ContextMenu}">
+        <Setter Property="UsesItemContainerTemplate" Value="True" />
+        <Setter Property="ItemContainerTemplateSelector" Value="{StaticResource MenuItemTemplateSelector}" />
+    </Style>
+
+</ResourceDictionary>

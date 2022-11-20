@@ -1,4 +1,5 @@
 ﻿using Index.Domain.Assets;
+using Index.UI.Controls.Menus;
 
 namespace Index.Modules.DataExplorer.ViewModels
 {
@@ -33,6 +34,19 @@ namespace Index.Modules.DataExplorer.ViewModels
     public AssetNodeViewModel( string assetTypeName )
     {
       _name = assetTypeName;
+    }
+
+    #endregion
+
+    #region Overrides
+
+    protected override void OnConfigureContextMenu( MenuViewModelBuilder builder )
+    {
+      builder
+        .AddItem( "Open" )
+        .AddSeparator()
+        .AddItem( "Properties" )
+        .AddItem( "Extract" );
     }
 
     #endregion
