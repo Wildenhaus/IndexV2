@@ -1,5 +1,6 @@
 ﻿using Index.Core.IO;
 using Index.Domain.FileSystem;
+using Index.Profiles.HaloCEA.FileSystem.Files;
 using Index.Profiles.HaloCEA.IO;
 
 namespace Index.Profiles.HaloCEA.FileSystem

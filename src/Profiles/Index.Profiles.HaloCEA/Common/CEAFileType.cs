@@ -1,4 +1,4 @@
-﻿namespace Index.Profiles.HaloCEA.FileSystem
+﻿namespace Index.Profiles.HaloCEA
 {
 
   public enum CEAFileType : int

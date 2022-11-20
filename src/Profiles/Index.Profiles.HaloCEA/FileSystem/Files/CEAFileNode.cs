@@ -1,6 +1,6 @@
 ﻿using Index.Domain.FileSystem;
 
-namespace Index.Profiles.HaloCEA.FileSystem
+namespace Index.Profiles.HaloCEA.FileSystem.Files
 {
 
   public class CEAFileNode : FileSystemNodeBase
@@ -20,19 +20,19 @@ namespace Index.Profiles.HaloCEA.FileSystem
     public long StartOffset
     {
       get => GetMetadata<long>( META_START_OFFSET );
-      set => SetMetadata<long>( META_START_OFFSET, value );
+      set => SetMetadata( META_START_OFFSET, value );
     }
 
     public long SizeInBytes
     {
       get => GetMetadata<long>( META_FILE_SIZE );
-      set => SetMetadata<long>( META_FILE_SIZE, value );
+      set => SetMetadata( META_FILE_SIZE, value );
     }
 
     public CEAFileType FileType
     {
       get => GetMetadata<CEAFileType>( META_FILE_TYPE );
-      set => SetMetadata<CEAFileType>( META_FILE_TYPE, value );
+      set => SetMetadata( META_FILE_TYPE, value );
     }
 
     #endregion
