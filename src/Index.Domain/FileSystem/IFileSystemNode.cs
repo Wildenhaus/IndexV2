@@ -10,6 +10,7 @@
     IParameterCollection Metadata { get; }
 
     string Name { get; }
+    string DisplayName { get; }
     bool IsDirectory { get; }
 
     IFileSystemNode Parent { get; }

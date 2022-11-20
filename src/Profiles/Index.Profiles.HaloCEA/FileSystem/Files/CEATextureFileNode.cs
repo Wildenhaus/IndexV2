@@ -5,7 +5,7 @@ using Index.Domain.FileSystem;
 namespace Index.Profiles.HaloCEA.FileSystem.Files
 {
 
-  public class CEATextureFileNode : CEAFileNode
+  public class CEATextureFileNode : CEAFileNode, IFileSystemAssetNode<DxgiTextureAsset>
   {
 
     #region Constants

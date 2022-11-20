@@ -1,4 +1,5 @@
-﻿using Index.Domain.FileSystem;
+﻿using Index.Domain.Assets;
+using Index.Domain.FileSystem;
 using Index.Domain.GameProfiles;
 
 namespace Index.Domain.Models
@@ -12,6 +13,7 @@ namespace Index.Domain.Models
     public string GamePath { get; set; }
     public IGameProfile GameProfile { get; set; }
 
+    public IAssetManager AssetManager { get; }
     public IFileSystem FileSystem { get; }
 
   }

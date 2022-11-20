@@ -19,6 +19,7 @@ namespace Index.Domain.FileSystem
     public IParameterCollection Metadata { get; }
 
     public string Name { get; }
+    public virtual string DisplayName => Name;
     public bool IsDirectory
     {
       get => FirstChild is not null;

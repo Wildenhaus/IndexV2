@@ -13,16 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Index.Modules.FileExplorer.Views
+namespace Index.Modules.DataExplorer.Views
 {
-  /// <summary>
-  /// Interaction logic for FileExplorerView.xaml
-  /// </summary>
-  public partial class FileExplorerView : UserControl
-  {
-    public FileExplorerView()
+    /// <summary>
+    /// Interaction logic for DataExplorerView.xaml
+    /// </summary>
+    public partial class DataExplorerView : UserControl
     {
-      InitializeComponent();
+        public DataExplorerView()
+        {
+            InitializeComponent();
+        }
     }
-  }
 }

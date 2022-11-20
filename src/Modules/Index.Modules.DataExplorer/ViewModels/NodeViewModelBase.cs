@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Collections.ObjectModel;
 using Index.Domain.ViewModels;
 
-namespace Index.Modules.FileExplorer.ViewModels
+namespace Index.Modules.DataExplorer.ViewModels
 {
 
-  public class FileTreeNodeViewModel : ViewModelBase
+  public abstract class NodeViewModelBase<TViewModel> : ViewModelBase
+    where TViewModel : NodeViewModelBase<TViewModel>
   {
 
     #region Data Members
 
-    private readonly string _name;
-    private readonly List<FileTreeNodeViewModel> _children;
+    private readonly ObservableCollection<TViewModel> _children;
 
     private bool _isExpanded;
     private bool _isVisible;
@@ -20,12 +20,7 @@ namespace Index.Modules.FileExplorer.ViewModels
 
     #region Properties
 
-    public string Name
-    {
-      get => _name;
-    }
-
-    public IList<FileTreeNodeViewModel> Children
+    public ObservableCollection<TViewModel> Children
     {
       get => _children;
     }
@@ -51,13 +46,11 @@ namespace Index.Modules.FileExplorer.ViewModels
 
     #region Constructor
 
-    public FileTreeNodeViewModel( string name, IEnumerable<FileTreeNodeViewModel> children = null )
+    public NodeViewModelBase()
     {
-      _name = name;
       _isExpanded = false;
       _isVisible = true;
-
-      _children = new List<FileTreeNodeViewModel>( children ?? Enumerable.Empty<FileTreeNodeViewModel>() );
+      _children = new ObservableCollection<TViewModel>();
     }
 
     #endregion

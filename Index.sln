@@ -13,15 +13,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Profiles", "Profiles", "{40
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Index.UI", "src\Index.UI\Index.UI.csproj", "{A360FD28-F6E2-4233-BCE2-47B575D81CD8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Index.Profiles.HaloCEA", "src\Profiles\Index.Profiles.HaloCEA\Index.Profiles.HaloCEA.csproj", "{C7F68969-8E3C-4A69-A7AE-53E32BB64451}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Index.Profiles.HaloCEA", "src\Profiles\Index.Profiles.HaloCEA\Index.Profiles.HaloCEA.csproj", "{C7F68969-8E3C-4A69-A7AE-53E32BB64451}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{930CFEFD-5610-4BBB-B82A-CBEC1338C4BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Index.Modules.Database", "src\Modules\Index.Modules.Database\Index.Modules.Database.csproj", "{54AE35E7-D038-4C1B-9A7C-27C9F5E2C27F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Index.Modules.Database", "src\Modules\Index.Modules.Database\Index.Modules.Database.csproj", "{54AE35E7-D038-4C1B-9A7C-27C9F5E2C27F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Index.Modules.FileDialogs", "src\Modules\Index.Modules.FileDialogs\Index.Modules.FileDialogs.csproj", "{493D57FF-1FB1-4DA3-9727-A45C6183F34D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Index.Modules.FileDialogs", "src\Modules\Index.Modules.FileDialogs\Index.Modules.FileDialogs.csproj", "{493D57FF-1FB1-4DA3-9727-A45C6183F34D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Index.Modules.FileExplorer", "src\Modules\Index.Modules.FileExplorer\Index.Modules.FileExplorer.csproj", "{328232AA-79B3-4F12-BF4A-63BF1969A812}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Index.Modules.DataExplorer", "src\Modules\Index.Modules.DataExplorer\Index.Modules.DataExplorer.csproj", "{3C045BED-F03E-4758-991F-EA133EDBBB92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,10 +57,10 @@ Global
 		{493D57FF-1FB1-4DA3-9727-A45C6183F34D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{493D57FF-1FB1-4DA3-9727-A45C6183F34D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{493D57FF-1FB1-4DA3-9727-A45C6183F34D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{328232AA-79B3-4F12-BF4A-63BF1969A812}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{328232AA-79B3-4F12-BF4A-63BF1969A812}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{328232AA-79B3-4F12-BF4A-63BF1969A812}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{328232AA-79B3-4F12-BF4A-63BF1969A812}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C045BED-F03E-4758-991F-EA133EDBBB92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C045BED-F03E-4758-991F-EA133EDBBB92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C045BED-F03E-4758-991F-EA133EDBBB92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C045BED-F03E-4758-991F-EA133EDBBB92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,7 +69,7 @@ Global
 		{C7F68969-8E3C-4A69-A7AE-53E32BB64451} = {40D760FB-2918-496B-9DAE-05F86684B958}
 		{54AE35E7-D038-4C1B-9A7C-27C9F5E2C27F} = {930CFEFD-5610-4BBB-B82A-CBEC1338C4BD}
 		{493D57FF-1FB1-4DA3-9727-A45C6183F34D} = {930CFEFD-5610-4BBB-B82A-CBEC1338C4BD}
-		{328232AA-79B3-4F12-BF4A-63BF1969A812} = {930CFEFD-5610-4BBB-B82A-CBEC1338C4BD}
+		{3C045BED-F03E-4758-991F-EA133EDBBB92} = {930CFEFD-5610-4BBB-B82A-CBEC1338C4BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6855B3DD-6FA8-4D39-96A2-C69AF901D39C}

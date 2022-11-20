@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Windows;
-using Index.App.Models;
-using Index.App.ViewModels;
 using Index.App.Views;
+using Index.Domain.Assets;
 using Index.Domain.FileSystem;
 using Index.Domain.GameProfiles;
 using Index.Domain.Models;
 using Index.Modules.Database;
+using Index.Modules.DataExplorer;
 using Index.Modules.FileDialogs;
-using Index.Modules.FileExplorer;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Modularity;
@@ -32,7 +31,7 @@ namespace Index.App
 
       moduleCatalog.AddModule<DatabaseModule>();
       moduleCatalog.AddModule<FileDialogsModule>();
-      moduleCatalog.AddModule<FileExplorerModule>();
+      moduleCatalog.AddModule<DataExplorerModule>();
     }
 
     protected override void RegisterTypes( IContainerRegistry containerRegistry )
@@ -40,6 +39,7 @@ namespace Index.App
       containerRegistry.RegisterSingleton<IGameProfileManager, GameProfileManager>();
       containerRegistry.RegisterSingleton<IEditorEnvironment, EditorEnvironment>();
       containerRegistry.RegisterSingleton<IFileSystem, FileSystem>();
+      containerRegistry.RegisterSingleton<IAssetManager, AssetManager>();
     }
 
     protected override void Initialize()

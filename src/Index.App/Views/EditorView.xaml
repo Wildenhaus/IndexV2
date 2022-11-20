@@ -20,7 +20,7 @@
         </Grid.ColumnDefinitions>
 
         <ContentControl Grid.Column="0"
-                        prism:RegionManager.RegionName="FileExplorerContent" />
+                        prism:RegionManager.RegionName="DataExplorerRegion" />
 
     </Grid>
     

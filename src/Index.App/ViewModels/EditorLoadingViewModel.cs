@@ -72,6 +72,7 @@ namespace Index.App.ViewModels
       try
       {
         await RunTask( "Initializing FileSystem", InitializeFileSystem );
+        await RunTask( "Initializing AssetManager", InitializeAssetManager );
 
         Complete?.Invoke( this, EventArgs.Empty );
       }
@@ -90,10 +91,24 @@ namespace Index.App.ViewModels
       await fileSystem.LoadDevices( loader );
     }
 
+    private void InitializeAssetManager()
+    {
+      var assetManager = _environment.AssetManager;
+      var fileSystem = _environment.FileSystem;
+
+      assetManager.InitializeFromFileSystem( fileSystem );
+    }
+
     private async Task RunTask( string status, Func<Task> taskFactory )
     {
       SetStatus( status );
       await taskFactory();
+    }
+
+    private async Task RunTask( string status, Action action )
+    {
+      SetStatus( status );
+      await Task.Factory.StartNew( action, TaskCreationOptions.LongRunning );
     }
 
     private void SetStatus( string status )
