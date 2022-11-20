@@ -63,7 +63,7 @@ namespace Index.App
 
     #region Private Methods
 
-    private bool ShowLauncher()
+    protected bool ShowLauncher()
     {
       var launcherView = Container.Resolve<LauncherView>();
       var shouldLaunch = launcherView.ShowDialog() ?? false;
@@ -80,7 +80,7 @@ namespace Index.App
       return true;
     }
 
-    private bool InitializeEditor()
+    protected bool InitializeEditor()
     {
       var loadingView = Container.Resolve<EditorLoadingView>();
       return loadingView.ShowDialog() ?? false;
