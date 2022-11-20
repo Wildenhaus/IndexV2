@@ -35,7 +35,7 @@ namespace Index.Profiles.HaloCEA.FileSystem
       } );
     }
 
-    public override IResult<Stream> GetStream( IFileSystemNode node )
+    public override Stream GetStream( IFileSystemNode node )
     {
       var ceaNode = node as CEAFileNode;
       ASSERT( ceaNode is not null, "File node is not a CEAFileNode." );
@@ -45,7 +45,7 @@ namespace Index.Profiles.HaloCEA.FileSystem
       var startOffset = ceaNode.StartOffset;
       var fileSize = ceaNode.SizeInBytes;
 
-      return Result.Successful( new StreamSegment( stream, startOffset, fileSize ) );
+      return new StreamSegment( stream, startOffset, fileSize );
     }
 
     #endregion

@@ -111,7 +111,7 @@ namespace Index.Domain.FileSystem
       return _path = Path.Combine( pathStack.ToArray() );
     }
 
-    public virtual IResult<Stream> Open()
+    public virtual Stream Open()
       => Device.GetStream( this );
 
     public T GetMetadata<T>( string key )

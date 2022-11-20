@@ -52,7 +52,7 @@
       }
     }
 
-    public abstract IResult<Stream> GetStream( IFileSystemNode node );
+    public abstract Stream GetStream( IFileSystemNode node );
 
     public IEnumerable<IFileSystemNode> EnumerateNodes()
     {

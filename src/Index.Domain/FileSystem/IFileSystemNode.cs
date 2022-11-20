@@ -27,7 +27,7 @@
     IEnumerable<IFileSystemNode> EnumerateSiblings( bool includeThis = false );
 
     string GetPath( bool excludeRoot = true );
-    IResult<Stream> Open();
+    Stream Open();
 
     T GetMetadata<T>( string key );
     void SetMetadata<T>( string key, T value );

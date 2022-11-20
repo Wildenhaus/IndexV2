@@ -18,7 +18,7 @@
 
     IResult Initialize();
     Task<IResult> InitializeAsync( CancellationToken cancellationToken = default );
-    IResult<Stream> GetStream( IFileSystemNode node );
+    Stream GetStream( IFileSystemNode node );
 
     IEnumerable<IFileSystemNode> EnumerateNodes();
     IEnumerable<IFileSystemNode> EnumerateDirectories();
