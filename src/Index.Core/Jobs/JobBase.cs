@@ -134,6 +134,8 @@ namespace Index.Jobs
       try
       {
         State = JobState.Executing;
+        RaiseStartedEvent();
+
         await OnExecuting();
 
         if ( !IsCancellationRequested )
@@ -180,15 +182,13 @@ namespace Index.Jobs
         else
         {
           State = JobState.Initialized;
+          RaiseInitializedEvent();
           return;
         }
       }
       catch ( Exception ex )
       {
-        State = JobState.Faulted;
-        RaiseFaultedEvent();
-
-        StatusList.AddError( "Initialization", ex );
+        HandleException( ex );
       }
       finally
       {
@@ -232,10 +232,6 @@ namespace Index.Jobs
       RaiseCancelledEvent();
     }
 
-    #endregion
-
-    #region Private Methods
-
     private void SetProperty<T>( ref T field, T value, [CallerMemberName] string propertyName = null )
     {
       field = value;
@@ -245,4 +241,16 @@ namespace Index.Jobs
     #endregion
 
   }
+
+  public abstract class JobBase<TResult> : JobBase, IJob<TResult>
+  {
+
+    #region Properties
+
+    public TResult? Result { get; protected set; }
+
+    #endregion
+
+  }
+
 }

@@ -43,4 +43,15 @@ namespace Index.Jobs
 
   }
 
+  public interface IJob<TResult> : IJob
+  {
+
+    #region Properties
+
+    TResult? Result { get; }
+
+    #endregion
+
+  }
+
 }
