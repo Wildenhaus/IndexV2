@@ -16,11 +16,16 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="5" />
             <ColumnDefinition Width="4*" />
         </Grid.ColumnDefinitions>
 
         <ContentControl Grid.Column="0"
                         prism:RegionManager.RegionName="DataExplorerRegion" />
+
+        <GridSplitter Grid.Column="1" Width="1"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch"/>
 
     </Grid>
     
