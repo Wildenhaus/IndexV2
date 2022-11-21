@@ -16,7 +16,6 @@
                         <TextBlock x:Name="PART_SegoeIcon"
                                    Foreground="{TemplateBinding Foreground}"
                                    FontFamily="{DynamicResource Fonts.Symbols}"
-                                   FontWeight="Bold"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Padding="{TemplateBinding Padding}"
