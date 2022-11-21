@@ -15,6 +15,7 @@ namespace Index.Modules.DataExplorer.ViewModels
 
     private readonly ObservableCollection<TViewModel> _children;
 
+    private bool _isSelected;
     private bool _isExpanded;
     private bool _isVisible;
 
@@ -31,6 +32,12 @@ namespace Index.Modules.DataExplorer.ViewModels
     {
       get => _isExpanded;
       set => SetProperty( ref _isExpanded, value );
+    }
+
+    public bool IsSelected
+    {
+      get => _isSelected;
+      set => SetProperty( ref _isSelected, value );
     }
 
     public bool IsVisible
