@@ -4,17 +4,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Index.Modules.DataExplorer.Views"
+             xmlns:controls="clr-namespace:Index.UI.Controls;assembly=Index.UI"
+             xmlns:ui="clr-namespace:Index.UI;assembly=Index.UI"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="300">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <TextBox Grid.Row="0" />
+        <controls:IxTextBox Grid.Row="0"
+                            PlaceholderText="Search"
+                            Icon="{x:Static ui:SegoeIcon.SearchAndApps}"
+                            Padding="2"/>
 
         <TreeView Grid.Row="1" 
                   ItemsSource="{Binding AssetNodes}"

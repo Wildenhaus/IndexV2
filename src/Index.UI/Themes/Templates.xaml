@@ -8,6 +8,8 @@
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxButton.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxContextMenu.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxGridView.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxIcon.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxTextBox.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxWindow.xaml" />
 
     </ResourceDictionary.MergedDictionaries>
