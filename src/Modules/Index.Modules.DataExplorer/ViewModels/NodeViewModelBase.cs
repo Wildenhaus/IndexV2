@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
-using Index.Domain.ViewModels;
 using Index.UI.Controls.Menus;
+using Prism.Mvvm;
 
 namespace Index.Modules.DataExplorer.ViewModels
 {
 
-  public abstract class NodeViewModelBase<TViewModel> : ViewModelBase
+  public abstract class NodeViewModelBase<TViewModel> : BindableBase
     where TViewModel : NodeViewModelBase<TViewModel>
   {
 

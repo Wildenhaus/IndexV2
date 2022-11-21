@@ -1,11 +1,10 @@
 ﻿using Index.Domain.Models;
-using Index.Domain.ViewModels;
-using Serilog;
+using Prism.Mvvm;
 
 namespace Index.App.ViewModels
 {
 
-  public class EditorViewModel : ViewModelBase
+  public class EditorViewModel : BindableBase
   {
 
     #region Properties

@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Index.App.Models;
-using Index.Domain.FileSystem;
-using Index.Domain.GameProfiles;
 using Index.Domain.Models;
-using Index.Domain.ViewModels;
 using Prism.Ioc;
+using Prism.Mvvm;
 
 namespace Index.App.ViewModels
 {
 
-  public class EditorLoadingViewModel : ViewModelBase
+  public class EditorLoadingViewModel : BindableBase
   {
 
     #region Events

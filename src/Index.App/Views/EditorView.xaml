@@ -34,6 +34,9 @@
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
 
+            <TabControl Grid.Row="0"
+                        prism:RegionManager.RegionName="EditorRegion" />
+
             <GridSplitter Grid.Row="1"
                           Height="1"
                           HorizontalAlignment="Stretch"

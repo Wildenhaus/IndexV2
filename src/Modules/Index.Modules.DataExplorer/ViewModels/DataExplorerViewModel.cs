@@ -2,13 +2,13 @@
 using Index.Domain.Assets;
 using Index.Domain.FileSystem;
 using Index.Domain.Models;
-using Index.Domain.ViewModels;
 using Index.Modules.DataExplorer.Services;
+using Prism.Mvvm;
 
 namespace Index.Modules.DataExplorer.ViewModels
 {
 
-  public class DataExplorerViewModel : ViewModelBase
+  public class DataExplorerViewModel : BindableBase
   {
 
     #region Data Members

@@ -8,14 +8,14 @@ using Index.Domain.Entities;
 using Index.Domain.GameProfiles;
 using Index.Domain.Repositories;
 using Index.Domain.Services;
-using Index.Domain.ViewModels;
 using Index.UI.Windows;
 using Prism.Commands;
+using Prism.Mvvm;
 
 namespace Index.App.ViewModels
 {
 
-  public class LauncherViewModel : ViewModelBase
+  public class LauncherViewModel : BindableBase
   {
 
     #region Data Members
