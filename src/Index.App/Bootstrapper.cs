@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using DryIoc;
 using Index.App.Views;
 using Index.Domain.Assets;
 using Index.Domain.FileSystem;
@@ -8,9 +9,11 @@ using Index.Domain.Models;
 using Index.Modules.Database;
 using Index.Modules.DataExplorer;
 using Index.Modules.FileDialogs;
+using Index.Modules.Logging;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Modularity;
+using Serilog;
 
 namespace Index.App
 {
@@ -29,9 +32,18 @@ namespace Index.App
     {
       base.ConfigureModuleCatalog( moduleCatalog );
 
+      moduleCatalog.AddModule<LoggingModule>();
       moduleCatalog.AddModule<DatabaseModule>();
       moduleCatalog.AddModule<FileDialogsModule>();
       moduleCatalog.AddModule<DataExplorerModule>();
+    }
+
+    protected override IContainerExtension CreateContainerExtension()
+    {
+      var container = new Container( CreateContainerRules() );
+      RegisterLogger( container );
+
+      return new DryIocContainerExtension( container );
     }
 
     protected override void RegisterTypes( IContainerRegistry containerRegistry )
@@ -57,11 +69,25 @@ namespace Index.App
       var editor = Container.Resolve<EditorView>();
       editor.Closed += ( s, e ) => Environment.Exit( 0 );
       editor.Show();
+
+      Log.Information( "Welcome to Index ^_^" );
     }
 
     #endregion
 
     #region Private Methods
+
+    private void RegisterLogger( Container container )
+    {
+      // Register Default Logger
+      container.Register( Made.Of( () => Serilog.Log.Logger ),
+          setup: Setup.With( condition: r => r.Parent.ImplementationType == null ) );
+
+      // Register Context-Specific Logger
+      container.Register(
+          Made.Of( () => Serilog.Log.ForContext( Arg.Index<Type>( 0 ) ), r => r.Parent.ImplementationType ),
+          setup: Setup.With( condition: r => r.Parent.ImplementationType != null ) );
+    }
 
     protected bool ShowLauncher()
     {

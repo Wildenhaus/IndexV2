@@ -17,6 +17,7 @@
     <ProjectReference Include="..\Modules\Index.Modules.Database\Index.Modules.Database.csproj" />
     <ProjectReference Include="..\Modules\Index.Modules.DataExplorer\Index.Modules.DataExplorer.csproj" />
     <ProjectReference Include="..\Modules\Index.Modules.FileDialogs\Index.Modules.FileDialogs.csproj" />
+    <ProjectReference Include="..\Modules\Index.Modules.Logging\Index.Modules.Logging.csproj" />
   </ItemGroup>
 
   <ItemGroup>

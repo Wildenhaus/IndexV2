@@ -22,7 +22,7 @@ namespace Index.App
 
     private void OnApplicationStartup( object sender, StartupEventArgs e )
     {
-#if DEBUG
+#if DEBUG && false
       DebugLaunch( e.Args );
 #else
       DefaultLaunch();

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Index.App.Views;
 using Index.Domain.GameProfiles;
 using Index.Domain.Models;
 using Prism.Ioc;
+using Serilog;
 
 namespace Index.App
 {

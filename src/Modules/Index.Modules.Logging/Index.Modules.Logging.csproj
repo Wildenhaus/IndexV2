@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Index.Core\Index.Core.csproj" />
+    <ProjectReference Include="..\..\Index.Domain\Index.Domain.csproj" />
+    <ProjectReference Include="..\..\Index.UI\Index.UI.csproj" />
+  </ItemGroup>
+
+</Project>

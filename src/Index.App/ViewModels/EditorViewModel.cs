@@ -1,5 +1,6 @@
 ﻿using Index.Domain.Models;
 using Index.Domain.ViewModels;
+using Serilog;
 
 namespace Index.App.ViewModels
 {

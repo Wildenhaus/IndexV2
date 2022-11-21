@@ -27,6 +27,23 @@
                       HorizontalAlignment="Center"
                       VerticalAlignment="Stretch"/>
 
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="1" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+
+            <GridSplitter Grid.Row="1"
+                          Height="1"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Center" />
+
+            <ContentControl Grid.Row="2" 
+                            prism:RegionManager.RegionName="BottomPanelRegion" />
+
+        </Grid>
+
     </Grid>
     
 </windows:IxWindow>

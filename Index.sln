@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Index.Modules.FileDialogs",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Index.Modules.DataExplorer", "src\Modules\Index.Modules.DataExplorer\Index.Modules.DataExplorer.csproj", "{3C045BED-F03E-4758-991F-EA133EDBBB92}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Index.Modules.Logging", "src\Modules\Index.Modules.Logging\Index.Modules.Logging.csproj", "{BF7FACC5-09AE-4F3F-B830-5D01A8CB40AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{3C045BED-F03E-4758-991F-EA133EDBBB92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C045BED-F03E-4758-991F-EA133EDBBB92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C045BED-F03E-4758-991F-EA133EDBBB92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF7FACC5-09AE-4F3F-B830-5D01A8CB40AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF7FACC5-09AE-4F3F-B830-5D01A8CB40AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF7FACC5-09AE-4F3F-B830-5D01A8CB40AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF7FACC5-09AE-4F3F-B830-5D01A8CB40AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		{54AE35E7-D038-4C1B-9A7C-27C9F5E2C27F} = {930CFEFD-5610-4BBB-B82A-CBEC1338C4BD}
 		{493D57FF-1FB1-4DA3-9727-A45C6183F34D} = {930CFEFD-5610-4BBB-B82A-CBEC1338C4BD}
 		{3C045BED-F03E-4758-991F-EA133EDBBB92} = {930CFEFD-5610-4BBB-B82A-CBEC1338C4BD}
+		{BF7FACC5-09AE-4F3F-B830-5D01A8CB40AF} = {930CFEFD-5610-4BBB-B82A-CBEC1338C4BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6855B3DD-6FA8-4D39-96A2-C69AF901D39C}
