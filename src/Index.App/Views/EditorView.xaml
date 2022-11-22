@@ -15,9 +15,9 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="300" />
             <ColumnDefinition Width="3" />
-            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <ContentControl Grid.Column="0"
