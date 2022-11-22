@@ -1,0 +1,24 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--#region Colors-->
+    <SolidColorBrush x:Key="GridSplitter.Static.Background" Color="{DynamicResource Colors.Secondary.Border.Static}" />
+    <!--#endregion-->
+
+    <!--#region Template: GridSplitterTemplate-->
+    <ControlTemplate x:Key="GridSplitterTemplate"
+                     TargetType="{x:Type GridSplitter}">
+        <Border BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                Background="{TemplateBinding Background}" />
+    </ControlTemplate>
+    <!--#endregion-->
+
+    <!--#region Style: GridSplitter -->
+    <Style TargetType="{x:Type GridSplitter}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template" Value="{StaticResource GridSplitterTemplate}" />
+    </Style>
+    <!--#endregion-->
+
+</ResourceDictionary>

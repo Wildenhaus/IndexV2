@@ -169,6 +169,9 @@
     <!--#region Style: Window-->
     <Style TargetType="{x:Type Window}">
         <Setter Property="Background" Value="{StaticResource Window.Static.Background}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="{StaticResource Window.Static.Border}" />
+        <Setter Property="Margin" Value="1" />
         <Setter Property="FontFamily" Value="{DynamicResource Fonts.Primary}" />
         <Setter Property="Foreground" Value="{StaticResource Window.Static.Foreground}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />

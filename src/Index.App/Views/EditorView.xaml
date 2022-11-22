@@ -16,7 +16,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="3" />
             <ColumnDefinition Width="4*" />
         </Grid.ColumnDefinitions>
 
@@ -24,7 +24,7 @@
                         prism:RegionManager.RegionName="DataExplorerRegion" />
 
         <GridSplitter Grid.Column="1"
-                      Width="1"
+                      Width="3"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Stretch" />
 

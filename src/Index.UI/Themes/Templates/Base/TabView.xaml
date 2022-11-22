@@ -289,6 +289,9 @@
             <Trigger Property="IsEnabled" Value="False">
                 <Setter TargetName="PART_TemplateRoot" Property="TextElement.Foreground" Value="{DynamicResource TabControl.Disabled.Foreground}" />
             </Trigger>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}" Value="0">
+                <Setter TargetName="PART_HeaderPanel" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <!--#endregion-->
@@ -300,7 +303,7 @@
         <Setter Property="Background" Value="{StaticResource TabItem.Static.Background}" />
         <Setter Property="BorderBrush" Value="{StaticResource TabItem.Static.Border}" />
         <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="10,4,10,4" />
+        <Setter Property="Padding" Value="10,2,10,2" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="Header" Value="{Binding DataContext.TabName}" />
@@ -310,7 +313,7 @@
 
     <!--#region Style: TabControl-->
     <Style TargetType="{x:Type TabControl}">
-        <Setter Property="Padding" Value="2" />
+        <Setter Property="Padding" Value="0" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Background" Value="{StaticResource TabControl.Static.Background}" />
