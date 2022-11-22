@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 using DryIoc;
 using Index.App.Views;
 using Index.Domain.Assets;
@@ -93,6 +94,8 @@ namespace Index.App
 
     private void RunStartupFlow()
     {
+      App.Current.MainWindow = new Window();
+
       if ( !TryApplyDebugLaunchArgs() )
         if ( !ShowLauncher() )
           Environment.Exit( 0 );

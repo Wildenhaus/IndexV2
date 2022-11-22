@@ -42,7 +42,7 @@ namespace Index.App
     {
       if ( Shell is Window window )
       {
-        window.Closed += ( s, e ) => Environment.Exit( 0 );
+        App.Current.MainWindow = window;
         window.Show();
       }
     }

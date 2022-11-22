@@ -11,9 +11,6 @@ namespace Index.App.Views
 
     public EditorLoadingView( EditorLoadingViewModel viewModel )
     {
-      if ( App.Current.MainWindow == this )
-        App.Current.MainWindow = null;
-
       DataContext = viewModel;
       InitializeComponent();
       viewModel.Complete += OnLoadingComplete;

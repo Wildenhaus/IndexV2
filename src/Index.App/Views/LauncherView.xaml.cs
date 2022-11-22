@@ -9,9 +9,6 @@ namespace Index.App.Views
 
     public LauncherView( LauncherViewModel viewModel )
     {
-      if ( App.Current.MainWindow == this )
-        App.Current.MainWindow = null;
-
       DataContext = viewModel;
       InitializeComponent();
     }
