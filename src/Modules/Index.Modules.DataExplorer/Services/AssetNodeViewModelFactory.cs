@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Index.Domain.Assets;
 using Index.Modules.DataExplorer.ViewModels;
 
@@ -34,7 +35,7 @@ namespace Index.Modules.DataExplorer.Services
         var categoryNode = new AssetNodeViewModel( referenceCollection.AssetTypeName );
         categories.Add( categoryNode );
 
-        foreach ( var assetReference in referenceCollection )
+        foreach ( var assetReference in referenceCollection.OrderBy( x => x.AssetName ) )
           categoryNode.Children.Add( new AssetNodeViewModel( assetReference ) );
       }
 
