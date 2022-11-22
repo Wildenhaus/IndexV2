@@ -33,7 +33,7 @@ namespace Index.App.ViewModels
     {
       InitializeBottomTabPanel();
       Log.Logger.Information( "Welcome to Index! ^_^" );
-      Log.Logger.Information( "Using Profile '{ProfileName}' v{VersionName:l} by {Author:l}",
+      Log.Logger.Information( "Using Profile '{ProfileName:l}' v{VersionName:l} by {Author:l}",
         EditorEnvironment.GameName,
         EditorEnvironment.GameProfile.Version,
         EditorEnvironment.GameProfile.Author );

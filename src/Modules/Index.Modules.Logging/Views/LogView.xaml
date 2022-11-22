@@ -13,31 +13,20 @@
         <ListView ItemsSource="{Binding Messages}"
                   Extensions:ListViewColumns.Stretch="AllColumns"
                   Extensions:ListViewScrollBehavior.AutoScroll="True">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}"
+                       BasedOn="{StaticResource {x:Type ListViewItem}}">
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="FontSize" Value="12" />
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.View>
-                <GridView>
+                <GridView >
                     <GridView.Columns>
-                        <GridViewColumn Header="Time" Width="55">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Timestamp, StringFormat='HH:mm:ss'}"
-                                               TextAlignment="Center"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Source" Width="100">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Source}" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Message">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Message}" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                        <GridViewColumn Header="Time" Width="60" DisplayMemberBinding="{Binding Timestamp, StringFormat='hh:mm:ss'}" />
+                        <GridViewColumn Header="Source" Width="100" DisplayMemberBinding="{Binding Source}" />
+                        <GridViewColumn Header="Message" DisplayMemberBinding="{Binding Message}" />
                     </GridView.Columns>
                 </GridView>
             </ListView.View>

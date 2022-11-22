@@ -59,7 +59,7 @@
     <ControlTemplate x:Key="ListViewItemTemplate"
                      TargetType="{x:Type ListViewItem}">
         <Border x:Name="PART_Border"
-                Padding="2"
+                Padding="{TemplateBinding Padding}"
                 SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
