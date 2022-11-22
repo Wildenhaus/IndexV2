@@ -1,4 +1,4 @@
-﻿namespace Index.Domain.Services
+﻿namespace Index.UI.Services
 {
 
   public interface IFileDialogService

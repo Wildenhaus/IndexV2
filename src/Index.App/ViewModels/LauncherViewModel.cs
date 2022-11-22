@@ -4,10 +4,11 @@ using System.Linq;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Index.App.Models;
+using Index.Domain.Database.Repositories;
 using Index.Domain.Entities;
 using Index.Domain.GameProfiles;
-using Index.Domain.Repositories;
-using Index.Domain.Services;
+using Index.Domain.Models;
+using Index.UI.Services;
 using Index.UI.Windows;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -20,6 +21,7 @@ namespace Index.App.ViewModels
 
     #region Data Members
 
+    private readonly IEditorEnvironment _editorEnvironment;
     private readonly IFileDialogService _fileDialogService;
     private readonly IGameProfileManager _profileManager;
     private readonly IGamePathRepository _gamePathRepository;
@@ -44,11 +46,18 @@ namespace Index.App.ViewModels
     public LauncherViewModel(
       IFileDialogService fileDialogService,
       IGameProfileManager profileManager,
-      IGamePathRepository gamePathRepository )
+      IGamePathRepository gamePathRepository,
+      IEditorEnvironment editorEnvironment )
     {
+      ASSERT_NOT_NULL( fileDialogService );
+      ASSERT_NOT_NULL( profileManager );
+      ASSERT_NOT_NULL( gamePathRepository );
+      ASSERT_NOT_NULL( editorEnvironment );
+
       _fileDialogService = fileDialogService;
       _profileManager = profileManager;
       _gamePathRepository = gamePathRepository;
+      _editorEnvironment = editorEnvironment;
 
       _items = new ObservableCollection<LauncherItem>();
 
@@ -65,6 +74,10 @@ namespace Index.App.ViewModels
 
     private void LaunchEditor( IxDialogWindow window )
     {
+      _editorEnvironment.GameId = SelectedItem.GameId;
+      _editorEnvironment.GameName = SelectedItem.GameName;
+      _editorEnvironment.GamePath = SelectedItem.GamePath;
+      _editorEnvironment.GameProfile = SelectedItem.GameProfile;
       window.Parameters.Set( nameof( LauncherItem.GameId ), SelectedItem.GameId );
       window.Parameters.Set( nameof( LauncherItem.GameName ), SelectedItem.GameName );
       window.Parameters.Set( nameof( LauncherItem.GamePath ), SelectedItem.GamePath );
@@ -89,7 +102,8 @@ namespace Index.App.ViewModels
           GameName = gameProfile.GameName,
           GameIcon = LoadGameIcon( gameProfile ),
 
-          GamePath = gamePath.Path
+          GamePath = gamePath.Path,
+          GameProfile = gameProfile
         } );
       }
 

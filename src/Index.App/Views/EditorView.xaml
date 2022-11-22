@@ -44,8 +44,7 @@
                           VerticalAlignment="Center" />
 
             <TabControl Grid.Row="2"
-                        prism:RegionManager.RegionName="BottomTabPanelRegion"
-                        SelectedIndex="0" />
+                        prism:RegionManager.RegionName="BottomTabPanelRegion" />
 
         </Grid>
 

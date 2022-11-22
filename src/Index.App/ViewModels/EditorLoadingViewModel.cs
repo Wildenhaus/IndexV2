@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DryIoc;
 using Index.Domain.Models;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -19,7 +20,7 @@ namespace Index.App.ViewModels
 
     #region Data Members
 
-    private IContainerProvider _container;
+    private IContainer _container;
     private IEditorEnvironment _environment;
 
     private string _status;
@@ -48,20 +49,19 @@ namespace Index.App.ViewModels
 
     #region Constructor
 
-    public EditorLoadingViewModel( IContainerProvider container, IEditorEnvironment editorEnvironment )
+    public EditorLoadingViewModel( IContainer container, IEditorEnvironment editorEnvironment )
     {
       _container = container;
       _environment = editorEnvironment;
 
       _status = "Initializing...";
-      Task.Factory.StartNew( Initialize, TaskCreationOptions.LongRunning );
     }
 
     #endregion
 
     #region Private Methods
 
-    private async Task Initialize()
+    internal async Task Initialize()
     {
       try
       {
@@ -69,6 +69,7 @@ namespace Index.App.ViewModels
         await RunTask( "Initializing AssetManager", InitializeAssetManager );
 
         Complete?.Invoke( this, EventArgs.Empty );
+
       }
       catch ( Exception ex )
       {

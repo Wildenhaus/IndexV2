@@ -1,7 +1,7 @@
 ﻿using Index.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Index.Modules.Database
+namespace Index.Domain.Database
 {
 
   public class IndexDataContext : DbContext

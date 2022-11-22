@@ -1,12 +1,11 @@
 ﻿using Index.Domain.Entities;
-using Index.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace Index.Modules.Database.Repositories
+namespace Index.Domain.Database.Repositories
 {
 
   public class GenericRepository<T> : DisposableObject, IRepository<T>
-    where T : EntityBase
+      where T : EntityBase
   {
 
     #region Data Members

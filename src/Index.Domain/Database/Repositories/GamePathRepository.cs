@@ -1,7 +1,6 @@
 ﻿using Index.Domain.Entities;
-using Index.Domain.Repositories;
 
-namespace Index.Modules.Database.Repositories
+namespace Index.Domain.Database.Repositories
 {
 
   public sealed class GamePathRepository : GenericRepository<GamePath>, IGamePathRepository

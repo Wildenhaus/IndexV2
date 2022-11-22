@@ -1,6 +1,5 @@
 ﻿using Index.App.ViewModels;
 using Index.UI.Windows;
-using Prism.Services.Dialogs;
 
 namespace Index.App.Views
 {
@@ -8,8 +7,12 @@ namespace Index.App.Views
   public partial class LauncherView : IxDialogWindow
   {
 
-    public LauncherView()
+    public LauncherView( LauncherViewModel viewModel )
     {
+      if ( App.Current.MainWindow == this )
+        App.Current.MainWindow = null;
+
+      DataContext = viewModel;
       InitializeComponent();
     }
 

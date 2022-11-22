@@ -4,7 +4,7 @@
                     xmlns:controls="clr-namespace:Index.UI.Controls"
                     xmlns:ui="clr-namespace:Index.UI">
 
-    <Style x:Key="ExpandCollapseToggleStyle"
+    <!--<Style x:Key="ExpandCollapseToggleStyle"
            TargetType="{x:Type ToggleButton}">
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Width" Value="16" />
@@ -19,6 +19,59 @@
                             <Setter TargetName="PART_ExpandCollapseIcon" Property="Icon" Value="{x:Static ui:SegoeIcon.CollapseContentSingle}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+    <Style x:Key="ExpandCollapseToggleStyle"
+           TargetType="ToggleButton">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid Width="15"
+                          Height="13"
+                          Background="Transparent">
+                        <Path x:Name="Collapsed"
+                              Margin="2,1,1,1"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center"
+                              Data="M 4 0 L 8 4 L 4 8 Z">
+                            <Path.Fill>
+                                <SolidColorBrush Color="{DynamicResource Colors.Glyph.Static}" />
+                            </Path.Fill>
+                        </Path>
+                        <Path x:Name="Expanded"
+                              Margin="4,0,0,1"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center"
+                              Data="M 0 4 L 8 4 L 4 8 Z"
+                              Visibility="Hidden">
+                            <Path.Fill>
+                                <SolidColorBrush Color="{DynamicResource Colors.Glyph.Static}" />
+                            </Path.Fill>
+                        </Path>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                                       Storyboard.TargetName="Collapsed">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="{x:Static Visibility.Hidden}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                                       Storyboard.TargetName="Expanded">
+                                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                                    Value="{x:Static Visibility.Visible}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked" />
+                                <VisualState x:Name="Indeterminate" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -53,7 +106,7 @@
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="3"
-                                IsHitTestVisible="True"/>
+                                IsHitTestVisible="True" />
 
                         <ToggleButton x:Name="PART_Expander"
                                       Grid.Row="0"
@@ -70,7 +123,9 @@
                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="PreviewMouseRightButtonDown">
-                                    <i:ChangePropertyAction PropertyName="IsSelected" Value="True" TargetObject="{Binding}" />
+                                    <i:ChangePropertyAction PropertyName="IsSelected"
+                                                            TargetObject="{Binding}"
+                                                            Value="True" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ContentPresenter>

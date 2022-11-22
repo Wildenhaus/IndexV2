@@ -12,7 +12,6 @@
                         Width="800"
                         Height="450"
                         WindowStartupLocation="CenterScreen"
-                        prism:ViewModelLocator.AutoWireViewModel="True"
                         mc:Ignorable="d">
     <windows:IxWindow.Resources>
         <ResourceDictionary>

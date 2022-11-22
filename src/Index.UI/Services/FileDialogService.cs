@@ -1,7 +1,6 @@
 ﻿using System.Windows.Forms;
-using Index.Domain.Services;
 
-namespace Index.Modules.FileDialogs
+namespace Index.UI.Services
 {
 
   public class FileDialogService : IFileDialogService

@@ -1,11 +1,11 @@
-﻿using Index.Modules.Logging.Logging;
+﻿using System.Linq;
+using Index.Modules.Logging.Logging;
 using Index.Modules.Logging.Views;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
 using Serilog;
-using System.Linq;
 
 namespace Index.Modules.Logging
 {
@@ -33,11 +33,12 @@ namespace Index.Modules.Logging
     public void OnInitialized( IContainerProvider containerProvider )
     {
       ConfigureLogger();
-      _regionManager.RegisterViewWithRegion<LogView>( "BottomTabPanelRegion" );
+      //_regionManager.RegisterViewWithRegion<LogView>( "BottomTabPanelRegion" );
     }
 
     public void RegisterTypes( IContainerRegistry containerRegistry )
     {
+      containerRegistry.RegisterForNavigation<LogView>();
     }
 
     private void ConfigureLogger()
