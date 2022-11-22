@@ -3,11 +3,14 @@
 
     <ResourceDictionary.MergedDictionaries>
 
-        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/ListView.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/Button.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/GridView.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/ListView.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/TabView.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/Window.xaml" />
 
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxButton.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxContextMenu.xaml" />
-        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxGridView.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxIcon.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxScrollBar.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxScrollViewer.xaml" />
@@ -16,5 +19,5 @@
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxWindow.xaml" />
 
     </ResourceDictionary.MergedDictionaries>
-    
+
 </ResourceDictionary>

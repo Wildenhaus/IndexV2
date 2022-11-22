@@ -1,0 +1,190 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+                    xmlns:windows="clr-namespace:Index.UI.Windows">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/Button.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--#region Constants-->
+    <system:Double x:Key="TitleBarHeight">25</system:Double>
+    <GridLength x:Key="TitleBarGridHeight">25</GridLength>
+    <!--#endregion-->
+
+    <!--#region Colors-->
+    <SolidColorBrush x:Key="Window.Static.Background" Color="{DynamicResource Colors.Deep.Background.Static}" />
+    <SolidColorBrush x:Key="Window.Static.Border" Color="{DynamicResource Colors.Deepest.Border.Static}" />
+    <SolidColorBrush x:Key="Window.Static.Foreground" Color="{DynamicResource Colors.Foreground.Static}" />
+    <SolidColorBrush x:Key="Window.Static.Title.Background" Color="{DynamicResource Colors.Deep.Background.Static}" />
+    <!--#endregion-->
+
+    <!--#region Style: TitleBarButton-->
+    <Style x:Key="TitleBarButtonStyle"
+           TargetType="{x:Type Button}"
+           BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Padding" Value="5,0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Height" Value="{StaticResource TitleBarHeight}" />
+        <Setter Property="Width" Value="{StaticResource TitleBarHeight}" />
+        <Setter Property="FontFamily" Value="{DynamicResource Fonts.Symbols}" />
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Template: Window TitleBar-->
+    <ControlTemplate x:Key="WindowTitleBarTemplate"
+                     TargetType="{x:Type ContentControl}">
+
+        <ControlTemplate.Resources>
+            <windows:CloseWindowCommand x:Key="CloseWindowCommand" />
+            <windows:MaximizeWindowCommand x:Key="MaximizeWindowCommand" />
+            <windows:MinimizeWindowCommand x:Key="MinimizeWindowCommand" />
+        </ControlTemplate.Resources>
+
+        <Border Grid.Row="0"
+                Height="{StaticResource TitleBarHeight}"
+                Panel.ZIndex="1"
+                BorderThickness="0,0,0,1"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+
+            <Grid>
+                <Grid.Background>
+                    <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5, 1">
+                        <GradientStop Offset="0" Color="{DynamicResource Colors.Background.Hover}" />
+                        <GradientStop Offset="1" Color="{DynamicResource Colors.Background.Static}" />
+                    </LinearGradientBrush>
+                </Grid.Background>
+
+                <StackPanel Orientation="Horizontal">
+                    <Canvas x:Name="PART_Icon"
+                            Width="18"
+                            Height="18"
+                            Margin="6,4,0,4"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                        <!--  TODO  -->
+                    </Canvas>
+
+                    <TextBlock Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=Title}"
+                               FontFamily="{TemplateBinding FontFamily}"
+                               FontSize="{TemplateBinding FontSize}"
+                               FontWeight="{TemplateBinding FontWeight}"
+                               Foreground="{TemplateBinding Foreground}" />
+                </StackPanel>
+
+                <StackPanel HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                            WindowChrome.IsHitTestVisibleInChrome="True">
+
+                    <Button x:Name="PART_MinimizeButton"
+                            Content="&#xE921;"
+                            Style="{StaticResource TitleBarButtonStyle}"
+                            Command="{StaticResource MinimizeWindowCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+
+                    <Button x:Name="PART_MaximizeButton"
+                            Content="&#xE923;"
+                            Style="{StaticResource TitleBarButtonStyle}"
+                            Command="{StaticResource MaximizeWindowCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+
+                    <Button x:Name="PART_CloseButton"
+                            Content="&#xE8BB;"
+                            Style="{StaticResource TitleBarButtonStyle}"
+                            Command="{StaticResource CloseWindowCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
+
+                </StackPanel>
+            </Grid>
+
+            <Border.Effect>
+                <DropShadowEffect Opacity="0.5"
+                                  BlurRadius="10"
+                                  ShadowDepth="1"
+                                  Color="Black" />
+            </Border.Effect>
+
+        </Border>
+
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=TitleBarIcon, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                         Value="{x:Null}">
+                <Setter TargetName="PART_Icon" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=ResizeMode, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                         Value="NoResize">
+                <Setter TargetName="PART_MaximizeButton" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="PART_MinimizeButton" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=ResizeMode, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                         Value="CanMinimize">
+                <Setter TargetName="PART_MaximizeButton" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=CanClose, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                         Value="False">
+                <Setter TargetName="PART_CloseButton" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--#endregion-->
+
+    <!--#region Template: Window-->
+    <ControlTemplate x:Key="DefaultWindowTemplate"
+                     TargetType="{x:Type Window}">
+        <Border x:Name="PART_WindowBorder"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="{StaticResource TitleBarGridHeight}" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <ContentControl x:Name="PART_TitleBar"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                Template="{StaticResource WindowTitleBarTemplate}" />
+
+                <Border x:Name="PART_ContentGrid"
+                        Grid.Row="1"
+                        Background="{TemplateBinding Background}"
+                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                    <AdornerDecorator>
+                        <ContentPresenter />
+                    </AdornerDecorator>
+                </Border>
+
+            </Grid>
+
+        </Border>
+    </ControlTemplate>
+    <!--#endregion-->
+
+    <!--#region Style: Window-->
+    <Style TargetType="{x:Type Window}">
+        <Setter Property="Background" Value="{StaticResource Window.Static.Background}" />
+        <Setter Property="FontFamily" Value="{DynamicResource Fonts.Primary}" />
+        <Setter Property="Foreground" Value="{StaticResource Window.Static.Foreground}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template" Value="{StaticResource DefaultWindowTemplate}" />
+        <Setter Property="WindowChrome.WindowChrome">
+            <Setter.Value>
+                <WindowChrome CaptionHeight="{StaticResource TitleBarHeight}"
+                              CornerRadius="0"
+                              GlassFrameThickness="1"
+                              NonClientFrameEdges="None"
+                              UseAeroCaptionButtons="False"
+                              ResizeBorderThickness="1" />
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+    <!--#endregion-->
+
+</ResourceDictionary>

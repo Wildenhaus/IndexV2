@@ -4,78 +4,92 @@
                     xmlns:converters="clr-namespace:Index.UI.Converters"
                     xmlns:ui="clr-namespace:Index.UI">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/Button.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
+    <!--#region Converters-->
     <converters:SegoeIconConverter x:Key="SegoeIconConverter" />
+    <!--#endregion-->
 
-    <Style TargetType="{x:Type controls:IxButton}">
-        <Setter Property="Background" Value="{DynamicResource Brushes.Background.Static}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Background.Hover}" />
+    <!--#region Template: IxButton-->
+    <ControlTemplate x:Key="IxButtonTemplate"
+                     TargetType="{x:Type controls:IxButton}">
+        <Border x:Name="PART_Border"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                Background="{TemplateBinding Background}"
+                SnapsToDevicePixels="True">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0"
+                        Margin="0"
+                        Background="#80000000">
+                    <TextBlock x:Name="PART_Icon"
+                               Padding="8,0"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="{TemplateBinding Icon,
+                                                      Converter={StaticResource SegoeIconConverter}}"
+                               FontFamily="{DynamicResource Fonts.Symbols}" />
+                </Border>
+
+                <ContentPresenter x:Name="PART_ContentPresenter"
+                                  Grid.Column="1"
+                                  Margin="{TemplateBinding Padding}"
+                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  Focusable="False"
+                                  RecognizesAccessKey="True"
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+            </Grid>
+        </Border>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsDefaulted" Value="True">
+                <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource Button.Defaulted.Border}" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="PART_Border" Property="Background" Value="{StaticResource Button.Hover.Background}" />
+                <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource Button.Hover.Border}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="PART_Border" Property="Background" Value="{StaticResource Button.Pressed.Background}" />
+                <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource Button.Pressed.Border}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="PART_Border" Property="Background" Value="{StaticResource Button.Disabled.Background}" />
+                <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource Button.Disabled.Border}" />
+                <Setter TargetName="PART_ContentPresenter" Property="TextElement.Foreground" Value="{StaticResource Button.Disabled.Foreground}" />
+            </Trigger>
+            <Trigger Property="Icon" Value="{x:Static ui:SegoeIcon.None}">
+                <Setter TargetName="PART_Icon" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+            <Trigger Property="Content" Value="{x:Null}">
+                <Setter TargetName="PART_ContentPresenter" Property="Visibility" Value="Collapsed" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--#endregion-->
+
+    <!--#region Style: IxButton-->
+    <Style TargetType="{x:Type controls:IxButton}" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource FocusVisualStyle}" />
+        <Setter Property="Background" Value="{StaticResource Button.Static.Background}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}" />
+        <Setter Property="Foreground" Value="{StaticResource Button.Static.Foreground}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="FocusVisualStyle" Value="{DynamicResource FocusVisual}" />
-        <Setter Property="Foreground" Value="{DynamicResource Brushes.Foreground.Static}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="Margin" Value="2" />
-        <Setter Property="Padding" Value="5,0" />
-
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type controls:IxButton}">
-                    <Border x:Name="PART_Border"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Background="{TemplateBinding Background}"
-                            SnapsToDevicePixels="True">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <Border Grid.Column="0"
-                                    Margin="0"
-                                    Background="#80000000">
-                                <TextBlock x:Name="PART_Icon"
-                                           Padding="8,0"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Text="{TemplateBinding Icon,
-                                                                  Converter={StaticResource SegoeIconConverter}}"
-                                           FontFamily="{DynamicResource Fonts.Symbols}" />
-                            </Border>
-
-                            <ContentPresenter x:Name="PART_ContentPresenter"
-                                              Grid.Column="1"
-                                              Margin="{TemplateBinding Padding}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              Focusable="False"
-                                              RecognizesAccessKey="True"
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                        </Grid>
-                    </Border>
-
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource Brushes.Background.Hover}" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource Brushes.Background.Pressed}" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Background" Value="{DynamicResource Brushes.Background.Deep}" />
-                            <Setter Property="Foreground" Value="{DynamicResource Brushes.Foreground.Deep}" />
-                            <Setter TargetName="PART_ContentPresenter" Property="Opacity" Value="0.5" />
-                        </Trigger>
-                        <Trigger Property="Icon" Value="{x:Static ui:SegoeIcon.None}">
-                            <Setter TargetName="PART_Icon" Property="Visibility" Value="Collapsed" />
-                        </Trigger>
-                        <Trigger Property="Content" Value="{x:Null}">
-                            <Setter TargetName="PART_ContentPresenter" Property="Visibility" Value="Collapsed" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
         <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="Padding" Value="3" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template" Value="{StaticResource IxButtonTemplate}" />
     </Style>
+    <!--#endregion-->
 
 </ResourceDictionary>

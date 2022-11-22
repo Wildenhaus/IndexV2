@@ -3,15 +3,95 @@
 
     <!--#region Colors-->
 
+    <Color x:Key="Colors.Foreground.Static"                        R="240" G="240" B="240" A="255" />
+    <Color x:Key="Colors.Foreground.Deeper"                        R="220" G="220" B="220" A="255" />
+    <Color x:Key="Colors.Foreground.Disabled"                      R="190" G="190" B="190" A="255" />
+
+    <Color x:Key="Colors.Glyph.Disabled"                           R="180" G="180" B="180" A="255" />
+    <Color x:Key="Colors.Glyph.Hover"                              R="250" G="250" B="250" A="255" />
+    <Color x:Key="Colors.Glyph.Pressed"                            R="235" G="235" B="235" A="255" />
+    <Color x:Key="Colors.Glyph.Selected"                           R="228" G="228" B="228" A="255" />
+    <Color x:Key="Colors.Glyph.Selected.Inactive"                  R="218" G="218" B="218" A="255" />
+    <Color x:Key="Colors.Glyph.Static"                             R="220" G="220" B="220" A="255" />
+
+    <Color x:Key="Colors.Accent.Disabled"                          R="050" G="085" B="095" A="255" />
+    <Color x:Key="Colors.Accent.Hover"                             R="025" G="140" B="165" A="255" />
+    <Color x:Key="Colors.Accent.Pressed"                           R="015" G="140" B="175" A="255" />
+    <Color x:Key="Colors.Accent.Selected"                          R="030" G="040" B="215" A="255" />
+    <Color x:Key="Colors.Accent.Selected.Inactive"                 R="030" G="030" B="210" A="255" />
+    <Color x:Key="Colors.Accent.Static"                            R="020" G="115" B="140" A="255" />
+    <Color x:Key="Colors.Accent.Static.Opaque"                     R="020" G="115" B="140" A="128" />
+
+    <Color x:Key="Colors.Primary.Background.Disabled"              R="080" G="080" B="080" A="255" />
+    <Color x:Key="Colors.Primary.Background.Hover"                 R="050" G="050" B="050" A="255" />
+    <Color x:Key="Colors.Primary.Background.Pressed"               R="044" G="044" B="044" A="255" />
+    <Color x:Key="Colors.Primary.Background.Selected"              R="048" G="048" B="048" A="255" />
+    <Color x:Key="Colors.Primary.Background.Selected.Inactive"     R="044" G="044" B="044" A="255" />
+    <Color x:Key="Colors.Primary.Background.Static"                R="032" G="032" B="032" A="255" />
+    <Color x:Key="Colors.Primary.Border.Disabled"                  R="090" G="090" B="090" A="255" />
+    <Color x:Key="Colors.Primary.Border.Hover"                     R="060" G="060" B="060" A="255" />
+    <Color x:Key="Colors.Primary.Border.Pressed"                   R="054" G="054" B="054" A="255" />
+    <Color x:Key="Colors.Primary.Border.Selected"                  R="058" G="058" B="058" A="255" />
+    <Color x:Key="Colors.Primary.Border.Selected.Inactive"         R="054" G="054" B="054" A="255" />
+    <Color x:Key="Colors.Primary.Border.Static"                    R="040" G="040" B="040" A="255" />
+
+    <Color x:Key="Colors.Secondary.Background.Disabled"            R="090" G="090" B="090" A="255" />
+    <Color x:Key="Colors.Secondary.Background.Hover"               R="060" G="060" B="060" A="255" />
+    <Color x:Key="Colors.Secondary.Background.Pressed"             R="054" G="054" B="054" A="255" />
+    <Color x:Key="Colors.Secondary.Background.Selected"            R="058" G="058" B="058" A="255" />
+    <Color x:Key="Colors.Secondary.Background.Selected.Inactive"   R="054" G="054" B="054" A="255" />
+    <Color x:Key="Colors.Secondary.Background.Static"              R="037" G="037" B="037" A="255" />
+    <Color x:Key="Colors.Secondary.Border.Disabled"                R="100" G="100" B="100" A="255" />
+    <Color x:Key="Colors.Secondary.Border.Hover"                   R="070" G="070" B="070" A="255" />
+    <Color x:Key="Colors.Secondary.Border.Pressed"                 R="064" G="064" B="064" A="255" />
+    <Color x:Key="Colors.Secondary.Border.Selected"                R="068" G="068" B="068" A="255" />
+    <Color x:Key="Colors.Secondary.Border.Selected.Inactive"       R="064" G="064" B="064" A="255" />
+    <Color x:Key="Colors.Secondary.Border.Static"                  R="047" G="047" B="047" A="255" />
+
+    <Color x:Key="Colors.Tertiary.Background.Disabled"             R="100" G="100" B="100" A="255" />
+    <Color x:Key="Colors.Tertiary.Background.Hover"                R="068" G="068" B="068" A="255" />
+    <Color x:Key="Colors.Tertiary.Background.Pressed"              R="062" G="062" B="062" A="255" />
+    <Color x:Key="Colors.Tertiary.Background.Selected"             R="066" G="066" B="066" A="255" />
+    <Color x:Key="Colors.Tertiary.Background.Selected.Inactive"    R="062" G="062" B="062" A="255" />
+    <Color x:Key="Colors.Tertiary.Background.Static"               R="045" G="045" B="045" A="255" />
+    <Color x:Key="Colors.Tertiary.Border.Disabled"                 R="110" G="110" B="110" A="255" />
+    <Color x:Key="Colors.Tertiary.Border.Hover"                    R="088" G="088" B="088" A="255" />
+    <Color x:Key="Colors.Tertiary.Border.Pressed"                  R="072" G="072" B="072" A="255" />
+    <Color x:Key="Colors.Tertiary.Border.Selected"                 R="076" G="076" B="076" A="255" />
+    <Color x:Key="Colors.Tertiary.Border.Selected.Inactive"        R="072" G="072" B="072" A="255" />
+    <Color x:Key="Colors.Tertiary.Border.Static"                   R="055" G="055" B="055" A="255" />
+
+    <Color x:Key="Colors.Quarternary.Background.Disabled"          R="110" G="110" B="110" A="255" />
+    <Color x:Key="Colors.Quarternary.Background.Hover"             R="080" G="080" B="080" A="255" />
+    <Color x:Key="Colors.Quarternary.Background.Pressed"           R="070" G="070" B="070" A="255" />
+    <Color x:Key="Colors.Quarternary.Background.Selected"          R="075" G="075" B="075" A="255" />
+    <Color x:Key="Colors.Quarternary.Background.Selected.Inactive" R="071" G="071" B="071" A="255" />
+    <Color x:Key="Colors.Quarternary.Background.Static"            R="056" G="056" B="056" A="255" />
+    <Color x:Key="Colors.Quarternary.Border.Disabled"              R="120" G="120" B="120" A="255" />
+    <Color x:Key="Colors.Quarternary.Border.Hover"                 R="090" G="090" B="090" A="255" />
+    <Color x:Key="Colors.Quarternary.Border.Pressed"               R="080" G="080" B="080" A="255" />
+    <Color x:Key="Colors.Quarternary.Border.Selected"              R="085" G="085" B="085" A="255" />
+    <Color x:Key="Colors.Quarternary.Border.Selected.Inactive"     R="081" G="081" B="081" A="255" />
+    <Color x:Key="Colors.Quarternary.Border.Static"                R="066" G="066" B="066" A="255" />
+
+    <Color x:Key="Colors.Deep.Background.Static"                   R="020" G="020" B="020" A="255" />
+    <Color x:Key="Colors.Deep.Border.Static"                       R="030" G="030" B="030" A="255" />
+    
+    <Color x:Key="Colors.Deeper.Background.Static"                 R="024" G="024" B="024" A="255" />
+    <Color x:Key="Colors.Deeper.Border.Static"                     R="034" G="034" B="034" A="255" />
+    
+    <Color x:Key="Colors.Deepest.Background.Static"                R="029" G="029" B="029" A="255" />
+    <Color x:Key="Colors.Deepest.Border.Static"                    R="049" G="049" B="049" A="255" />
+
+    <!-- -->
     <Color x:Key="Colors.Background.Deeper"  R="016" G="016" B="016" A="255" />
     <Color x:Key="Colors.Background.Deep"    R="024" G="024" B="024" A="255" />
     <Color x:Key="Colors.Background.Static"  R="032" G="032" B="032" A="255" />
     <Color x:Key="Colors.Background.Hover"   R="048" G="048" B="048" A="255" />
     <Color x:Key="Colors.Background.Pressed" R="064" G="064" B="064" A="255" />
 
-    <Color x:Key="Colors.Foreground.Deeper"  R="075" G="075" B="075" A="255" />
+    
     <Color x:Key="Colors.Foreground.Deep"    R="100" G="100" B="100" A="255" />
-    <Color x:Key="Colors.Foreground.Static"  R="200" G="200" B="200" A="255" />
     <Color x:Key="Colors.Foreground.Hover"   R="225" G="225" B="225" A="255" />
     <Color x:Key="Colors.Foreground.Pressed" R="255" G="255" B="255" A="255" />
 
@@ -19,15 +99,94 @@
 
     <!--#region Brushes-->
 
+    <SolidColorBrush x:Key="Brushes.Foreground.Deeper"                        Color="{StaticResource Colors.Foreground.Deeper}" />
+    <SolidColorBrush x:Key="Brushes.Foreground.Disabled"                      Color="{StaticResource Colors.Foreground.Disabled}" />
+    <SolidColorBrush x:Key="Brushes.Foreground.Static"                        Color="{StaticResource Colors.Foreground.Static}" />
+
+    <SolidColorBrush x:Key="Brushes.Glyph.Disabled"                           Color="{StaticResource Colors.Glyph.Disabled}" />
+    <SolidColorBrush x:Key="Brushes.Glyph.Hover"                              Color="{StaticResource Colors.Glyph.Hover}" />
+    <SolidColorBrush x:Key="Brushes.Glyph.Pressed"                            Color="{StaticResource Colors.Glyph.Pressed}" />
+    <SolidColorBrush x:Key="Brushes.Glyph.Selected"                           Color="{StaticResource Colors.Glyph.Selected}" />
+    <SolidColorBrush x:Key="Brushes.Glyph.Selected.Inactive"                  Color="{StaticResource Colors.Glyph.Selected.Inactive}" />
+    <SolidColorBrush x:Key="Brushes.Glyph.Static"                             Color="{StaticResource Colors.Glyph.Static}" />
+
+    <SolidColorBrush x:Key="Brushes.Accent.Disabled"                          Color="{StaticResource Colors.Accent.Disabled}" />
+    <SolidColorBrush x:Key="Brushes.Accent.Hover"                             Color="{StaticResource Colors.Accent.Hover}" />
+    <SolidColorBrush x:Key="Brushes.Accent.Pressed"                           Color="{StaticResource Colors.Accent.Pressed}" />
+    <SolidColorBrush x:Key="Brushes.Accent.Selected"                          Color="{StaticResource Colors.Accent.Selected}" />
+    <SolidColorBrush x:Key="Brushes.Accent.Selected.Inactive"                 Color="{StaticResource Colors.Accent.Selected.Inactive}" />
+    <SolidColorBrush x:Key="Brushes.Accent.Static"                            Color="{StaticResource Colors.Accent.Static}" />
+
+    <SolidColorBrush x:Key="Brushes.Primary.Background.Disabled"              Color="{StaticResource Colors.Primary.Background.Disabled}" />
+    <SolidColorBrush x:Key="Brushes.Primary.Background.Hover"                 Color="{StaticResource Colors.Primary.Background.Hover}" />
+    <SolidColorBrush x:Key="Brushes.Primary.Background.Pressed"               Color="{StaticResource Colors.Primary.Background.Pressed}" />
+    <SolidColorBrush x:Key="Brushes.Primary.Background.Selected"              Color="{StaticResource Colors.Primary.Background.Selected}" />
+    <SolidColorBrush x:Key="Brushes.Primary.Background.Selected.Inactive"     Color="{StaticResource Colors.Primary.Background.Selected.Inactive}" />
+    <SolidColorBrush x:Key="Brushes.Primary.Background.Static"                Color="{StaticResource Colors.Primary.Background.Static}" />
+    <SolidColorBrush x:Key="Brushes.Primary.Border.Disabled"                  Color="{StaticResource Colors.Primary.Border.Disabled}" />
+    <SolidColorBrush x:Key="Brushes.Primary.Border.Hover"                     Color="{StaticResource Colors.Primary.Border.Hover}" />
+    <SolidColorBrush x:Key="Brushes.Primary.Border.Pressed"                   Color="{StaticResource Colors.Primary.Border.Pressed}" />
+    <SolidColorBrush x:Key="Brushes.Primary.Border.Selected"                  Color="{StaticResource Colors.Primary.Border.Selected}" />
+    <SolidColorBrush x:Key="Brushes.Primary.Border.Selected.Inactive"         Color="{StaticResource Colors.Primary.Border.Selected.Inactive}" />
+    <SolidColorBrush x:Key="Brushes.Primary.Border.Static"                    Color="{StaticResource Colors.Primary.Border.Static}" />
+
+    <SolidColorBrush x:Key="Brushes.Secondary.Background.Disabled"            Color="{StaticResource Colors.Secondary.Background.Disabled}" />
+    <SolidColorBrush x:Key="Brushes.Secondary.Background.Hover"               Color="{StaticResource Colors.Secondary.Background.Hover}" />
+    <SolidColorBrush x:Key="Brushes.Secondary.Background.Pressed"             Color="{StaticResource Colors.Secondary.Background.Pressed}" />
+    <SolidColorBrush x:Key="Brushes.Secondary.Background.Selected"            Color="{StaticResource Colors.Secondary.Background.Selected}" />
+    <SolidColorBrush x:Key="Brushes.Secondary.Background.Selected.Inactive"   Color="{StaticResource Colors.Secondary.Background.Selected.Inactive}" />
+    <SolidColorBrush x:Key="Brushes.Secondary.Background.Static"              Color="{StaticResource Colors.Secondary.Background.Static}" />
+    <SolidColorBrush x:Key="Brushes.Secondary.Border.Disabled"                Color="{StaticResource Colors.Secondary.Border.Disabled}" />
+    <SolidColorBrush x:Key="Brushes.Secondary.Border.Hover"                   Color="{StaticResource Colors.Secondary.Border.Hover}" />
+    <SolidColorBrush x:Key="Brushes.Secondary.Border.Pressed"                 Color="{StaticResource Colors.Secondary.Border.Pressed}" />
+    <SolidColorBrush x:Key="Brushes.Secondary.Border.Selected"                Color="{StaticResource Colors.Secondary.Border.Selected}" />
+    <SolidColorBrush x:Key="Brushes.Secondary.Border.Selected.Inactive"       Color="{StaticResource Colors.Secondary.Border.Selected.Inactive}" />
+    <SolidColorBrush x:Key="Brushes.Secondary.Border.Static"                  Color="{StaticResource Colors.Secondary.Border.Static}" />
+
+    <SolidColorBrush x:Key="Brushes.Tertiary.Background.Disabled"             Color="{StaticResource Colors.Tertiary.Background.Disabled}" />
+    <SolidColorBrush x:Key="Brushes.Tertiary.Background.Hover"                Color="{StaticResource Colors.Tertiary.Background.Hover}" />
+    <SolidColorBrush x:Key="Brushes.Tertiary.Background.Pressed"              Color="{StaticResource Colors.Tertiary.Background.Pressed}" />
+    <SolidColorBrush x:Key="Brushes.Tertiary.Background.Selected"             Color="{StaticResource Colors.Tertiary.Background.Selected}" />
+    <SolidColorBrush x:Key="Brushes.Tertiary.Background.Selected.Inactive"    Color="{StaticResource Colors.Tertiary.Background.Selected.Inactive}" />
+    <SolidColorBrush x:Key="Brushes.Tertiary.Background.Static"               Color="{StaticResource Colors.Tertiary.Background.Static}" />
+    <SolidColorBrush x:Key="Brushes.Tertiary.Border.Disabled"                 Color="{StaticResource Colors.Tertiary.Border.Disabled}" />
+    <SolidColorBrush x:Key="Brushes.Tertiary.Border.Hover"                    Color="{StaticResource Colors.Tertiary.Border.Hover}" />
+    <SolidColorBrush x:Key="Brushes.Tertiary.Border.Pressed"                  Color="{StaticResource Colors.Tertiary.Border.Pressed}" />
+    <SolidColorBrush x:Key="Brushes.Tertiary.Border.Selected"                 Color="{StaticResource Colors.Tertiary.Border.Selected}" />
+    <SolidColorBrush x:Key="Brushes.Tertiary.Border.Selected.Inactive"        Color="{StaticResource Colors.Tertiary.Border.Selected.Inactive}" />
+    <SolidColorBrush x:Key="Brushes.Tertiary.Border.Static"                   Color="{StaticResource Colors.Tertiary.Border.Static}" />
+
+    <SolidColorBrush x:Key="Brushes.Quarternary.Background.Disabled"          Color="{StaticResource Colors.Quarternary.Background.Disabled}" />
+    <SolidColorBrush x:Key="Brushes.Quarternary.Background.Hover"             Color="{StaticResource Colors.Quarternary.Background.Hover}" />
+    <SolidColorBrush x:Key="Brushes.Quarternary.Background.Pressed"           Color="{StaticResource Colors.Quarternary.Background.Pressed}" />
+    <SolidColorBrush x:Key="Brushes.Quarternary.Background.Selected"          Color="{StaticResource Colors.Quarternary.Background.Selected}" />
+    <SolidColorBrush x:Key="Brushes.Quarternary.Background.Selected.Inactive" Color="{StaticResource Colors.Quarternary.Background.Selected.Inactive}" />
+    <SolidColorBrush x:Key="Brushes.Quarternary.Background.Static"            Color="{StaticResource Colors.Quarternary.Background.Static}" />
+    <SolidColorBrush x:Key="Brushes.Quarternary.Border.Disabled"              Color="{StaticResource Colors.Quarternary.Border.Disabled}" />
+    <SolidColorBrush x:Key="Brushes.Quarternary.Border.Hover"                 Color="{StaticResource Colors.Quarternary.Border.Hover}" />
+    <SolidColorBrush x:Key="Brushes.Quarternary.Border.Pressed"               Color="{StaticResource Colors.Quarternary.Border.Pressed}" />
+    <SolidColorBrush x:Key="Brushes.Quarternary.Border.Selected"              Color="{StaticResource Colors.Quarternary.Border.Selected}" />
+    <SolidColorBrush x:Key="Brushes.Quarternary.Border.Selected.Inactive"     Color="{StaticResource Colors.Quarternary.Border.Selected.Inactive}" />
+    <SolidColorBrush x:Key="Brushes.Quarternary.Border.Static"                Color="{StaticResource Colors.Quarternary.Border.Static}" />
+
+    <SolidColorBrush x:Key="Brushes.Deep.Background.Static"                   Color="{StaticResource Colors.Deep.Background.Static}" />
+    <SolidColorBrush x:Key="Brushes.Deep.Border.Static"                       Color="{StaticResource Colors.Deep.Border.Static}" />
+    
+    <SolidColorBrush x:Key="Brushes.Deeper.Background.Static"                 Color="{StaticResource Colors.Deeper.Background.Static}" />
+    <SolidColorBrush x:Key="Brushes.Deeper.Border.Static"                     Color="{StaticResource Colors.Deeper.Border.Static}" />
+    
+    <SolidColorBrush x:Key="Brushes.Deepest.Background.Static"                Color="{StaticResource Colors.Deepest.Background.Static}" />
+    <SolidColorBrush x:Key="Brushes.Deepest.Border.Static"                    Color="{StaticResource Colors.Deepest.Border.Static}" />
+
+    <!-- -->
+    
     <SolidColorBrush x:Key="Brushes.Background.Deeper"  Color="{DynamicResource Colors.Background.Deeper}" />
     <SolidColorBrush x:Key="Brushes.Background.Deep"    Color="{DynamicResource Colors.Background.Deep}" />
     <SolidColorBrush x:Key="Brushes.Background.Static"  Color="{DynamicResource Colors.Background.Static}" />
     <SolidColorBrush x:Key="Brushes.Background.Hover"   Color="{DynamicResource Colors.Background.Hover}" />
     <SolidColorBrush x:Key="Brushes.Background.Pressed" Color="{DynamicResource Colors.Background.Pressed}" />
 
-    <SolidColorBrush x:Key="Brushes.Foreground.Deeper"  Color="{DynamicResource Colors.Foreground.Deeper}" />
     <SolidColorBrush x:Key="Brushes.Foreground.Deep"    Color="{DynamicResource Colors.Foreground.Deep}" />
-    <SolidColorBrush x:Key="Brushes.Foreground.Static"  Color="{DynamicResource Colors.Foreground.Static}" />
     <SolidColorBrush x:Key="Brushes.Foreground.Hover"   Color="{DynamicResource Colors.Foreground.Hover}" />
     <SolidColorBrush x:Key="Brushes.Foreground.Pressed" Color="{DynamicResource Colors.Foreground.Pressed}" />
 
