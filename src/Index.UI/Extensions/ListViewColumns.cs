@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Index.UI.Controls;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -13,14 +15,14 @@ namespace Index.UI.Extensions
 
     public static readonly DependencyProperty StretchProperty = DependencyProperty.RegisterAttached(
       "Stretch",
-      typeof( bool ),
+      typeof( ListViewColumnStretchType ),
       typeof( ListViewColumns ),
-      new UIPropertyMetadata( true, null, OnCoerceStretch ) );
+      new UIPropertyMetadata( ListViewColumnStretchType.None, null, OnCoerceStretch ) );
 
-    public static bool GetStretch( DependencyObject obj )
-      => ( bool ) obj.GetValue( StretchProperty );
+    public static ListViewColumnStretchType GetStretch( DependencyObject obj )
+      => ( ListViewColumnStretchType ) obj.GetValue( StretchProperty );
 
-    public static void SetStretch( DependencyObject obj, bool value )
+    public static void SetStretch( DependencyObject obj, ListViewColumnStretchType value )
       => obj.SetValue( StretchProperty, value );
 
     #endregion
@@ -30,8 +32,7 @@ namespace Index.UI.Extensions
     private static object OnCoerceStretch( DependencyObject source, object value )
     {
       var listView = source as ListView;
-      if ( listView is null )
-        throw new ArgumentException( "This property may only be used on ListViews" );
+      ASSERT_NOT_NULL( listView );
 
       listView.Loaded += new RoutedEventHandler( OnListViewLoadedForStretch );
       listView.SizeChanged += new SizeChangedEventHandler( OnListViewSizeChangedForStretch );
@@ -53,40 +54,74 @@ namespace Index.UI.Extensions
 
     private static void SetColumnWidthsForStretch( ListView listView )
     {
-      var columns = listView.Tag as List<GridViewColumn>;
-      double specifiedWidth = 0;
-      var gridView = listView.View as GridView;
-      if ( gridView != null )
+      var stretchType = GetStretch( listView );
+      if ( stretchType == ListViewColumnStretchType.None )
+        return;
+
+      CalculateStretchStatistics( listView, out var stretchableColumns, out var remainingWidth );
+      if ( stretchableColumns.Count == 0 )
+        return;
+
+      var columnsToStretch = stretchableColumns.ToArray();
+      switch ( stretchType )
       {
-        if ( columns == null )
-        {
-          columns = new List<GridViewColumn>();
-          foreach ( var column in gridView.Columns )
-          {
-            if ( !( column.Width >= 0 ) )
-              columns.Add( column );
-            else
-              specifiedWidth += column.ActualWidth;
-          }
-        }
-        else
-        {
-          foreach ( var column in gridView.Columns )
-          {
-            if ( !columns.Contains( column ) )
-              specifiedWidth += column.ActualWidth;
-          }
-        }
-
-        foreach ( GridViewColumn column in columns )
-        {
-          double newWidth = ( listView.ActualWidth - specifiedWidth ) / columns.Count;
-          if ( newWidth >= 10 )
-            column.Width = newWidth - 10;
-        }
-
-        listView.Tag = columns;
+        case ListViewColumnStretchType.AllColumns:
+          StretchColumns( columnsToStretch, remainingWidth );
+          break;
+        case ListViewColumnStretchType.LastColumn:
+          StretchColumns( columnsToStretch[ ^1.. ], remainingWidth );
+          break;
       }
+
+    }
+
+    private static void StretchColumns( Span<GridViewColumn> columns, double remainingWidth )
+    {
+      var allottedWidth = remainingWidth / columns.Length;
+      if ( allottedWidth < 1 )
+        return;
+
+      if ( allottedWidth >= 10 )
+        allottedWidth -= 10;
+
+      foreach ( var column in columns )
+      {
+        if ( column.Width > 0 )
+          continue;
+
+        column.Width = column.ActualWidth + allottedWidth;
+      }
+    }
+
+    private static void CalculateStretchStatistics( ListView listView,
+      out List<GridViewColumn> stretchableColumns,
+      out double remainingWidth )
+    {
+      stretchableColumns = new List<GridViewColumn>();
+      remainingWidth = listView.ActualWidth;
+
+      var gridView = listView.View as GridView;
+      if ( gridView is null )
+        return;
+
+      foreach ( var column in gridView.Columns )
+      {
+        if ( double.IsNaN( column.Width ) )
+          stretchableColumns.Add( column );
+
+        remainingWidth -= column.ActualWidth;
+      }
+    }
+
+    #endregion
+
+    #region Embedded Types
+
+    public enum ListViewColumnStretchType
+    {
+      None,
+      AllColumns,
+      LastColumn
     }
 
     #endregion

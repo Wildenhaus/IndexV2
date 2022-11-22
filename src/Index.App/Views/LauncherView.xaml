@@ -7,6 +7,7 @@
                         xmlns:prism="http://prismlibrary.com/"
                         xmlns:ui="clr-namespace:Index.UI;assembly=Index.UI"
                         xmlns:windows="clr-namespace:Index.UI.Windows;assembly=Index.UI"
+                        xmlns:Extensions="clr-namespace:Index.UI.Extensions;assembly=Index.UI"
                         Title="Index Launcher"
                         Width="800"
                         Height="450"
@@ -33,13 +34,14 @@
                   Panel.ZIndex="99"
                   DockPanel.Dock="Top"
                   ItemsSource="{Binding Path=Items}"
-                  SelectedItem="{Binding Path=SelectedItem}">
+                  SelectedItem="{Binding Path=SelectedItem}"
+                  Extensions:ListViewColumns.Stretch="LastColumn">
             <ListView.View>
-                <controls:IxGridView AutoSizeColumnWidth="True">
+                <GridView>
                     <GridView.Columns>
 
                         <!--#region Column: Game Icon-->
-                        <GridViewColumn>
+                        <GridViewColumn Width="60">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Border Width="40"
@@ -71,7 +73,7 @@
                         <!--#endregion-->
 
                         <!--#region Column: Game Name-->
-                        <GridViewColumn Header="Game">
+                        <GridViewColumn Header="Game" Width="Auto">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid Height="48"
@@ -101,7 +103,7 @@
                         <!--#endregion-->
 
                     </GridView.Columns>
-                </controls:IxGridView>
+                </GridView>
             </ListView.View>
             <ListView.Effect>
                 <DropShadowEffect BlurRadius="20"

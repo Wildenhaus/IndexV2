@@ -11,7 +11,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <ListView ItemsSource="{Binding Messages}"
-                  Extensions:ListViewColumns.Stretch="True"
+                  Extensions:ListViewColumns.Stretch="AllColumns"
                   Extensions:ListViewScrollBehavior.AutoScroll="True">
             <ListView.View>
                 <GridView>
