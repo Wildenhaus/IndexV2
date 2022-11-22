@@ -6,10 +6,10 @@
                   xmlns:local="clr-namespace:Index.App.Views"
                   xmlns:windows="clr-namespace:Index.UI.Windows;assembly=Index.UI"
                   xmlns:prism="http://prismlibrary.com/"
-                  prism:ViewModelLocator.AutoWireViewModel="True"
+                  Title="{Binding WindowTitle}"
                   Width="1280"
                   Height="720"
-                  Title="{Binding WindowTitle}"
+                  prism:ViewModelLocator.AutoWireViewModel="True"
                   WindowStartupLocation="CenterScreen"
                   mc:Ignorable="d">
 
@@ -23,9 +23,10 @@
         <ContentControl Grid.Column="0"
                         prism:RegionManager.RegionName="DataExplorerRegion" />
 
-        <GridSplitter Grid.Column="1" Width="1"
+        <GridSplitter Grid.Column="1"
+                      Width="1"
                       HorizontalAlignment="Center"
-                      VerticalAlignment="Stretch"/>
+                      VerticalAlignment="Stretch" />
 
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
@@ -42,11 +43,12 @@
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Center" />
 
-            <ContentControl Grid.Row="2" 
-                            prism:RegionManager.RegionName="BottomPanelRegion" />
+            <TabControl Grid.Row="2"
+                        prism:RegionManager.RegionName="BottomTabPanelRegion"
+                        SelectedIndex="0" />
 
         </Grid>
 
     </Grid>
-    
+
 </windows:IxWindow>

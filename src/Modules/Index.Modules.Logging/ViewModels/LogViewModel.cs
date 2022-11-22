@@ -1,20 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Threading;
 using Index.Modules.Logging.Logging;
-using Prism.Commands;
+using Index.UI.ViewModels;
 using Prism.Events;
 using Prism.Mvvm;
 
 namespace Index.Modules.Logging.ViewModels
 {
 
-  public class LogViewModel : BindableBase
+  public class LogViewModel : TabViewModelBase
   {
 
     #region Constants
@@ -45,6 +39,8 @@ namespace Index.Modules.Logging.ViewModels
 
     public LogViewModel( IEventAggregator eventAggregator )
     {
+      TabName = "Log";
+
       _eventAggregator = eventAggregator;
 
       _messagesLock = new object();
