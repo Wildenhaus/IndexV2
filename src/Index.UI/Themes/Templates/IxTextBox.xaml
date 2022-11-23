@@ -3,43 +3,39 @@
                     xmlns:controls="clr-namespace:Index.UI.Controls"
                     xmlns:ui="clr-namespace:Index.UI">
 
-    <Style TargetType="{x:Type controls:IxTextBox}">
-        <Setter Property="Background" Value="{DynamicResource Brushes.Background.Static}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Background.Hover}" />
-        <Setter Property="Foreground" Value="{DynamicResource Brushes.Foreground.Static}" />
-        <Setter Property="CaretBrush" Value="{DynamicResource Brushes.Foreground.Static}" />
-        <Setter Property="SelectionBrush" Value="{DynamicResource Brushes.Background.Hover}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type controls:IxTextBox}" >
-                    <Border x:Name="PART_Border"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Background="{TemplateBinding Background}"
-                            SnapsToDevicePixels="True" >
-                        <Grid>
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/TextBox.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+    <!--#region Template: IxTextBoxTemplate -->
+    <ControlTemplate x:Key="IxTextBoxTemplate"
+                     TargetType="{x:Type controls:IxTextBox}">
+        <Border x:Name="PART_Border"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                Background="{TemplateBinding Background}"
+                SnapsToDevicePixels="True" >
+            <Grid>
 
-                            <controls:IxIcon x:Name="PART_Icon"
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <controls:IxIcon x:Name="PART_Icon"
                                              Icon="{TemplateBinding Icon}"
                                              Padding="5,0,0,0"
                                              Foreground="{DynamicResource Brushes.Foreground.Deep}" />
 
-                            <ScrollViewer x:Name="PART_ContentHost"
+                <ScrollViewer x:Name="PART_ContentHost"
                                           Grid.Column="1"
                                           Focusable="False"
                                           Padding="2,1"
-                                          HorizontalScrollBarVisibility="Hidden"
-                                          VerticalScrollBarVisibility="Hidden"
+                                          HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
+                                          VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"
                                           VerticalContentAlignment="Bottom" />
 
-                            <TextBlock x:Name="PART_Placeholder"
+                <TextBlock x:Name="PART_Placeholder"
                                        Grid.Column="1"
                                        Focusable="False"
                                        VerticalAlignment="Center"
@@ -47,25 +43,29 @@
                                        FontStyle="Italic"
                                        Opacity="0.5"
                                        Padding="5,0" />
-                        </Grid>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="PART_Border" Property="Opacity" Value="0.5" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_Border" Property="BorderBrush" Value="{DynamicResource Brushes.Background.Pressed}" />
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="PART_Border" Property="BorderBrush" Value="{DynamicResource Brushes.Background.Pressed}" />
-                        </Trigger>
-                        <Trigger Property="HasText" Value="True">
-                            <Setter TargetName="PART_Placeholder" Property="Visibility" Value="Hidden" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="PART_Border" Property="Opacity" Value="0.56" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource TextBox.Hover.Border}" />
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="PART_Border" Property="BorderBrush" Value="{StaticResource TextBox.Focus.Border}" />
+            </Trigger>
+            <Trigger Property="HasText" Value="True">
+                <Setter TargetName="PART_Placeholder" Property="Visibility" Value="Hidden" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--#endregion-->
+
+    <!--#region Style: IxTextBox -->
+    <Style TargetType="{x:Type controls:IxTextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="Template" Value="{StaticResource IxTextBoxTemplate}" />
     </Style>
+    <!--#endregion-->
     
 </ResourceDictionary>

@@ -24,6 +24,8 @@
 
         <TextBox Grid.Row="2"
                  IsReadOnly="True"
+                 HorizontalScrollBarVisibility="Auto"
+                 VerticalScrollBarVisibility="Auto"
                  Text="{Binding ExceptionText, Mode=OneWay}" />
     </Grid>
 </UserControl>
