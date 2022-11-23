@@ -36,12 +36,6 @@
     <ControlTemplate x:Key="WindowTitleBarTemplate"
                      TargetType="{x:Type ContentControl}">
 
-        <ControlTemplate.Resources>
-            <windows:CloseWindowCommand x:Key="CloseWindowCommand" />
-            <windows:MaximizeWindowCommand x:Key="MaximizeWindowCommand" />
-            <windows:MinimizeWindowCommand x:Key="MinimizeWindowCommand" />
-        </ControlTemplate.Resources>
-
         <Border Grid.Row="0"
                 Height="{StaticResource TitleBarHeight}"
                 Panel.ZIndex="1"
@@ -83,19 +77,19 @@
                     <Button x:Name="PART_MinimizeButton"
                             Content="&#xE921;"
                             Style="{StaticResource TitleBarButtonStyle}"
-                            Command="{StaticResource MinimizeWindowCommand}"
+                            Command="{x:Static windows:WindowCommands.MinimizeWindowCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
 
                     <Button x:Name="PART_MaximizeButton"
                             Content="&#xE923;"
                             Style="{StaticResource TitleBarButtonStyle}"
-                            Command="{StaticResource MaximizeWindowCommand}"
+                            Command="{x:Static windows:WindowCommands.MaximizeWindowCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
 
                     <Button x:Name="PART_CloseButton"
                             Content="&#xE8BB;"
                             Style="{StaticResource TitleBarButtonStyle}"
-                            Command="{StaticResource CloseWindowCommand}"
+                            Command="{x:Static windows:WindowCommands.CloseWindowCommand}"
                             CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" />
 
                 </StackPanel>

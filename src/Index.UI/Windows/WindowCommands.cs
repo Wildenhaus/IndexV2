@@ -1,37 +1,40 @@
 ﻿using System.Windows;
+using System.Windows.Input;
+using Prism.Commands;
 
 namespace Index.UI.Windows
 {
 
-  public class CloseWindowCommand : CommandBase
+  public static class WindowCommands
   {
-    public override void Execute( object? parameter )
-    {
-      if ( parameter is Window window )
-        window.Close();
-    }
-  }
 
-  public class MaximizeWindowCommand : CommandBase
-  {
-    public override void Execute( object? parameter )
-    {
-      if ( parameter is Window window )
-      {
-        if ( window.WindowState == WindowState.Maximized )
-          window.WindowState = WindowState.Normal;
-        else
-          window.WindowState = WindowState.Maximized;
-      }
-    }
-  }
+    public static ICommand CloseWindowCommand { get; }
+    public static ICommand MaximizeWindowCommand { get; }
+    public static ICommand MinimizeWindowCommand { get; }
 
-  public class MinimizeWindowCommand : CommandBase
-  {
-    public override void Execute( object? parameter )
+    static WindowCommands()
     {
-      if ( parameter is Window window )
-        window.WindowState = WindowState.Minimized;
+      CloseWindowCommand = new DelegateCommand<Window>( CloseWindow );
+      MaximizeWindowCommand = new DelegateCommand<Window>( MaximizeWindow );
+      MinimizeWindowCommand = new DelegateCommand<Window>( MinimizeWindow );
+    }
+
+    private static void CloseWindow(Window window)
+    {
+      if (window is null) return;
+      window.Close();
+    }
+
+    private static void MaximizeWindow(Window window)
+    {
+      if (window is null) return;
+      window.WindowState = WindowState.Maximized;
+    }
+
+    private static void MinimizeWindow(Window window)
+    {
+      if (window is null) return;
+      window.WindowState = WindowState.Minimized;
     }
   }
 
