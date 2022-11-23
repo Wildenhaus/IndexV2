@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using DryIoc;
 
 namespace Index.App
 {
@@ -6,9 +7,9 @@ namespace Index.App
   public partial class App : Application
   {
 
-    #region Data Members
+    #region Properties
 
-
+    public IContainer Container { get; internal set; }
 
     #endregion
 
