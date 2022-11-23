@@ -1,6 +1,6 @@
-﻿using Index.UI.ViewModels;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Shapes;
+using Index.UI.ViewModels;
 
 namespace Index.UI.Windows
 {
@@ -21,9 +21,8 @@ namespace Index.UI.Windows
     public IxWindow()
     {
       ContentRendered += OnContentRendered;
-      //IsVisibleChanged += OnVisibilityChanged;
+      DataContextChanged += OnDataContextChanged;
     }
-
 
     static IxWindow()
     {
@@ -34,30 +33,27 @@ namespace Index.UI.Windows
 
     #endregion
 
-    #region Overrides
+    #region Event Handlers
 
     private void OnContentRendered( object? sender, System.EventArgs e )
     {
       var viewModel = DataContext as WindowViewModel;
-      if ( viewModel != null )
+      if ( viewModel is not null )
         viewModel.WindowAppeared();
 
       ContentRendered -= OnContentRendered;
     }
 
-
-    private void OnVisibilityChanged( object sender, DependencyPropertyChangedEventArgs e )
+    private void OnDataContextChanged( object sender, DependencyPropertyChangedEventArgs e )
     {
-      var viewModel = DataContext as WindowViewModel;
-      if ( viewModel != null )
-        viewModel.WindowAppeared();
+      var viewModel = e.NewValue as WindowViewModel;
+      if ( viewModel is null )
+        return;
 
-      IsVisibleChanged -= OnVisibilityChanged;
+      viewModel.SetWindow( this );
     }
 
-
     #endregion
-
 
   }
 
