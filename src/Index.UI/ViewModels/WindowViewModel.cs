@@ -1,7 +1,7 @@
-﻿using System.Windows;
-using Index.UI.Windows;
+﻿using Index.UI.Windows;
 using Prism.Ioc;
 using Prism.Regions;
+using PropertyChanged;
 
 namespace Index.UI.ViewModels
 {
@@ -11,12 +11,11 @@ namespace Index.UI.ViewModels
 
     #region Properties
 
-    public string WindowTitle { get; set; }
+    public string Title { get; set; }
 
-    protected IContainerProvider Container { get; }
-    protected IRegionManager RegionManager { get; }
-
-    protected IxWindow Window { get; private set; }
+    [DoNotNotify] protected IContainerProvider Container { get; }
+    [DoNotNotify] protected IRegionManager RegionManager { get; }
+    [DoNotNotify] protected IxWindow Window { get; private set; }
 
     #endregion
 
@@ -44,7 +43,7 @@ namespace Index.UI.ViewModels
 
     #region Private Methods
 
-    protected void Close()
+    protected virtual void Close()
     {
       OnWindowClosing();
       Window.Close();
