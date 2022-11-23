@@ -11,6 +11,7 @@ using Index.Domain.FileSystem;
 using Index.Domain.GameProfiles;
 using Index.Domain.Models;
 using Index.UI.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Index.App
 {
@@ -96,12 +97,21 @@ namespace Index.App
     {
       App.Current.MainWindow = new Window();
 
+      InitializeDatabase();
+
       if ( !TryApplyDebugLaunchArgs() )
         if ( !ShowLauncher() )
           Environment.Exit( 0 );
 
       if ( !InitializeEditor() )
         Environment.Exit( 0 );
+    }
+
+    private void InitializeDatabase()
+    {
+      var context = Container.Resolve<IndexDataContext>();
+      context.Database.EnsureCreated();
+      context.Database.Migrate();
     }
 
     private bool ShowLauncher()
