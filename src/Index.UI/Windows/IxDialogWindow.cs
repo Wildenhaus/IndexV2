@@ -1,15 +1,24 @@
-﻿namespace Index.UI.Windows
+﻿using Prism.Services.Dialogs;
+
+namespace Index.UI.Windows
 {
 
-  public class IxDialogWindow : IxWindow
+  public class IxDialogWindow : IxWindow, IDialogWindow
   {
 
-    public IParameterCollection Parameters { get; }
+    #region Properties
+
+    public IDialogResult Result { get; set; }
+
+    #endregion
+
+    #region Constructor
 
     public IxDialogWindow()
     {
-      Parameters = new ParameterCollection();
     }
+
+    #endregion
 
   }
 

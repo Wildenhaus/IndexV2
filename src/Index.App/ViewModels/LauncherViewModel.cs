@@ -78,9 +78,6 @@ namespace Index.App.ViewModels
       _editorEnvironment.GameName = SelectedItem.GameName;
       _editorEnvironment.GamePath = SelectedItem.GamePath;
       _editorEnvironment.GameProfile = SelectedItem.GameProfile;
-      window.Parameters.Set( nameof( LauncherItem.GameId ), SelectedItem.GameId );
-      window.Parameters.Set( nameof( LauncherItem.GameName ), SelectedItem.GameName );
-      window.Parameters.Set( nameof( LauncherItem.GamePath ), SelectedItem.GamePath );
 
       window.DialogResult = true;
       window.Close();

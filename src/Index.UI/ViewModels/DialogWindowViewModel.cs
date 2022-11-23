@@ -1,18 +1,29 @@
-﻿using Index.UI.Windows;
+﻿using System;
+using System.Windows.Input;
+using Index.UI.Windows;
+using Prism.Commands;
 using Prism.Ioc;
+using Prism.Services.Dialogs;
+using PropertyChanged;
 
 namespace Index.UI.ViewModels
 {
 
-  public abstract class DialogWindowViewModel : WindowViewModel
+  public abstract class DialogWindowViewModel : WindowViewModel, IDialogAware
   {
+
+    #region Events
+
+    public event Action<IDialogResult>? RequestClose;
+
+    #endregion
 
     #region Properties
 
-    protected new IxDialogWindow Window
-    {
-      get => ( IxDialogWindow ) base.Window;
-    }
+    public virtual ICommand CloseDialogCommand { get; }
+
+    [DoNotNotify]
+    protected new IxDialogWindow Window => ( IxDialogWindow ) base.Window;
 
     #endregion
 
@@ -21,7 +32,33 @@ namespace Index.UI.ViewModels
     protected DialogWindowViewModel( IContainerProvider container ) 
       : base( container )
     {
+      CloseDialogCommand = new DelegateCommand( CloseDialog );
     }
+
+    #endregion
+
+    #region IDialogAware Methods
+
+    public virtual bool CanCloseDialog()
+      => true;
+
+    public virtual void OnDialogClosed()
+    {
+    }
+
+    public virtual void OnDialogOpened( IDialogParameters parameters )
+    {
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void CloseDialog()
+      => RaiseRequestClose( new DialogResult() );
+
+    private void RaiseRequestClose( IDialogResult dialogResult )
+      => RequestClose?.Invoke( dialogResult );
 
     #endregion
 
