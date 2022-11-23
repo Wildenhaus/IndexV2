@@ -63,7 +63,7 @@
 
                     <TextBlock Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=Title}"
+                               Text="{Binding Title}"
                                FontFamily="{TemplateBinding FontFamily}"
                                FontSize="{TemplateBinding FontSize}"
                                FontWeight="{TemplateBinding FontWeight}"

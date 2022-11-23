@@ -17,7 +17,9 @@
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxScrollViewer.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxTextBox.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxTreeView.xaml" />
+
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxWindow.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxDialogWindow.xaml" />
 
     </ResourceDictionary.MergedDictionaries>
 

@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:windows="clr-namespace:Index.UI.Windows">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxWindow.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--#region Style: IxWindow -->
+    <Style TargetType="{x:Type windows:IxDialogWindow}" BasedOn="{StaticResource {x:Type windows:IxWindow}}">
+        <Setter Property="SizeToContent" Value="WidthAndHeight" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="ResizeMode" Value="NoResize" />
+    </Style>
+    <!--#endregion-->
+
+</ResourceDictionary>
