@@ -4,11 +4,13 @@ using DryIoc;
 using Index.App.Views;
 using Index.Modules.DataExplorer;
 using Index.Modules.Logging;
+using Index.UI.Windows;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Modularity;
+using Prism.Services.Dialogs;
 
-namespace Index.App
+namespace Index.App.Prism
 {
 
   internal class EditorBootstrapper : PrismBootstrapper
@@ -36,13 +38,23 @@ namespace Index.App
 
     protected override void RegisterTypes( IContainerRegistry containerRegistry )
     {
+      containerRegistry.RegisterDialogWindow<IxDialogWindow>();
+      containerRegistry.RegisterDialog<UnhandledExceptionDialog>();
     }
 
     protected override void OnInitialized()
     {
+      AppDomain.CurrentDomain.UnhandledException += ( sender, e ) =>
+      {
+        var exception = (Exception) e.ExceptionObject;
+        var dialogService = Container.Resolve<IDialogService>();
+
+        dialogService.ShowUnhandledExceptionDialog( exception );
+      };
+
       if ( Shell is Window window )
       {
-        App.Current.MainWindow = window;
+        Application.Current.MainWindow = window;
         window.Show();
       }
     }

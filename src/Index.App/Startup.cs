@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using DryIoc;
+using Index.App.Prism;
 using Index.App.Views;
 using Index.Domain.Assets;
 using Index.Domain.Database;
@@ -30,6 +31,7 @@ namespace Index.App
     public Startup()
     {
       Container = new Container( CreateContainerRules() );
+      ( ( App ) App.Current ).Container = Container;
     }
 
     #endregion
