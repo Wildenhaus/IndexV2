@@ -1,5 +1,4 @@
 ﻿using Index.Domain.Models;
-using Index.Modules.Logging.Views;
 using Index.UI.ViewModels;
 using Prism.Ioc;
 using Serilog;
@@ -21,7 +20,7 @@ namespace Index.App.ViewModels
     public EditorViewModel( IContainerProvider container, IEditorEnvironment environment )
       : base( container )
     {
-      WindowTitle = $"Index | {environment.GameName}";
+      Title = $"Index | {environment.GameName}";
       EditorEnvironment = environment;
     }
 
