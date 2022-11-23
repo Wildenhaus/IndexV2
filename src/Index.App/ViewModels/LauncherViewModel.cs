@@ -9,6 +9,7 @@ using Index.Domain.Entities;
 using Index.Domain.GameProfiles;
 using Index.Domain.Models;
 using Index.UI.Services;
+using Index.UI.ViewModels;
 using Index.UI.Windows;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -16,7 +17,7 @@ using Prism.Mvvm;
 namespace Index.App.ViewModels
 {
 
-  public class LauncherViewModel : BindableBase
+  public class LauncherViewModel : WindowViewModel
   {
 
     #region Data Members
@@ -37,7 +38,7 @@ namespace Index.App.ViewModels
 
     public DelegateCommand ScanPathCommand { get; }
     public DelegateCommand RemoveSelectedPathCommand { get; }
-    public DelegateCommand<IxDialogWindow> LaunchCommand { get; }
+    public DelegateCommand LaunchCommand { get; }
 
     #endregion
 
@@ -48,6 +49,7 @@ namespace Index.App.ViewModels
       IGameProfileManager profileManager,
       IGamePathRepository gamePathRepository,
       IEditorEnvironment editorEnvironment )
+      : base( null )
     {
       ASSERT_NOT_NULL( fileDialogService );
       ASSERT_NOT_NULL( profileManager );
@@ -63,7 +65,9 @@ namespace Index.App.ViewModels
 
       ScanPathCommand = new DelegateCommand( ScanPath );
       RemoveSelectedPathCommand = new DelegateCommand( RemoveSelectedGamePath );
-      LaunchCommand = new DelegateCommand<IxDialogWindow>( LaunchEditor );
+      LaunchCommand = new DelegateCommand( LaunchEditor );
+
+      Title = "Select a Game Profile";
 
       ReloadLauncherItems();
     }
@@ -72,15 +76,15 @@ namespace Index.App.ViewModels
 
     #region Private Methods
 
-    private void LaunchEditor( IxDialogWindow window )
+    private void LaunchEditor()
     {
       _editorEnvironment.GameId = SelectedItem.GameId;
       _editorEnvironment.GameName = SelectedItem.GameName;
       _editorEnvironment.GamePath = SelectedItem.GamePath;
       _editorEnvironment.GameProfile = SelectedItem.GameProfile;
 
-      window.DialogResult = true;
-      window.Close();
+      Window.DialogResult = true;
+      Window.Close();
     }
 
     private void ReloadLauncherItems()

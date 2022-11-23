@@ -24,7 +24,8 @@ namespace Index.UI.ViewModels
     protected WindowViewModel( IContainerProvider container )
     {
       Container = container;
-      RegionManager = container.Resolve<IRegionManager>();
+      if ( container != null )
+        RegionManager = container.Resolve<IRegionManager>();
     }
 
     #endregion

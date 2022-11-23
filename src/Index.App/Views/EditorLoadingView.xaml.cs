@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows;
 using Index.App.ViewModels;
 using Index.UI.Windows;
 
 namespace Index.App.Views
 {
 
-  public partial class EditorLoadingView : IxDialogWindow
+  public partial class EditorLoadingView : Window
   {
 
     public EditorLoadingView( EditorLoadingViewModel viewModel )
