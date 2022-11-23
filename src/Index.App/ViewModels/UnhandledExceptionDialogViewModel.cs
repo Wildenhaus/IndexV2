@@ -30,6 +30,7 @@ namespace Index.App.ViewModels
 
     public override void OnDialogOpened( IDialogParameters parameters )
     {
+      base.OnDialogOpened( parameters );
       var exception = parameters.GetValue<Exception>( nameof( Exception ) );
 
       Message = exception.Message;

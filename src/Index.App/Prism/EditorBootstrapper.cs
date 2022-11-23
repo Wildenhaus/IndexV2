@@ -46,7 +46,7 @@ namespace Index.App.Prism
     {
       AppDomain.CurrentDomain.UnhandledException += ( sender, e ) =>
       {
-        var exception = (Exception) e.ExceptionObject;
+        var exception = ( Exception ) e.ExceptionObject;
         var dialogService = Container.Resolve<IDialogService>();
 
         dialogService.ShowUnhandledExceptionDialog( exception );

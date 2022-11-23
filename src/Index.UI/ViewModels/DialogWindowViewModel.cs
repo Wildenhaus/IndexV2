@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Index.UI.Controls;
+using Index.UI.Controls.Buttons;
 using Index.UI.Windows;
 using Prism.Commands;
 using Prism.Ioc;
@@ -20,7 +23,11 @@ namespace Index.UI.ViewModels
 
     #region Properties
 
-    public virtual ICommand CloseDialogCommand { get; }
+    public ObservableCollection<IxButton> Buttons { get; }
+    public ICommand CloseDialogCommand { get; set; }
+
+    [DoNotNotify]
+    public IDialogParameters Parameters { get; private set; }
 
     [DoNotNotify]
     protected new IxDialogWindow Window => ( IxDialogWindow ) base.Window;
@@ -32,6 +39,7 @@ namespace Index.UI.ViewModels
     protected DialogWindowViewModel( IContainerProvider container ) 
       : base( container )
     {
+      Buttons = new ObservableCollection<IxButton>();
       CloseDialogCommand = new DelegateCommand( CloseDialog );
     }
 
@@ -48,6 +56,20 @@ namespace Index.UI.ViewModels
 
     public virtual void OnDialogOpened( IDialogParameters parameters )
     {
+      Parameters = parameters;
+
+      var buttonBuilder = new DialogButtonBuilder( Buttons );
+      OnConfigureButtons( buttonBuilder );
+    }
+
+    #endregion
+
+    #region Virtual Methods
+
+    protected virtual void OnConfigureButtons( DialogButtonBuilder builder )
+    {
+      builder.AddButton().Content( "Close" ).Command( CloseDialogCommand );
+      builder.AddButton().Content( "Close" ).Command( CloseDialogCommand );
     }
 
     #endregion

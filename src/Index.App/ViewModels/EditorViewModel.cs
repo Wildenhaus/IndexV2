@@ -1,6 +1,8 @@
-﻿using Index.Domain.Models;
+﻿using Index.App.Prism;
+using Index.Domain.Models;
 using Index.UI.ViewModels;
 using Prism.Ioc;
+using Prism.Services.Dialogs;
 using Serilog;
 
 namespace Index.App.ViewModels

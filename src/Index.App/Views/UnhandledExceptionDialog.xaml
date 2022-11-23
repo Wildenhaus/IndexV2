@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              Width="600"
              Height="400">
-    <Grid Margin="5">
+    <Grid Margin="10,5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -23,7 +23,7 @@
                    Text="{Binding Message, Mode=OneWay}" />
 
         <TextBox Grid.Row="2"
-                 IsManipulationEnabled="False"
+                 IsReadOnly="True"
                  Text="{Binding ExceptionText, Mode=OneWay}" />
     </Grid>
 </UserControl>
