@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="mkdir &quot;$(SolutionDir)src\Index.App\bin\Debug\net7.0-windows\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\Debug\net7.0-windows\GameProfiles\$(TargetName).dll&quot;&#xD;&#xA;mkdir &quot;$(SolutionDir)src\Index.App\bin\Release\net7.0-windows\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\Release\net7.0-windows\GameProfiles\$(TargetName).dll&quot;" />
+    <Exec Command="mkdir &quot;$(SolutionDir)src\Index.App\bin\Debug\net6.0-windows\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\Debug\net6.0-windows\GameProfiles\$(TargetName).dll&quot;&#xD;&#xA;mkdir &quot;$(SolutionDir)src\Index.App\bin\Release\net6.0-windows\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\Release\net6.0-windows\GameProfiles\$(TargetName).dll&quot;" />
   </Target>
 
 </Project>
