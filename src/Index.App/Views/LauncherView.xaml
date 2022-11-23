@@ -12,6 +12,8 @@
                         Width="800"
                         Height="450"
                         WindowStartupLocation="CenterScreen"
+                        SizeToContent="Manual"
+                        ResizeMode="CanResize"
                         mc:Ignorable="d">
     <windows:IxWindow.Resources>
         <ResourceDictionary>
