@@ -3,6 +3,7 @@ using System.Windows;
 using DryIoc;
 using Index.App.Views;
 using Index.Modules.DataExplorer;
+using Index.Modules.JobManager;
 using Index.Modules.Logging;
 using Index.UI.Windows;
 using Prism.DryIoc;
@@ -33,6 +34,7 @@ namespace Index.App.Prism
     protected override void ConfigureModuleCatalog( IModuleCatalog moduleCatalog )
     {
       moduleCatalog.AddModule<LoggingModule>();
+      moduleCatalog.AddModule<JobManagerModule>();
       moduleCatalog.AddModule<DataExplorerModule>();
     }
 

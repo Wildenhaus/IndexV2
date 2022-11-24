@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Index.Common;
 
 namespace Index.Jobs
 {
@@ -16,6 +12,7 @@ namespace Index.Jobs
 
     private IJob _currentJob;
     private int _currentJobKey;
+    private int _completedJobs;
 
     #endregion
 
@@ -34,8 +31,8 @@ namespace Index.Jobs
     {
       await CreateSubJobs();
 
-      CompletedUnits = 0;
-      TotalUnits = _jobs.Count;
+      Progress.CompletedUnits = 0;
+      Progress.TotalUnits = _jobs.Count;
     }
 
     protected override async Task OnExecuting()
@@ -48,7 +45,15 @@ namespace Index.Jobs
         _currentJob = job;
         _currentJobKey = jobKey;
 
-        await job.Execute();
+        try
+        {
+          job.Progress.PropertyChanged += OnSubJobProgressPropertyChanged;
+          await job.Execute();
+        }
+        finally
+        {
+          job.Progress.PropertyChanged -= OnSubJobProgressPropertyChanged;
+        }
 
         if ( job.State == JobState.Faulted )
         {
@@ -71,6 +76,30 @@ namespace Index.Jobs
     protected void AddJob( int jobKey, IJob job )
     {
       _jobs.Add( (jobKey, job) );
+    }
+
+    #endregion
+
+    #region Event Handlers
+
+    private void OnSubJobProgressPropertyChanged( object? sender, System.ComponentModel.PropertyChangedEventArgs e )
+    {
+      var currentJobProgress = _currentJob.Progress;
+      switch ( e.PropertyName )
+      {
+        case nameof( IProgressInfo.PercentCompleted ):
+          {
+            if ( currentJobProgress.IsIndeterminate )
+              return;
+
+            Progress.CompletedUnits = _completedJobs + currentJobProgress.PercentCompleted;
+            return;
+          }
+
+        case nameof( IProgressInfo.Status ):
+          Progress.SubStatus = currentJobProgress.Status;
+          return;
+      }
     }
 
     #endregion

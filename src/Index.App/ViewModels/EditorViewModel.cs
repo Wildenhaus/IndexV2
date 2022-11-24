@@ -1,8 +1,7 @@
-﻿using Index.App.Prism;
-using Index.Domain.Models;
+﻿using Index.Domain.Models;
+using Index.Modules.JobManager.Views;
 using Index.UI.ViewModels;
 using Prism.Ioc;
-using Prism.Services.Dialogs;
 using Serilog;
 
 namespace Index.App.ViewModels
@@ -47,6 +46,10 @@ namespace Index.App.ViewModels
     private void InitializeBottomTabPanel()
     {
       RegionManager.RequestNavigate( "BottomTabPanelRegion", "LogView" );
+
+      var region = RegionManager.Regions[ "BottomTabPanelRegion" ];
+
+      region.Add( Container.Resolve<JobsView>() );
     }
 
     #endregion

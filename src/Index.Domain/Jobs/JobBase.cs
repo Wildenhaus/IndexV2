@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Index.Common;
 
 namespace Index.Jobs
 {
@@ -13,7 +14,7 @@ namespace Index.Jobs
     public event EventHandler? Completed;
     public event EventHandler? Initialized;
     public event EventHandler? Started;
-    public event EventHandler<Exception>? Faulted;
+    public event EventHandler? Faulted;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -24,12 +25,7 @@ namespace Index.Jobs
     private string _name;
     private JobState _state;
     private StatusList _statusList;
-
-    private bool _isIndeterminate;
-    private string _status;
-    private int _completedUnits;
-    private int _totalUnits;
-    private string _unitName;
+    private IProgressInfo _progress;
 
     private CancellationTokenSource _cancellationTokenSource;
 
@@ -57,34 +53,9 @@ namespace Index.Jobs
       get => _statusList;
     }
 
-    public bool IsIndeterminate
+    public IProgressInfo Progress
     {
-      get => _isIndeterminate;
-      protected set => SetProperty( ref _isIndeterminate, value );
-    }
-
-    public string Status
-    {
-      get => _status;
-      protected set => SetProperty( ref _status, value );
-    }
-
-    public int CompletedUnits
-    {
-      get => _completedUnits;
-      protected set => SetProperty( ref _completedUnits, value );
-    }
-
-    public int TotalUnits
-    {
-      get => _totalUnits;
-      protected set => SetProperty( ref _totalUnits, value );
-    }
-
-    public string UnitName
-    {
-      get => _unitName;
-      protected set => SetProperty( ref _unitName, value );
+      get => _progress;
     }
 
     public Task Completion
@@ -114,8 +85,7 @@ namespace Index.Jobs
 
     protected JobBase()
     {
-      _isIndeterminate = true;
-
+      _progress = new ProgressInfo();
       _statusList = new StatusList();
 
       _initializationCompletionSource = new TaskCompletionSource();
@@ -131,8 +101,8 @@ namespace Index.Jobs
     {
       _cancellationTokenSource.Cancel();
 
-      Status = "Finishing Current Operations";
-      IsIndeterminate = true;
+      Progress.Status = "Finishing Current Operations";
+      Progress.IsIndeterminate = true;
     }
 
     public async Task Execute()
@@ -169,7 +139,7 @@ namespace Index.Jobs
 
     public async Task Initialize()
     {
-      if ( _state <= JobState.Initialized )
+      if ( _state >= JobState.Initialized )
         return;
 
       if ( _state == JobState.Initializing )
@@ -178,7 +148,7 @@ namespace Index.Jobs
         return;
       }
 
-      ASSERT( _state == JobState.Idle );
+      ASSERT( _state == JobState.Pending );
 
       try
       {
@@ -219,7 +189,7 @@ namespace Index.Jobs
     protected void RaiseCompletedEvent() => Completed?.Invoke( this, EventArgs.Empty );
     protected void RaiseInitializedEvent() => Initialized?.Invoke( this, EventArgs.Empty );
     protected void RaiseStartedEvent() => Started?.Invoke( this, EventArgs.Empty );
-    protected void RaiseFaultedEvent( Exception exception ) => Faulted?.Invoke( this, exception );
+    protected void RaiseFaultedEvent() => Faulted?.Invoke( this, EventArgs.Empty );
 
     protected void HandleException( Exception exception )
     {
@@ -230,7 +200,7 @@ namespace Index.Jobs
       _initializationCompletionSource.TrySetResult();
       _executeCompletionSource.TrySetResult();
 
-      RaiseFaultedEvent( exception );
+      RaiseFaultedEvent();
     }
 
     private void HandleCancellation()

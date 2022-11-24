@@ -8,15 +8,15 @@
 
     <!--#region Style: ProgressBar-->
     <Style TargetType="{x:Type ProgressBar}">
-        <Setter Property="Background" Value="#50000000" />
+        <Setter Property="Background" Value="#A0000000" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Foreground">
             <Setter.Value>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="{DynamicResource Color.ColourfulGlyph.Static.Opaque}" Offset="0.00" />
-                    <GradientStop Color="{DynamicResource Color.ColourfulGlyph.Static}" Offset="0.55" />
-                    <GradientStop Color="{DynamicResource Color.ColourfulGlyph.Static}" Offset="0.65" />
-                    <GradientStop Color="{DynamicResource Color.ColourfulGlyph.Static.Opaque}" Offset="1.00" />
+                    <GradientStop Color="{DynamicResource Colors.Accent.Static.Opaque}" Offset="0.00" />
+                    <GradientStop Color="{DynamicResource Colors.Accent.Static}" Offset="0.55" />
+                    <GradientStop Color="{DynamicResource Colors.Accent.Static}" Offset="0.65" />
+                    <GradientStop Color="{DynamicResource Colors.Accent.Static.Opaque}" Offset="1.00" />
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>

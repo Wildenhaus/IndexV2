@@ -15,6 +15,7 @@
     <ProjectReference Include="..\Index.Domain\Index.Domain.csproj" />
     <ProjectReference Include="..\Index.UI\Index.UI.csproj" />
     <ProjectReference Include="..\Modules\Index.Modules.DataExplorer\Index.Modules.DataExplorer.csproj" />
+    <ProjectReference Include="..\Modules\Index.Modules.JobManager\Index.Modules.JobManager.csproj" />
     <ProjectReference Include="..\Modules\Index.Modules.Logging\Index.Modules.Logging.csproj" />
   </ItemGroup>
 

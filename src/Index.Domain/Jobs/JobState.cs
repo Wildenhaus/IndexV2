@@ -3,7 +3,7 @@
 
   public enum JobState
   {
-    Idle = 0,
+    Pending = 0,
     Initializing = 1,
     Initialized = 2,
     Executing = 3,

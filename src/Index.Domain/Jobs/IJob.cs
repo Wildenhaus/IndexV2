@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Index.Common;
 
 namespace Index.Jobs
 {
@@ -12,7 +13,7 @@ namespace Index.Jobs
     event EventHandler Completed;
     event EventHandler Initialized;
     event EventHandler Started;
-    event EventHandler<Exception> Faulted;
+    event EventHandler Faulted;
 
     #endregion
 
@@ -21,13 +22,7 @@ namespace Index.Jobs
     string Name { get; }
     JobState State { get; }
     StatusList StatusList { get; }
-
-    bool IsIndeterminate { get; }
-    string Status { get; }
-
-    int CompletedUnits { get; }
-    int TotalUnits { get; }
-    string UnitName { get; }
+    IProgressInfo Progress { get; }
 
     Task Completion { get; }
     Exception Exception { get; }

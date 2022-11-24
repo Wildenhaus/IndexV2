@@ -11,6 +11,7 @@ using Index.Domain.Database.Repositories;
 using Index.Domain.FileSystem;
 using Index.Domain.GameProfiles;
 using Index.Domain.Models;
+using Index.Jobs;
 using Index.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -88,6 +89,7 @@ namespace Index.App
       Container.Register<IFileSystem, FileSystem>( Reuse.Singleton );
       Container.Register<IAssetManager, AssetManager>( Reuse.Singleton );
       Container.Register<IGameProfileManager, GameProfileManager>( Reuse.Singleton );
+      Container.Register<IJobManager, JobManager>( Reuse.Singleton );
       Container.Register<IEditorEnvironment, EditorEnvironment>( Reuse.Singleton );
     }
 
