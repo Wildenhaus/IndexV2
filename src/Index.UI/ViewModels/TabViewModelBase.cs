@@ -1,7 +1,7 @@
 ﻿namespace Index.UI.ViewModels
 {
 
-  public abstract class TabViewModelBase : ViewModelBase
+  public abstract class TabViewModelBase : InitializableViewModel
   {
 
     #region Properties
