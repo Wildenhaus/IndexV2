@@ -16,6 +16,9 @@ namespace Index.Domain.Assets
 
     void InitializeFromFileSystem( IFileSystem fileSystem );
 
+    Task<TAsset> LoadAsset<TAsset>( IAssetReference assetReference )
+      where TAsset : IAsset;
+
     void AddAssetReference( IAssetReference assetReference );
     bool TryGetAssetReference( Type assetType, string assetName, out IAssetReference assetReference );
 

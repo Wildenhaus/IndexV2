@@ -5,7 +5,7 @@
     where TAsset : IAsset
   {
 
-    Task<TAsset> LoadAsset( IFileSystemAssetNode<TAsset> assetNode );
+    Task<TAsset> LoadAsset( IAssetReference assetReference );
 
   }
 

@@ -8,6 +8,7 @@
 
     public string AssetName { get; }
     public Type AssetType { get; }
+    public Type AssetFactoryType { get; }
     public IFileSystemAssetNode Node { get; }
 
     #endregion
@@ -18,6 +19,7 @@
     {
       Node = node;
       AssetType = node.AssetType;
+      AssetFactoryType = node.AssetFactoryType;
       AssetName = assetName ?? node.DisplayName;
     }
 
@@ -25,6 +27,7 @@
     {
       Node = node;
       AssetType = assetType;
+      AssetFactoryType = node.AssetFactoryType;
       AssetName = assetName ?? node.DisplayName;
     }
 

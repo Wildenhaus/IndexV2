@@ -1,4 +1,4 @@
-﻿using Index.Domain.Assets.Textures;
+﻿using Index.Textures;
 
 namespace Index.Profiles.HaloCEA
 {

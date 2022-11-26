@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Runtime.Serialization;
 
 namespace Index.Domain.Assets
 {
@@ -49,7 +50,7 @@ namespace Index.Domain.Assets
 
     private static string GetAssetTypeName()
     {
-      var dummy = ( IAsset ) Activator.CreateInstance( typeof( TAsset ) );
+      var dummy = ( IAsset ) FormatterServices.GetUninitializedObject( typeof( TAsset ) );
       return dummy.TypeName;
     }
 

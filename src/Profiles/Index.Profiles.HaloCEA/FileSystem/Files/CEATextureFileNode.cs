@@ -1,11 +1,12 @@
 ﻿using Index.Domain.Assets;
-using Index.Domain.Assets.Textures;
+using Index.Domain.Assets.Textures.Dxgi;
 using Index.Domain.FileSystem;
+using Index.Profiles.HaloCEA.Assets;
 
 namespace Index.Profiles.HaloCEA.FileSystem.Files
 {
 
-  public class CEATextureFileNode : CEAFileNode, IFileSystemAssetNode<DxgiTextureAsset>
+  public class CEATextureFileNode : CEAFileNode, IFileSystemAssetNode<DxgiTextureAsset, CEATextureAssetFactory>
   {
 
     #region Constants
@@ -67,7 +68,6 @@ namespace Index.Profiles.HaloCEA.FileSystem.Files
     }
 
     #endregion
-
 
   }
 

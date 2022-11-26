@@ -6,6 +6,7 @@
 
     string AssetName { get; }
     Type AssetType { get; }
+    Type AssetFactoryType { get; }
 
     IFileSystemAssetNode Node { get; }
 

@@ -1,4 +1,5 @@
 ﻿using Index.Domain.FileSystem;
+using Prism.Ioc;
 
 namespace Index.Domain.Assets
 {
@@ -47,6 +48,18 @@ namespace Index.Domain.Assets
       }
 
       _isInitialized = true;
+    }
+
+    public async Task<TAsset> LoadAsset<TAsset>( IAssetReference assetReference )
+      where TAsset : IAsset
+    {
+      ASSERT_NOT_NULL( assetReference );
+      ASSERT( assetReference.AssetType.IsAssignableTo( typeof( TAsset ) ), $"Asset type mismatch." );
+
+      var factoryType = assetReference.AssetFactoryType;
+      var factory = ( IAssetFactory<TAsset> ) Activator.CreateInstance( factoryType );
+
+      return await factory.LoadAsset( assetReference );
     }
 
     public void AddAssetReference( IAssetReference assetReference )

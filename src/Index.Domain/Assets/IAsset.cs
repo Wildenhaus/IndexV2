@@ -8,6 +8,7 @@
     string EditorKey { get; }
 
     string AssetName { get; }
+    IAssetReference AssetReference { get; }
 
   }
 

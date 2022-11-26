@@ -9,6 +9,7 @@ namespace Index.Domain.Assets
     #region Properties
 
     Type AssetType { get; }
+    Type AssetFactoryType { get; }
 
     #endregion
 
@@ -21,6 +22,19 @@ namespace Index.Domain.Assets
     #region Properties
 
     Type IFileSystemAssetNode.AssetType => typeof( TAsset );
+
+    #endregion
+
+  }
+
+  public interface IFileSystemAssetNode<TAsset, TFactory> : IFileSystemAssetNode<TAsset>
+    where TAsset : IAsset
+    where TFactory : IAssetFactory<TAsset>
+  {
+
+    #region Properties
+
+    Type IFileSystemAssetNode.AssetFactoryType => typeof( TFactory );
 
     #endregion
 

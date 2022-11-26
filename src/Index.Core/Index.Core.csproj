@@ -8,4 +8,8 @@
     <RootNamespace>Index</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="DirectXTexNet" Version="1.0.3" />
+  </ItemGroup>
+
 </Project>
