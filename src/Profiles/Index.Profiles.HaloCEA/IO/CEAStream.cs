@@ -166,7 +166,7 @@ namespace Index.Profiles.HaloCEA.IO
         SetCurrentChunk( chunkIndex );
 
       // Set position within chunk
-      var chunkPosition = offset % MAX_CHUNK_COUNT;
+      var chunkPosition = offset % MAX_CHUNK_SIZE;
       _decompressStream.Position = chunkPosition;
       _position = offset;
 
