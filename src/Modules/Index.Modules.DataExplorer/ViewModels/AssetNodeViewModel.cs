@@ -1,4 +1,5 @@
 ﻿using Index.Domain.Assets;
+using Index.UI.Commands;
 using Index.UI.Controls.Menus;
 
 namespace Index.Modules.DataExplorer.ViewModels
@@ -43,7 +44,10 @@ namespace Index.Modules.DataExplorer.ViewModels
     protected override void OnConfigureContextMenu( MenuViewModelBuilder builder )
     {
       builder
-        .AddItem( "Open" )
+        .AddItem( "Open", item =>
+        {
+          item.Command( EditorCommands.NavigateToAssetCommand, _assetReference );
+        } )
         .AddSeparator()
         .AddItem( "Properties" )
         .AddItem( "Extract" );

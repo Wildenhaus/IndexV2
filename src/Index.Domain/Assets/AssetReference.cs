@@ -1,4 +1,6 @@
-﻿namespace Index.Domain.Assets
+﻿using System.Runtime.Serialization;
+
+namespace Index.Domain.Assets
 {
 
   public class AssetReference : IAssetReference
@@ -9,6 +11,9 @@
     public string AssetName { get; }
     public Type AssetType { get; }
     public Type AssetFactoryType { get; }
+
+    public string EditorKey => GetEditorKey();
+
     public IFileSystemAssetNode Node { get; }
 
     #endregion
@@ -29,6 +34,16 @@
       AssetType = assetType;
       AssetFactoryType = node.AssetFactoryType;
       AssetName = assetName ?? node.DisplayName;
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private string GetEditorKey()
+    {
+      var dummy = ( IAsset ) FormatterServices.GetUninitializedObject( AssetType );
+      return dummy.EditorKey;
     }
 
     #endregion

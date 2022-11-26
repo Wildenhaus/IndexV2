@@ -17,6 +17,8 @@
     <ProjectReference Include="..\Modules\Index.Modules.DataExplorer\Index.Modules.DataExplorer.csproj" />
     <ProjectReference Include="..\Modules\Index.Modules.JobManager\Index.Modules.JobManager.csproj" />
     <ProjectReference Include="..\Modules\Index.Modules.Logging\Index.Modules.Logging.csproj" />
+    <ProjectReference Include="..\Modules\Index.Modules.TextureEditor\Index.Modules.TextureEditor.csproj" />
+    <ProjectReference Include="..\Profiles\Index.Profiles.HaloCEA\Index.Profiles.HaloCEA.csproj" />
   </ItemGroup>
 
   <ItemGroup>

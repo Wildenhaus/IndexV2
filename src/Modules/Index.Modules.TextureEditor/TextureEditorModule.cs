@@ -1,4 +1,6 @@
 ﻿using System;
+using Index.Domain.Editors;
+using Index.Modules.TextureEditor.Views;
 using Prism.Ioc;
 using Prism.Modularity;
 
@@ -10,12 +12,11 @@ namespace Index.Modules.TextureEditor
 
     public void OnInitialized( IContainerProvider containerProvider )
     {
-      throw new NotImplementedException();
     }
 
     public void RegisterTypes( IContainerRegistry containerRegistry )
     {
-      throw new NotImplementedException();
+      containerRegistry.RegisterForNavigation<TextureEditorView>( DefaultEditorKeys.TextureEditor );
     }
 
   }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Prism.Regions;
 using PropertyChanged;
 
 namespace Index.UI.ViewModels
@@ -30,6 +31,21 @@ namespace Index.UI.ViewModels
     ~ViewModelBase()
     {
       Dispose( false );
+    }
+
+    #endregion
+
+    #region INavigationAware Methods
+
+    public virtual bool IsNavigationTarget( NavigationContext navigationContext )
+      => false;
+
+    public virtual void OnNavigatedTo( NavigationContext navigationContext )
+    {
+    }
+
+    public virtual void OnNavigatedFrom( NavigationContext navigationContext )
+    {
     }
 
     #endregion

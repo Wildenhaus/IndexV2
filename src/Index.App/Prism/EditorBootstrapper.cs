@@ -5,6 +5,8 @@ using Index.App.Views;
 using Index.Modules.DataExplorer;
 using Index.Modules.JobManager;
 using Index.Modules.Logging;
+using Index.Modules.TextureEditor;
+using Index.UI.Commands;
 using Index.UI.Windows;
 using Prism.DryIoc;
 using Prism.Ioc;
@@ -36,6 +38,8 @@ namespace Index.App.Prism
       moduleCatalog.AddModule<LoggingModule>();
       moduleCatalog.AddModule<JobManagerModule>();
       moduleCatalog.AddModule<DataExplorerModule>();
+
+      moduleCatalog.AddModule<TextureEditorModule>();
     }
 
     protected override void RegisterTypes( IContainerRegistry containerRegistry )
@@ -46,12 +50,17 @@ namespace Index.App.Prism
 
     protected override void OnInitialized()
     {
+      EditorCommands.Initialize( Container );
+
       AppDomain.CurrentDomain.UnhandledException += ( sender, e ) =>
       {
-        var exception = ( Exception ) e.ExceptionObject;
-        var dialogService = Container.Resolve<IDialogService>();
+        App.Current.Dispatcher.Invoke( () =>
+        {
+          var exception = ( Exception ) e.ExceptionObject;
+          var dialogService = Container.Resolve<IDialogService>();
 
-        dialogService.ShowUnhandledExceptionDialog( exception );
+          dialogService.ShowUnhandledExceptionDialog( exception );
+        } );
       };
 
       if ( Shell is Window window )

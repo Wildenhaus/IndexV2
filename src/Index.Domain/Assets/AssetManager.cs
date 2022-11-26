@@ -57,9 +57,10 @@ namespace Index.Domain.Assets
       ASSERT( assetReference.AssetType.IsAssignableTo( typeof( TAsset ) ), $"Asset type mismatch." );
 
       var factoryType = assetReference.AssetFactoryType;
-      var factory = ( IAssetFactory<TAsset> ) Activator.CreateInstance( factoryType );
+      var factory = ( IAssetFactory ) Activator.CreateInstance( factoryType );
 
-      return await factory.LoadAsset( assetReference );
+      var asset = await factory.LoadAsset( assetReference );
+      return ( TAsset ) asset;
     }
 
     public void AddAssetReference( IAssetReference assetReference )

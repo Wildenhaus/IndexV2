@@ -1,5 +1,7 @@
-﻿using Index.Domain.Assets;
+﻿using System.Threading.Tasks;
+using Index.Domain.Assets;
 using Prism.Ioc;
+using Prism.Regions;
 using PropertyChanged;
 
 namespace Index.UI.ViewModels
@@ -23,14 +25,44 @@ namespace Index.UI.ViewModels
 
     #region Constructor
 
-    protected EditorViewModelBase( IAssetReference assetReference, IContainerProvider container )
+    protected EditorViewModelBase( IContainerProvider container )
     {
-      AssetReference = assetReference;
       Container = container;
       AssetManager = container.Resolve<IAssetManager>();
-
-      TabName = assetReference.AssetName;
     }
+
+    #endregion
+
+    #region Overrides
+
+    protected override async Task<StatusList> OnInitializing()
+    {
+      Asset = await AssetManager.LoadAsset<TAsset>( AssetReference );
+      await OnAssetLoaded( Asset );
+      return new StatusList();
+    }
+
+    public override bool IsNavigationTarget( NavigationContext navigationContext )
+    {
+      var assetReference = ( IAssetReference ) navigationContext.Parameters[ "AssetReference" ];
+      return assetReference == AssetReference;
+    }
+
+    public override void OnNavigatedTo( NavigationContext navigationContext )
+    {
+      if ( AssetReference is null )
+      {
+        AssetReference = ( IAssetReference ) navigationContext.Parameters[ "AssetReference" ];
+        TabName = AssetReference.AssetName;
+        Initialize();
+      }
+    }
+
+    #endregion
+
+    #region Abstract Methods
+
+    protected abstract Task OnAssetLoaded( TAsset asset );
 
     #endregion
 

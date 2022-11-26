@@ -48,14 +48,14 @@ namespace Index.Textures
       if ( info.IsCubeMap )
         img = TexHelper.Instance.InitializeCube( format, info.Width, info.Height, info.FaceCount, info.MipCount, CP_FLAGS.NONE );
       else
-        img = TexHelper.Instance.Initialize2D( format, info.Width, info.Height, 1, info.MipCount, CP_FLAGS.NONE );
+        img = TexHelper.Instance.Initialize2D( format, info.Width, info.Height, info.Depth, info.MipCount, CP_FLAGS.NONE );
 
       // Get a pointer to the scratch image's raw pixel data
       var srcData = textureData;
       var srcDataLen = textureData.Length;
       var pDest = img.GetPixels();
       var pDestLen = img.GetPixelsSize();
-      ASSERT( pDestLen == srcDataLen, "Source data will not fit in the destination image." );
+      ASSERT( pDestLen >= srcDataLen, "Source data will not fit in the destination image." );
 
       // Copy data into the scratch image
       Marshal.Copy( srcData, 0, pDest, srcDataLen );

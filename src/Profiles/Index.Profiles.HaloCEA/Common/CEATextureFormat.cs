@@ -27,17 +27,17 @@ namespace Index.Profiles.HaloCEA
         case CEATextureFormat.AI88_Alt:
           return DxgiTextureFormat.DXGI_FORMAT_R8G8_TYPELESS;
         case CEATextureFormat.BC1:
-          return DxgiTextureFormat.DXGI_FORMAT_BC1_TYPELESS;
+          return DxgiTextureFormat.DXGI_FORMAT_BC1_UNORM;
         case CEATextureFormat.BC2:
-          return DxgiTextureFormat.DXGI_FORMAT_BC2_TYPELESS;
+          return DxgiTextureFormat.DXGI_FORMAT_BC2_UNORM;
         case CEATextureFormat.BC3:
-          return DxgiTextureFormat.DXGI_FORMAT_BC3_TYPELESS;
+          return DxgiTextureFormat.DXGI_FORMAT_BC3_UNORM;
         case CEATextureFormat.BC4:
-          return DxgiTextureFormat.DXGI_FORMAT_BC4_TYPELESS;
+          return DxgiTextureFormat.DXGI_FORMAT_BC4_UNORM;
         case CEATextureFormat.BC5:
-          return DxgiTextureFormat.DXGI_FORMAT_BC5_TYPELESS;
+          return DxgiTextureFormat.DXGI_FORMAT_BC5_UNORM;
         case CEATextureFormat.ARGB8888:
-          return DxgiTextureFormat.DXGI_FORMAT_B8G8R8A8_TYPELESS;
+          return DxgiTextureFormat.DXGI_FORMAT_B8G8R8A8_UNORM;
         default:
           throw new NotSupportedException( "Invalid CEA Texture Type." );
       }

@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Index.Core\Index.Core.csproj" />
-    <ProjectReference Include="..\..\Index.Domain\Index.Domain.csproj" />
-    <ProjectReference Include="..\..\Index.UI\Index.UI.csproj" />
+    <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\" />
+    <ProjectReference Include="..\..\Index.Core\Index.Core.csproj" />
+    <ProjectReference Include="..\..\Index.Domain\Index.Domain.csproj" />
+    <ProjectReference Include="..\..\Index.UI\Index.UI.csproj" />
   </ItemGroup>
 
 </Project>

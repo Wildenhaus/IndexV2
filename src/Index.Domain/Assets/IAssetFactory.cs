@@ -1,11 +1,23 @@
 ﻿namespace Index.Domain.Assets
 {
 
-  public interface IAssetFactory<TAsset>
+  public interface IAssetFactory
+  {
+
+    Task<IAsset> LoadAsset( IAssetReference assetReference );
+
+  }
+
+  public interface IAssetFactory<TAsset> : IAssetFactory
     where TAsset : IAsset
   {
 
-    Task<TAsset> LoadAsset( IAssetReference assetReference );
+    new Task<TAsset> LoadAsset( IAssetReference assetReference );
+
+    async Task<IAsset> IAssetFactory.LoadAsset( IAssetReference assetReference )
+    {
+      return await LoadAsset( assetReference );
+    }
 
   }
 
