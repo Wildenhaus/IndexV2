@@ -17,6 +17,7 @@
 
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxButton.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxIcon.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxProgressOverlay.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxTextBox.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxTreeView.xaml" />
 
