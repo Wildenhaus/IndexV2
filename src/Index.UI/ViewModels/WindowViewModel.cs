@@ -6,7 +6,7 @@ using PropertyChanged;
 namespace Index.UI.ViewModels
 {
 
-  public abstract class WindowViewModel : ViewModelBase
+  public abstract class WindowViewModel : ViewModelBase, IWindowViewModel
   {
 
     #region Properties

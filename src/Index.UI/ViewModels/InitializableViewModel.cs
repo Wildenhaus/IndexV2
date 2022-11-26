@@ -1,15 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Index.Common;
 
 namespace Index.UI.ViewModels
 {
 
-  public abstract class InitializableViewModel : ViewModelBase
+  public abstract class InitializableViewModel : ViewModelBase, IInitializableViewModel
   {
 
     #region Data Members
 
     private bool _isInitialized;
+    private Task _initializeTask;
+    private CancellationTokenSource _initializeCts;
 
     #endregion
 
@@ -22,17 +25,25 @@ namespace Index.UI.ViewModels
 
     #region Public Methods
 
-    public async Task<StatusList> Initialize()
+    public void Initialize()
     {
       if ( _isInitialized )
-        return new StatusList();
+        return;
 
       IsInitializing = true;
-      var statusList = await OnInitializing();
-      IsInitializing = false;
+      _initializeTask = Task.Factory.StartNew( OnInitializing, TaskCreationOptions.LongRunning );
 
-      _isInitialized = true;
+      _initializeTask.ContinueWith( t =>
+      {
+        IsInitializing = false;
+
+        if ( t.IsCompletedSuccessfully )
+          _isInitialized = true;
+      } );
     }
+
+    public void CancelInitialization()
+      => _initializeCts.Cancel();
 
     #endregion
 

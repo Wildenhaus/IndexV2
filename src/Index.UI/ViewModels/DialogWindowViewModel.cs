@@ -12,7 +12,7 @@ using PropertyChanged;
 namespace Index.UI.ViewModels
 {
 
-  public abstract class DialogWindowViewModel : WindowViewModel, IDialogAware
+  public abstract class DialogWindowViewModel : WindowViewModel, IDialogWindowViewModel
   {
 
     #region Events
@@ -36,7 +36,7 @@ namespace Index.UI.ViewModels
 
     #region Constructor
 
-    protected DialogWindowViewModel( IContainerProvider container ) 
+    protected DialogWindowViewModel( IContainerProvider container )
       : base( container )
     {
       Buttons = new ObservableCollection<IxButton>();

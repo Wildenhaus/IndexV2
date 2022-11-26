@@ -6,7 +6,7 @@ namespace Index.UI.ViewModels
 {
 
   [AddINotifyPropertyChangedInterface]
-  public abstract class ViewModelBase : IDisposable, INotifyPropertyChanged
+  public abstract class ViewModelBase : IViewModel
   {
 
     #region Events

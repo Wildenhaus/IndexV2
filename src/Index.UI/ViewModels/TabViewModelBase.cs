@@ -1,12 +1,14 @@
-﻿namespace Index.UI.ViewModels
+﻿using Index.UI.ViewModels;
+
+namespace Index.UI.ViewModels
 {
 
-  public abstract class TabViewModelBase : InitializableViewModel
+  public abstract class TabViewModelBase : ViewModelBase, ITabViewModel
   {
 
     #region Properties
 
-    public virtual string TabName { get; protected set; }
+    public string TabName { get; set; }
 
     #endregion
 
