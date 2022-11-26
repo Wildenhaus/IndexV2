@@ -17,7 +17,7 @@ namespace Index.Modules.DataExplorer.ViewModels
 
     #region Properties
 
-    public string Name
+    public override string Name
     {
       get => _name;
     }

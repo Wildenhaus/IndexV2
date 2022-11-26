@@ -3,6 +3,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Index.UI;component/Themes/Colors.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Converters.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Fonts.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Paths.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates.xaml" />

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using Index.UI.Controls.Menus;
 using Prism.Mvvm;
@@ -21,6 +22,8 @@ namespace Index.Modules.DataExplorer.ViewModels
     #endregion
 
     #region Properties
+
+    public abstract string Name { get; }
 
     public ObservableCollection<TViewModel> Children
     {
@@ -68,6 +71,46 @@ namespace Index.Modules.DataExplorer.ViewModels
 
     #endregion
 
+    #region Public Methods
+
+    public bool ApplySearchCriteria( string searchTerm )
+    {
+      var isEmpty = string.IsNullOrWhiteSpace( searchTerm );
+
+      if ( IsLeaf )
+      {
+        if ( isEmpty )
+          return IsVisible = true;
+        else
+          return IsVisible = IsMatchForSearchTerm( searchTerm );
+      }
+      else
+      {
+        var childrenVisible = false;
+
+        Parallel.ForEach( Children,
+          localInit: () => false,
+          body: ( child, state, idx, localChildrenVisible ) =>
+          {
+            childrenVisible |= child.ApplySearchCriteria( searchTerm );
+            return childrenVisible;
+          },
+          localFinally: ( localChildrenVisible ) =>
+          {
+            childrenVisible |= localChildrenVisible;
+          } );
+
+        if ( isEmpty )
+          childrenVisible = true;
+
+        IsExpanded = !isEmpty && childrenVisible;
+        IsVisible = childrenVisible;
+        return childrenVisible;
+      }
+    }
+
+    #endregion
+
     #region Private Methods
 
     private ContextMenu BuildContextMenu()
@@ -87,6 +130,9 @@ namespace Index.Modules.DataExplorer.ViewModels
     protected virtual void OnConfigureContextMenu( MenuViewModelBuilder builder )
     {
     }
+
+    protected virtual bool IsMatchForSearchTerm( string searchTerm )
+      => Name.ToLower().Contains( searchTerm );
 
     #endregion
 

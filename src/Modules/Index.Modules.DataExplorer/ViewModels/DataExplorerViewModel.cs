@@ -1,12 +1,15 @@
 ﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Index.Domain.Assets;
 using Index.Domain.FileSystem;
 using Index.Domain.Models;
 using Index.Modules.DataExplorer.Services;
+using Index.Utilities;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
+using PropertyChanged;
 
 namespace Index.Modules.DataExplorer.ViewModels
 {
@@ -20,12 +23,17 @@ namespace Index.Modules.DataExplorer.ViewModels
     private readonly IFileSystem _fileSystem;
     private readonly IRegionManager _regionManager;
 
+    private readonly ActionDebouncer _searchDebouncer;
+
     #endregion
 
     #region Properties
 
     public ObservableCollection<AssetNodeViewModel> AssetNodes { get; }
     public ObservableCollection<FileTreeNodeViewModel> FileTreeNodes { get; }
+
+    [OnChangedMethod( nameof( OnSearchTermChanged ) )]
+    public string SearchTerm { get; set; }
 
     public ICommand NavigateToAssetCommand { get; }
 
@@ -43,6 +51,8 @@ namespace Index.Modules.DataExplorer.ViewModels
       FileTreeNodes = InitializeFileTreeNodes( environment.FileSystem );
 
       NavigateToAssetCommand = new DelegateCommand<IAssetReference>( NavigateToAsset );
+
+      _searchDebouncer = new ActionDebouncer( 500, ApplySearchTerm );
     }
 
     #endregion
@@ -67,6 +77,19 @@ namespace Index.Modules.DataExplorer.ViewModels
       parameters.Add( "AssetReference", assetReference );
 
       _regionManager.RequestNavigate( "EditorRegion", "TextureEditorView", parameters );
+    }
+
+    private void OnSearchTermChanged()
+      => _searchDebouncer.Invoke();
+
+    private void ApplySearchTerm()
+    {
+      var searchTerm = SearchTerm.ToLower();
+      Task.Factory.StartNew( () =>
+      {
+        foreach ( var node in AssetNodes )
+          node.ApplySearchCriteria( searchTerm );
+      }, TaskCreationOptions.LongRunning );
     }
 
     #endregion
