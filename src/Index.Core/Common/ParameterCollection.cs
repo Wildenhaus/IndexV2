@@ -6,9 +6,12 @@ namespace Index
   public interface IParameterCollection : IDisposable
   {
 
+    T Get<T>();
     T Get<T>( string key );
+    bool TryGet<T>( out T parameter );
     bool TryGet<T>( string key, out T parameter );
 
+    void Set<T>( T value );
     void Set<T>( string key, T value );
 
   }
@@ -24,6 +27,9 @@ namespace Index
 
     #region Public Methods
 
+    public T Get<T>()
+      => Get<T>( typeof( T ).FullName );
+
     public T Get<T>( string key )
     {
       if ( _data is null )
@@ -34,6 +40,9 @@ namespace Index
 
       return ( T ) value;
     }
+
+    public bool TryGet<T>( out T parameter )
+      => TryGet<T>( typeof( T ).FullName, out parameter );
 
     public bool TryGet<T>( string key, out T parameter )
     {
@@ -48,6 +57,9 @@ namespace Index
       parameter = ( T ) value;
       return true;
     }
+
+    public void Set<T>( T value )
+      => Set<T>( typeof( T ).FullName, value );
 
     public void Set<T>( string key, T value )
     {
