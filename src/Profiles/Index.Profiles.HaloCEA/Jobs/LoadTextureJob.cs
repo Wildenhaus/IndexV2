@@ -132,7 +132,8 @@ namespace Index.Profiles.HaloCEA.Jobs
       }
 
       var sizeOfData = stream.Length - stream.Position;
-      data.DataStream = new StreamSegment( stream, reader.Position, sizeOfData );
+      data.DataStream = new MemoryStream();
+      new StreamSegment( stream, reader.Position, sizeOfData ).CopyTo( data.DataStream );
 
       return data;
     }
