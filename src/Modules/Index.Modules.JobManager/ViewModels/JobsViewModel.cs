@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Documents;
 using Index.Jobs;
 using Index.UI.ViewModels;
 
@@ -10,7 +12,7 @@ namespace Index.Modules.JobManager.ViewModels
 
     private IJobManager _jobManager;
 
-    public ReadOnlyObservableCollection<IJob> Jobs => _jobManager.Jobs;
+    public IReadOnlyList<IJob> Jobs => _jobManager.Jobs;
 
     public JobsViewModel( IJobManager jobManager )
     {

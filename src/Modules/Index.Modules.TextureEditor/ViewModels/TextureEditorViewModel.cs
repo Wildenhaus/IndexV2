@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using Index.Domain.Assets;
 using Index.Domain.Assets.Textures;
+using Index.Jobs;
 using Index.UI.ViewModels;
 using Prism.Ioc;
 
@@ -23,8 +23,11 @@ namespace Index.Modules.TextureEditor.ViewModels
       Texture = new TextureViewModel();
     }
 
-    protected override async Task OnAssetLoaded( ITextureAsset asset )
+    protected override void OnInitializationJobCompleted( IJob job )
     {
+      var typedJob = job as IJob<ITextureAsset>;
+      var asset = typedJob.Result;
+
       foreach ( var image in asset.Images )
       {
         var imageModel = new TextureImageViewModel();
@@ -40,6 +43,8 @@ namespace Index.Modules.TextureEditor.ViewModels
 
         Texture.AddImage( imageModel );
       }
+
+      Task.Delay( 5000 ).Wait();
     }
 
   }

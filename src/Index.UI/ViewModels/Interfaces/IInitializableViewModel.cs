@@ -1,4 +1,5 @@
 ﻿using Index.Common;
+using Prism.Commands;
 
 namespace Index.UI.ViewModels
 {
@@ -9,6 +10,7 @@ namespace Index.UI.ViewModels
     #region Properties
 
     public bool IsInitializing { get; }
+    public DelegateCommand CancelInitializationCommand { get; }
     public IProgressInfo InitializationProgress { get; }
 
     #endregion

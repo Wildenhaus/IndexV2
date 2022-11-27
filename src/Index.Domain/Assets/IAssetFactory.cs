@@ -1,23 +1,23 @@
-﻿namespace Index.Domain.Assets
+﻿using Index.Jobs;
+
+namespace Index.Domain.Assets
 {
 
   public interface IAssetFactory
   {
 
-    Task<IAsset> LoadAsset( IAssetReference assetReference );
+    IJob<IAsset> LoadAsset( IAssetReference assetReference );
 
   }
 
-  public interface IAssetFactory<TAsset> : IAssetFactory
-    where TAsset : IAsset
+  public interface IAssetFactory<out TAsset> : IAssetFactory
+    where TAsset : class, IAsset
   {
 
-    new Task<TAsset> LoadAsset( IAssetReference assetReference );
+    new IJob<TAsset> LoadAsset( IAssetReference assetReference );
 
-    async Task<IAsset> IAssetFactory.LoadAsset( IAssetReference assetReference )
-    {
-      return await LoadAsset( assetReference );
-    }
+    IJob<IAsset> IAssetFactory.LoadAsset( IAssetReference assetReference )
+      => LoadAsset( assetReference );
 
   }
 

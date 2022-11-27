@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Index.Common;
+using Prism.Ioc;
 
 namespace Index.Jobs
 {
@@ -21,6 +22,9 @@ namespace Index.Jobs
     #endregion
 
     #region Data Members
+
+    private readonly IContainerProvider _container;
+    private readonly IParameterCollection _parameters;
 
     private string _name;
     private JobState _state;
@@ -58,6 +62,11 @@ namespace Index.Jobs
       get => _progress;
     }
 
+    public bool IsCancellationRequested
+    {
+      get => _cancellationTokenSource.IsCancellationRequested;
+    }
+
     public Task Completion
     {
       get => _executeCompletionSource.Task;
@@ -74,16 +83,21 @@ namespace Index.Jobs
       get => _cancellationTokenSource.Token;
     }
 
-    protected bool IsCancellationRequested
+    protected IContainerProvider Container
     {
-      get => _cancellationTokenSource.IsCancellationRequested;
+      get => _container;
+    }
+
+    protected IParameterCollection Parameters
+    {
+      get => _parameters;
     }
 
     #endregion
 
     #region Constructor
 
-    protected JobBase()
+    internal JobBase()
     {
       _progress = new ProgressInfo();
       _statusList = new StatusList();
@@ -91,6 +105,13 @@ namespace Index.Jobs
       _initializationCompletionSource = new TaskCompletionSource();
       _executeCompletionSource = new TaskCompletionSource();
       _cancellationTokenSource = new CancellationTokenSource();
+    }
+
+    protected JobBase( IContainerProvider container, IParameterCollection parameters = null )
+      : this()
+    {
+      _container = container;
+      _parameters = parameters;
     }
 
     #endregion
@@ -191,6 +212,24 @@ namespace Index.Jobs
     protected void RaiseStartedEvent() => Started?.Invoke( this, EventArgs.Empty );
     protected void RaiseFaultedEvent() => Faulted?.Invoke( this, EventArgs.Empty );
 
+    protected void SetStatus( string message, params object[] formatArgs )
+      => Progress.Status = string.Format( message, formatArgs );
+
+    protected void SetIndeterminate( bool indeterminate = true )
+      => Progress.IsIndeterminate = indeterminate;
+
+    protected void SetCompletedUnits( double completedUnits )
+      => Progress.CompletedUnits = completedUnits;
+
+    protected void SetTotalUnits( double totalUnits )
+      => Progress.TotalUnits = totalUnits;
+
+    protected void SetUnitName( string unitName )
+      => Progress.UnitName = unitName;
+
+    protected void IncreaseCompletedUnits( double increase )
+      => Progress.CompletedUnits += increase;
+
     protected void HandleException( Exception exception )
     {
       Exception = exception;
@@ -230,6 +269,27 @@ namespace Index.Jobs
     #region Properties
 
     public TResult? Result { get; protected set; }
+
+    #endregion
+
+    #region Constructor
+
+    internal JobBase()
+      : base()
+    {
+    }
+
+    protected JobBase( IContainerProvider containerProvider, IParameterCollection parameters = null )
+      : base( containerProvider, parameters )
+    {
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    protected void SetResult( TResult result )
+      => Result = result;
 
     #endregion
 

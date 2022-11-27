@@ -28,7 +28,7 @@ namespace Index.App.Prism
     }
 
     protected override IContainerExtension CreateContainerExtension()
-      => new DryIocContainerExtension( _dryIocContainer );
+      => _dryIocContainer.Resolve<IContainerExtension>();
 
     protected override DependencyObject CreateShell()
       => Container.Resolve<EditorView>();

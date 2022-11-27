@@ -12,8 +12,11 @@ using Index.Domain.FileSystem;
 using Index.Domain.GameProfiles;
 using Index.Domain.Models;
 using Index.Jobs;
+using Index.Textures;
 using Index.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Prism.DryIoc;
+using Prism.Ioc;
 
 namespace Index.App
 {
@@ -33,6 +36,10 @@ namespace Index.App
     {
       Container = new Container( CreateContainerRules() );
       ( ( App ) App.Current ).Container = Container;
+
+      var containerExtension = new DryIocContainerExtension( Container );
+      Container.RegisterInstance<IContainerExtension>( containerExtension );
+      Container.RegisterInstance<IContainerProvider>( containerExtension );
     }
 
     #endregion
@@ -84,6 +91,7 @@ namespace Index.App
 
     private void RegisterEditorServices()
     {
+      Container.Register<IDxgiTextureService, DxgiTextureService>();
       Container.Register<IFileDialogService, FileDialogService>( Reuse.Singleton );
 
       Container.Register<IFileSystem, FileSystem>( Reuse.Singleton );

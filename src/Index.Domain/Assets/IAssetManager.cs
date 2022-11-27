@@ -1,4 +1,5 @@
 ﻿using Index.Domain.FileSystem;
+using Index.Jobs;
 
 namespace Index.Domain.Assets
 {
@@ -16,8 +17,8 @@ namespace Index.Domain.Assets
 
     void InitializeFromFileSystem( IFileSystem fileSystem );
 
-    Task<TAsset> LoadAsset<TAsset>( IAssetReference assetReference )
-      where TAsset : IAsset;
+    IJob<TAsset> LoadAsset<TAsset>( IAssetReference assetReference )
+      where TAsset : class, IAsset;
 
     void AddAssetReference( IAssetReference assetReference );
     bool TryGetAssetReference( Type assetType, string assetName, out IAssetReference assetReference );

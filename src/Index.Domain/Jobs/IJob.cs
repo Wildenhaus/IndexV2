@@ -24,6 +24,7 @@ namespace Index.Jobs
     StatusList StatusList { get; }
     IProgressInfo Progress { get; }
 
+    bool IsCancellationRequested { get; }
     Task Completion { get; }
     Exception Exception { get; }
 
@@ -39,7 +40,7 @@ namespace Index.Jobs
 
   }
 
-  public interface IJob<TResult> : IJob
+  public interface IJob<out TResult> : IJob
   {
 
     #region Properties

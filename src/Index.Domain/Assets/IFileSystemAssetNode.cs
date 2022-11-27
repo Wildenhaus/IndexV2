@@ -28,7 +28,7 @@ namespace Index.Domain.Assets
   }
 
   public interface IFileSystemAssetNode<TAsset, TFactory> : IFileSystemAssetNode<TAsset>
-    where TAsset : IAsset
+    where TAsset : class, IAsset
     where TFactory : IAssetFactory<TAsset>
   {
 

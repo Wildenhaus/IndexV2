@@ -2,11 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Index.UI.Controls">
 
-    <!--#region Template: IxProgressOverlayTemplate -->
+    <!--#region Template: IxProgressOverlayTemplate-->
     <ControlTemplate x:Key="IxProgressOverlayTemplate"
                      TargetType="{x:Type controls:IxProgressOverlay}">
         <Border x:Name="PART_Border"
-            Background="{TemplateBinding Background}">
+                Background="{TemplateBinding Background}">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -17,40 +17,44 @@
                 </Grid.RowDefinitions>
 
                 <Button x:Name="PART_CancelButton"
-                    Grid.Row="0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    FontFamily="{DynamicResource Fonts.Symbols}"
-                    BorderThickness="0"
-                    Content="&#xE8BB;"
-                    Command="{Binding CancelCommand, RelativeSource={RelativeSource Mode=Self}}"/>
+                        Grid.Row="0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        FontFamily="{DynamicResource Fonts.Symbols}"
+                        BorderThickness="0"
+                        Content="&#xE8BB;"
+                        Command="{TemplateBinding CancelCommand}" />
 
                 <TextBlock x:Name="PART_Status"
-                       Grid.Row="1"
-                       Margin="5"
-                       FontSize="24"
-                       Text="{Binding ProgressInfo.Status, RelativeSource={RelativeSource Mode=Self}}" />
+                           Grid.Row="1"
+                           Margin="5"
+                           FontSize="24"
+                           HorizontalAlignment="Center"
+                           Text="{Binding Path=ProgressInfo.Status, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
                 <TextBlock x:Name="PART_SubStatus"
-                       Grid.Row="2"
-                       Margin="5"
-                       FontSize="16"
-                       Text="{Binding ProgressInfo.SubStatus, RelativeSource={RelativeSource Mode=Self}}" />
+                           Grid.Row="2"
+                           Margin="5"
+                           FontSize="16"
+                           HorizontalAlignment="Center"
+                           Text="{Binding Path=ProgressInfo.SubStatus, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
                 <ProgressBar x:Name="PART_ProgressBar"
-                         Grid.Row="3"
-                         Margin="5"
-                         Value="{Binding ProgressInfo.PercentCompleted, RelativeSource={RelativeSource Mode=Self}}" />
+                             Grid.Row="3"
+                             Margin="5"
+                             Maximum="1"
+                             Value="{Binding Path=ProgressInfo.PercentCompleted, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
+                             IsIndeterminate="{Binding Path=ProgressInfo.IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"/>
 
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding CancelCommand, RelativeSource={RelativeSource Mode=Self}}" Value="{x:Null}">
-                <Setter TargetName="PART_CancelButton"  Property="Visibility" Value="Collapsed" />
+            <DataTrigger Binding="{Binding Path=CancelCommand, RelativeSource={RelativeSource TemplatedParent}}" Value="{x:Null}">
+                <Setter TargetName="PART_CancelButton" Property="Visibility" Value="Collapsed" />
             </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <!--#endregion-->
 
-    <!--#region Style: IxProgressOverlay -->
+    <!--#region Style: IxProgressOverlay-->
     <Style TargetType="{x:Type controls:IxProgressOverlay}">
         <Setter Property="Background" Value="{DynamicResource Brushes.Secondary.Background.Static}" />
         <Setter Property="Template" Value="{StaticResource IxProgressOverlayTemplate}" />

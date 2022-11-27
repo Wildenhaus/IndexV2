@@ -29,7 +29,7 @@ namespace Index.Jobs
 
     protected override async Task OnInitializing()
     {
-      await CreateSubJobs();
+      CreateSubJobs();
 
       Progress.CompletedUnits = 0;
       Progress.TotalUnits = _jobs.Count;
@@ -69,7 +69,7 @@ namespace Index.Jobs
 
     #region Private Methods
 
-    protected abstract Task CreateSubJobs();
+    protected abstract void CreateSubJobs();
 
     protected virtual Task OnSubJobCompleted( int jobKey, IJob job ) => Task.CompletedTask;
 

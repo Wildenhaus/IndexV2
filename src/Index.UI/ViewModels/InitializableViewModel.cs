@@ -1,6 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Index.Common;
+﻿using Index.Common;
+using Index.Jobs;
+using Prism.Commands;
+using Prism.Ioc;
 
 namespace Index.UI.ViewModels
 {
@@ -10,16 +11,29 @@ namespace Index.UI.ViewModels
 
     #region Data Members
 
+    private readonly IContainerProvider _container;
+    private readonly IJobManager _jobManager;
+
     private bool _isInitialized;
-    private Task _initializeTask;
-    private CancellationTokenSource _initializeCts;
+    private IJob _initializationJob;
 
     #endregion
 
     #region Properties
 
     public bool IsInitializing { get; private set; }
-    public IProgressInfo InitializationProgress { get; protected set; }
+    public DelegateCommand CancelInitializationCommand { get; private set; }
+    public IProgressInfo InitializationProgress { get; private set; }
+
+    #endregion
+
+    #region Constructor
+
+    protected InitializableViewModel( IContainerProvider container )
+    {
+      _container = container;
+      _jobManager = container.Resolve<IJobManager>();
+    }
 
     #endregion
 
@@ -30,26 +44,41 @@ namespace Index.UI.ViewModels
       if ( _isInitialized )
         return;
 
+      _initializationJob = CreateInitializationJob( _container );
+      ASSERT_NOT_NULL( _initializationJob );
+
+      InitializationProgress = _initializationJob.Progress;
+      CancelInitializationCommand = new DelegateCommand( CancelInitialization,
+        () => !_initializationJob.IsCancellationRequested );
+
+      _jobManager.StartJob( _initializationJob, InitializationJobCompleted );
       IsInitializing = true;
-      _initializeTask = Task.Factory.StartNew( OnInitializing, TaskCreationOptions.LongRunning );
-
-      _initializeTask.ContinueWith( t =>
-      {
-        IsInitializing = false;
-
-        if ( t.IsCompletedSuccessfully )
-          _isInitialized = true;
-      } );
     }
 
     public void CancelInitialization()
-      => _initializeCts.Cancel();
+    {
+      _jobManager.CancelJob( _initializationJob );
+      CancelInitializationCommand?.RaiseCanExecuteChanged();
+    }
 
     #endregion
 
     #region Abstract Methods
 
-    protected abstract Task<StatusList> OnInitializing();
+    protected abstract IJob CreateInitializationJob( IContainerProvider container );
+    protected abstract void OnInitializationJobCompleted( IJob job );
+
+    #endregion
+
+    #region Private Methods
+
+    private void InitializationJobCompleted( IJob job )
+    {
+      CancelInitializationCommand = null;
+      OnInitializationJobCompleted( job );
+      IsInitializing = false;
+      _initializationJob = null;
+    }
 
     #endregion
 

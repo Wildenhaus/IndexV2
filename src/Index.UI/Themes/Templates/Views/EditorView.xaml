@@ -1,0 +1,101 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:Index.UI.Controls"
+                    xmlns:views="clr-namespace:Index.UI.Views">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Index.UI;component/Themes/Converters.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <ControlTemplate x:Key="EditorViewTemplate" TargetType="{x:Type views:EditorView}">
+        <Grid>
+
+            <ContentPresenter x:Name="PART_ContentPresenter">
+                <ContentPresenter.Effect>
+                    <BlurEffect x:Name="PART_ContentBlur"
+                                Radius="0"
+                                KernelType="Gaussian"
+                                RenderingBias="Performance" />
+                </ContentPresenter.Effect>
+            </ContentPresenter>
+
+            <Rectangle x:Name="PART_BlackoutRect"
+                       Fill="Black"
+                       Opacity="0"
+                       Panel.ZIndex="999998"
+                       Visibility="{Binding IsInitializing, Converter={StaticResource VisibilityConverter}}" />
+
+            <controls:IxProgressOverlay x:Name="PART_ProgressOverlay"
+                                        Panel.ZIndex="999999"
+                                        Width="450"
+                                        Height="150"
+                                        CancelCommand="{Binding CancelInitializationCommand}"
+                                        ProgressInfo="{Binding InitializationProgress}" 
+                                        Visibility="{Binding IsInitializing, Converter={StaticResource VisibilityConverter}}"/>
+
+        </Grid>
+
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsInitializing}" Value="True">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_BlackoutRect"
+                                                           Storyboard.TargetProperty="Visibility">
+                                <ObjectAnimationUsingKeyFrames.KeyFrames>
+                                    <DiscreteObjectKeyFrame Value="{x:Static Visibility.Visible}" KeyTime="0" />
+                                </ObjectAnimationUsingKeyFrames.KeyFrames>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_ProgressOverlay"
+                                                           Storyboard.TargetProperty="Visibility">
+                                <ObjectAnimationUsingKeyFrames.KeyFrames>
+                                    <DiscreteObjectKeyFrame Value="{x:Static Visibility.Visible}" KeyTime="0" />
+                                </ObjectAnimationUsingKeyFrames.KeyFrames>
+                            </ObjectAnimationUsingKeyFrames>
+
+                            <DoubleAnimation Storyboard.TargetName="PART_ProgressOverlay"
+                                             Storyboard.TargetProperty="Opacity"
+                                             From="0" To="1" Duration="0:0:0.100" />
+                            <DoubleAnimation Storyboard.TargetName="PART_BlackoutRect"
+                                             Storyboard.TargetProperty="Opacity"
+                                             From="0" To=".5" Duration="0:0:0.100" />
+                            <DoubleAnimation Storyboard.TargetName="PART_ContentBlur"
+                                             Storyboard.TargetProperty="Radius"
+                                             From="0" To="5" Duration="0:0:0.100" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="PART_ProgressOverlay"
+                                             Storyboard.TargetProperty="Opacity"
+                                             From="1" To="0" Duration="0:0:0.100" />
+                            <DoubleAnimation Storyboard.TargetName="PART_BlackoutRect"
+                                             Storyboard.TargetProperty="Opacity"
+                                             From=".5" To="0" Duration="0:0:0.100" />
+                            <DoubleAnimation Storyboard.TargetName="PART_ContentBlur"
+                                             Storyboard.TargetProperty="Radius"
+                                             From="5" To="0" Duration="0:0:0.100" />
+
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_BlackoutRect"
+                                                           Storyboard.TargetProperty="Visibility">
+                                <ObjectAnimationUsingKeyFrames.KeyFrames>
+                                    <DiscreteObjectKeyFrame Value="{x:Static Visibility.Hidden}" KeyTime="0:0:0.100" />
+                                </ObjectAnimationUsingKeyFrames.KeyFrames>
+                            </ObjectAnimationUsingKeyFrames>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_ProgressOverlay"
+                                                           Storyboard.TargetProperty="Visibility">
+                                <ObjectAnimationUsingKeyFrames.KeyFrames>
+                                    <DiscreteObjectKeyFrame Value="{x:Static Visibility.Hidden}" KeyTime="0:0:0.100" />
+                                </ObjectAnimationUsingKeyFrames.KeyFrames>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+        
+    </ControlTemplate>
+    
+</ResourceDictionary>

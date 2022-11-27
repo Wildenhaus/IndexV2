@@ -23,6 +23,8 @@
 
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxWindow.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxDialogWindow.xaml" />
+        
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Views/EditorView.xaml" />
 
     </ResourceDictionary.MergedDictionaries>
 
