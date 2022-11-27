@@ -49,7 +49,11 @@
                 <Style TargetType="{x:Type TreeViewItem}"
                        BasedOn="{StaticResource {x:Type TreeViewItem}}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
-                    <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsVisible}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
