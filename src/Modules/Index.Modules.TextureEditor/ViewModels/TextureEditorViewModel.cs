@@ -43,8 +43,6 @@ namespace Index.Modules.TextureEditor.ViewModels
 
         Texture.AddImage( imageModel );
       }
-
-      Task.Delay( 5000 ).Wait();
     }
 
   }

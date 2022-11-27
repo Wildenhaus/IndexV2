@@ -4,6 +4,7 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:local="clr-namespace:Index.Modules.TextureEditor.Views"
+                  xmlns:controls="clr-namespace:Index.UI.Controls;assembly=Index.UI"
                   xmlns:views="clr-namespace:Index.UI.Views;assembly=Index.UI"
                   xmlns:vm="clr-namespace:Index.Modules.TextureEditor.ViewModels"
                   xmlns:prism="http://prismlibrary.com/"
@@ -49,7 +50,17 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="200">
+                <ColumnDefinition.Style>
+                    <Style TargetType="ColumnDefinition">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Texture.Images.Count}" Value="1">
+                                <Setter Property="Width" Value="0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ColumnDefinition.Style>
+            </ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <Menu Grid.Row="0"
@@ -59,11 +70,23 @@
             </MenuItem>
         </Menu>
 
-        <Image x:Name="CurrentTexturePreview"
-               Grid.Row="1"
-               Grid.Column="0"
-               RenderOptions.BitmapScalingMode="HighQuality"
-               Source="{Binding Texture.SelectedImage.Preview}" />
+        <controls:IxImageViewer Grid.Row="1"
+                                Grid.Column="0"
+                                ClipToBounds="True">
+            <controls:IxImageViewer.Background>
+                <DrawingBrush TileMode="Tile"
+                              Viewport="0,0,16,16"
+                              ViewportUnits="Absolute">
+                    <DrawingBrush.Drawing>
+                        <GeometryDrawing Geometry="M0,0 H1 V1 H2 V2 H1 V1 H0Z" 
+                                         Brush="{DynamicResource Brushes.Quarternary.Border.Static}" />
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </controls:IxImageViewer.Background>
+            <Image x:Name="CurrentTexturePreview"
+                   RenderOptions.BitmapScalingMode="HighQuality"
+                   Source="{Binding Texture.SelectedImage.Preview}" />
+        </controls:IxImageViewer>
 
         <DockPanel Grid.Row="1"
                    Grid.Column="1">
@@ -79,7 +102,9 @@
                       ItemsSource="{Binding Texture.Images}"
                       SelectedIndex="0"
                       SelectedItem="{Binding Texture.SelectedImage}"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                      ScrollViewer.CanContentScroll="False"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      VirtualizingPanel.IsVirtualizing="False">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Width="Auto" />
@@ -87,6 +112,5 @@
                 </ListView.View>
             </ListView>
         </DockPanel>
-
     </Grid>
 </views:EditorView>

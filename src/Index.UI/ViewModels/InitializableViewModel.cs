@@ -49,7 +49,7 @@ namespace Index.UI.ViewModels
 
       InitializationProgress = _initializationJob.Progress;
       CancelInitializationCommand = new DelegateCommand( CancelInitialization,
-        () => !_initializationJob.IsCancellationRequested );
+        () => !_initializationJob?.IsCancellationRequested ?? false );
 
       _jobManager.StartJob( _initializationJob, InitializationJobCompleted );
       IsInitializing = true;
