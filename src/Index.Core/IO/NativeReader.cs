@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Index.Core.IO
 {
@@ -117,7 +113,10 @@ namespace Index.Core.IO
 
       var c = ReadUnmanaged<Byte>();
       while ( c != 0 )
+      {
         sb.Append( ( char ) c );
+        c = ReadUnmanaged<Byte>();
+      }
 
       return sb.ToString();
     }
