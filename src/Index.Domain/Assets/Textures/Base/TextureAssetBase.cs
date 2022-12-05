@@ -11,8 +11,6 @@ namespace Index.Domain.Assets.Textures
     public override string TypeName => "Texture";
     public override string EditorKey => DefaultEditorKeys.TextureEditor;
 
-    public string AssetName { get; set; }
-
     public IReadOnlyList<ITextureAssetImage> Images { get; set; }
     public IReadOnlyDictionary<TextureExportFormat, CreateTextureExportStreamDelegate> ExportDelegates { get; set; }
 
