@@ -31,7 +31,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*" />
                 <RowDefinition Height="1" />
-                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" MinHeight="22" />
             </Grid.RowDefinitions>
 
             <TabControl Grid.Row="0"
