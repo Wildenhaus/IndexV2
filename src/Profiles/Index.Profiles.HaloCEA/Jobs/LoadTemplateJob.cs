@@ -1,7 +1,7 @@
 ﻿using Assimp;
 using Index.Domain.Assets;
-using Index.Domain.Assets.Meshes;
-using Index.Jobs;
+using Index.Profiles.HaloCEA.Assets;
+using Index.Profiles.HaloCEA.Meshes;
 using LibSaber.HaloCEA.Structures;
 using LibSaber.IO;
 using LibSaber.Serialization;
@@ -10,13 +10,13 @@ using Prism.Ioc;
 namespace Index.Profiles.HaloCEA.Jobs
 {
 
-  public class LoadTemplateJob : JobBase<MeshAsset>
+  public class LoadTemplateJob : LoadGeometryJobBase<CEATemplateAsset>
   {
 
-    #region Data Members
+    #region Properties
 
-    private IAssetReference _assetReference;
-    private Data_02E4 _template;
+    protected SceneContext Context { get; set; }
+    protected Template Template { get; set; }
 
     #endregion
 
@@ -25,52 +25,36 @@ namespace Index.Profiles.HaloCEA.Jobs
     public LoadTemplateJob( IContainerProvider container, IParameterCollection parameters )
       : base( container, parameters )
     {
-      _assetReference = Parameters.Get<IAssetReference>();
-      Name = $"Loading {_assetReference.AssetName}";
     }
 
     #endregion
 
     #region Overrides
 
-    protected override Task OnInitializing()
+    protected override Task<SceneContext> CreateSceneContext( IAssetReference assetReference )
     {
       return Task.Run( () =>
       {
-        SetStatus( "Deserializing Data" );
-        SetIndeterminate();
+        var stream = assetReference.Node.Open();
+        var reader = new NativeReader( stream, Endianness.LittleEndian );
 
-        _template = DeserializeData( _assetReference );
+        Template = Template.Deserialize( reader, new SerializationContext() );
+
+        var context = SceneContext.Create( Template.Data_02E4.Objects );
+
+        return context;
       } );
     }
 
-    protected override Task OnExecuting()
+    protected override IList<TextureListEntry> GetTextureList()
+      => Template.Data_02E4.TextureList;
+
+    protected override CEATemplateAsset CreateAsset( Scene assimpScene )
     {
-      return Task.Run( () =>
-      {
-        var scene = CreateScene();
+      var asset = new CEATemplateAsset( AssetReference );
+      asset.AssimpScene = assimpScene;
 
-        var asset = new MeshAsset( _assetReference ) { AssimpScene = scene };
-        SetResult( asset );
-      } );
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private Data_02E4 DeserializeData( IAssetReference assetReference )
-    {
-      var stream = assetReference.Node.Open();
-      var reader = new NativeReader( stream, Endianness.LittleEndian );
-
-      var template = Template.Deserialize( reader, new SerializationContext() );
-      return template.Data_02E4;
-    }
-
-    private Scene CreateScene()
-    {
-      return new Scene();
+      return asset;
     }
 
     #endregion

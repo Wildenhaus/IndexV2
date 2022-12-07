@@ -7,7 +7,7 @@ using Prism.Ioc;
 namespace Index.Profiles.HaloCEA.Assets
 {
 
-  public class CEATemplateAssetFactory : AssetFactoryBase<MeshAsset>
+  public class CEATemplateAssetFactory : AssetFactoryBase<CEATemplateAsset>
   {
 
     #region Constructor
@@ -21,7 +21,7 @@ namespace Index.Profiles.HaloCEA.Assets
 
     #region Overrides
 
-    public override IJob<MeshAsset> LoadAsset( IAssetReference assetReference )
+    public override IJob<CEATemplateAsset> LoadAsset( IAssetReference assetReference )
     {
       var parameters = new ParameterCollection();
       parameters.Set( assetReference );
