@@ -53,6 +53,7 @@ namespace Index.Profiles.HaloCEA.Jobs
     {
       var asset = new CEATemplateAsset( AssetReference );
       asset.AssimpScene = assimpScene;
+      asset.Textures = Textures;
 
       return asset;
     }

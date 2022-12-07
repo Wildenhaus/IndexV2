@@ -88,6 +88,18 @@ namespace Index.Domain.Assets
       return referenceCollection.TryGetReference( assetName, out assetReference );
     }
 
+    public IEnumerable<IAssetReference> GetAssetReferencesOfType<TAsset>()
+    {
+      foreach ( var referenceCollection in _references )
+      {
+        if ( !referenceCollection.Key.IsAssignableTo( typeof( TAsset ) ) )
+          continue;
+
+        foreach ( var assetReference in referenceCollection.Value )
+          yield return assetReference;
+      }
+    }
+
     #endregion
 
     #region Private Methods

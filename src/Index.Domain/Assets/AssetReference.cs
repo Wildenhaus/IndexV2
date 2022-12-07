@@ -48,6 +48,22 @@ namespace Index.Domain.Assets
 
     #endregion
 
+    #region Overrides
+
+    public override bool Equals( object? obj )
+    {
+      if ( !( obj is IAssetReference assetReference ) )
+        return false;
+
+      return this.AssetType == assetReference.AssetType
+          && this.AssetName == assetReference.AssetName;
+    }
+
+    public override int GetHashCode()
+      => AssetName.GetHashCode();
+
+    #endregion
+
   }
 
 }

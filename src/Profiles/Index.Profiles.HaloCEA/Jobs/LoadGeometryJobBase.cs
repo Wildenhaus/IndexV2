@@ -1,6 +1,7 @@
 ﻿using Assimp;
 using Index.Domain.Assets;
 using Index.Domain.Assets.Meshes;
+using Index.Domain.Assets.Textures;
 using Index.Jobs;
 using Index.Profiles.HaloCEA.Common;
 using Index.Profiles.HaloCEA.Meshes;
@@ -16,9 +17,13 @@ namespace Index.Profiles.HaloCEA.Jobs
 
     #region Properties
 
+    public IAssetManager AssetManager { get; }
+
     protected SceneContext Context { get; private set; }
 
     protected IAssetReference AssetReference { get; }
+
+    protected Dictionary<string, ITextureAsset> Textures { get; private set; }
 
     #endregion
 
@@ -27,6 +32,8 @@ namespace Index.Profiles.HaloCEA.Jobs
     protected LoadGeometryJobBase( IContainerProvider container, IParameterCollection parameters = null )
       : base( container, parameters )
     {
+      AssetManager = container.Resolve<IAssetManager>();
+
       AssetReference = parameters.Get<IAssetReference>();
       Name = $"Loading {AssetReference.AssetName}";
     }
@@ -45,7 +52,10 @@ namespace Index.Profiles.HaloCEA.Jobs
 
     protected override async Task OnExecuting()
     {
-      CreateScene( Context );
+      await CreateScene( Context );
+
+      SetStatus( "Preparing Viewer" );
+      SetIndeterminate();
 
       var asset = CreateAsset( Context.Scene );
       SetResult( asset );
@@ -65,11 +75,14 @@ namespace Index.Profiles.HaloCEA.Jobs
 
     #region Virtual Methods
 
-    protected virtual void CreateScene( SceneContext context )
+    protected virtual async Task CreateScene( SceneContext context )
     {
       AddNodes();
       AddMeshes();
-      AddMaterials( GetTextureList() );
+
+      var textureList = GetTextureList();
+      Textures = await GatherTextures( textureList );
+      AddMaterials( textureList );
     }
 
     #endregion
@@ -157,18 +170,49 @@ namespace Index.Profiles.HaloCEA.Jobs
       SetTotalUnits( textures.Count );
       SetIndeterminate( false );
 
-      foreach ( var texture in textures )
-        AddMaterial( texture );
+      foreach ( var baseTextureName in textures )
+        AddMaterial( baseTextureName );
 
       if ( Context.Scene.MaterialCount == 0 )
         Context.Scene.Materials.Add( new Material() { Name = "DefaultMaterial" } );
     }
 
-    private void AddMaterial( string textureName )
+    private void AddMaterial( string baseTextureName )
     {
-      var material = MaterialBuilder.Build( Context, textureName );
+      var material = MaterialBuilder.Build( Context, baseTextureName, Textures );
       Context.Scene.Materials.Add( material );
       IncreaseCompletedUnits( 1 );
+    }
+
+    private async Task<Dictionary<string, ITextureAsset>> GatherTextures( IList<TextureListEntry> textureNames )
+    {
+      SetStatus( "Loading Textures" );
+      SetIndeterminate();
+
+      var toLoadSet = new HashSet<IAssetReference>();
+      var textureAssetReferences = AssetManager.GetAssetReferencesOfType<ITextureAsset>();
+
+      foreach ( var textureName in textureNames )
+      {
+        var matches = textureAssetReferences.Where( x => x.AssetName.StartsWith( textureName ) );
+        foreach ( var match in matches )
+          toLoadSet.Add( match );
+      }
+
+      SetCompletedUnits( 0 );
+      SetTotalUnits( toLoadSet.Count );
+
+      var loadedTextures = new Dictionary<string, ITextureAsset>();
+      foreach ( var assetToLoad in toLoadSet )
+      {
+        var loadJob = AssetManager.LoadAsset<ITextureAsset>( assetToLoad );
+        await loadJob.Completion;
+
+        var texture = loadJob.Result;
+        loadedTextures.Add( texture.AssetName, texture );
+      }
+
+      return loadedTextures;
     }
 
     #endregion

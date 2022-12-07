@@ -1,4 +1,5 @@
-﻿using Index.Domain.Editors;
+﻿using Index.Domain.Assets.Textures;
+using Index.Domain.Editors;
 
 namespace Index.Domain.Assets.Meshes
 {
@@ -12,6 +13,7 @@ namespace Index.Domain.Assets.Meshes
     string IAsset.EditorKey => DefaultEditorKeys.MeshEditorKey;
 
     public Assimp.Scene AssimpScene { get; }
+    public IReadOnlyDictionary<string, ITextureAsset> Textures { get; }
 
     #endregion
 

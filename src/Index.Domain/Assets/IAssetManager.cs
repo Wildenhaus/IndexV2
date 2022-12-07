@@ -22,6 +22,7 @@ namespace Index.Domain.Assets
 
     void AddAssetReference( IAssetReference assetReference );
     bool TryGetAssetReference( Type assetType, string assetName, out IAssetReference assetReference );
+    IEnumerable<IAssetReference> GetAssetReferencesOfType<TAsset>();
 
     #endregion
 

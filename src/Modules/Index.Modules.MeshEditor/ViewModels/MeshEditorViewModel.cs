@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using HelixToolkit.Wpf.SharpDX;
+using Index.Domain.Assets;
 using Index.Domain.Assets.Meshes;
 using Index.Jobs;
 using Index.Modules.MeshEditor.Views;
@@ -16,6 +18,7 @@ namespace Index.Modules.MeshEditor.ViewModels
 
     private IRegionManager _regionManager;
     public SceneViewModel Scene { get; private set; }
+    public Viewport3DX Viewport { get; set; }
 
     #endregion
 
@@ -40,7 +43,11 @@ namespace Index.Modules.MeshEditor.ViewModels
 
       Application.Current.Dispatcher.Invoke( () =>
       {
-        _regionManager.RegisterViewWithRegion( "ModelViewerContentRegion", typeof( MeshView ) );
+        Scene.Camera.ZoomExtents( Viewport );
+        //var region = _regionManager.Regions[ "ModelViewerContentRegion" ];
+        //var meshView = Container.Resolve<MeshView>();
+
+        //region.Add( meshView );
       } );
     }
 

@@ -13,6 +13,6 @@
                d:DesignWidth="800"
                mc:Ignorable="d">
     <Grid>
-        <ContentControl prism:RegionManager.RegionName="ModelViewerContentRegion" />
+        <local:MeshView />
     </Grid>
 </ui:EditorView>

@@ -14,7 +14,6 @@ namespace Index.UI.ViewModels
     private readonly IContainerProvider _container;
     private readonly IJobManager _jobManager;
 
-    private bool _isInitialized;
     private IJob _initializationJob;
 
     #endregion
@@ -22,6 +21,7 @@ namespace Index.UI.ViewModels
     #region Properties
 
     public bool IsInitializing { get; private set; }
+    public bool IsInitialized { get; private set; }
     public DelegateCommand CancelInitializationCommand { get; private set; }
     public IProgressInfo InitializationProgress { get; private set; }
 
@@ -41,7 +41,7 @@ namespace Index.UI.ViewModels
 
     public void Initialize()
     {
-      if ( _isInitialized )
+      if ( IsInitialized )
         return;
 
       _initializationJob = CreateInitializationJob( _container );
@@ -77,6 +77,7 @@ namespace Index.UI.ViewModels
       CancelInitializationCommand = null;
       OnInitializationJobCompleted( job );
       IsInitializing = false;
+      IsInitialized = true;
       _initializationJob = null;
     }
 

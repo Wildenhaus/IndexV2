@@ -1,4 +1,5 @@
 ﻿using Assimp;
+using Index.Domain.Assets.Textures;
 using Index.Domain.Editors;
 
 namespace Index.Domain.Assets.Meshes
@@ -13,6 +14,7 @@ namespace Index.Domain.Assets.Meshes
     public override string EditorKey => DefaultEditorKeys.MeshEditorKey;
 
     public Scene AssimpScene { get; set; }
+    public IReadOnlyDictionary<string, ITextureAsset> Textures { get; set; }
 
     #endregion
 

@@ -9,7 +9,7 @@
     public abstract string TypeName { get; }
     public abstract string EditorKey { get; }
 
-    public string AssetName { get; set; }
+    public string AssetName => AssetReference.AssetName;
     public IAssetReference AssetReference { get; set; }
 
     #endregion

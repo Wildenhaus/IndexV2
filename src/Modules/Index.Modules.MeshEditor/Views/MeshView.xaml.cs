@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using HelixToolkit.Wpf.SharpDX;
+using Index.Modules.MeshEditor.ViewModels;
 
 namespace Index.Modules.MeshEditor.Views
 {
-    /// <summary>
-    /// Interaction logic for MeshView.xaml
-    /// </summary>
-    public partial class MeshView : UserControl
+
+  public partial class MeshView : UserControl
+  {
+
+    public MeshView()
     {
-        public MeshView()
-        {
-            InitializeComponent();
-        }
+      InitializeComponent();
+      DataContextChanged += OnDataContextChanged;
     }
+
+    private void OnDataContextChanged( object sender, DependencyPropertyChangedEventArgs e )
+    {
+      var context = e.NewValue as MeshEditorViewModel;
+      context.Viewport = ViewportControl;
+    }
+
+  }
+
 }

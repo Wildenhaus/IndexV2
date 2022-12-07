@@ -1,4 +1,5 @@
 ﻿using Assimp;
+using Index.Domain.Assets.Textures;
 
 namespace Index.Profiles.HaloCEA.Meshes
 {
@@ -10,20 +11,22 @@ namespace Index.Profiles.HaloCEA.Meshes
 
     public SceneContext Context { get; }
     public string BaseTextureName { get; }
+    protected Dictionary<string, ITextureAsset> TextureLookup { get; }
 
     #endregion
 
     #region Constructor
 
-    private MaterialBuilder( SceneContext context, string baseTextureName )
+    private MaterialBuilder( SceneContext context, string baseTextureName, Dictionary<string, ITextureAsset> textureLookup )
     {
       Context = context;
       BaseTextureName = baseTextureName;
+      TextureLookup = textureLookup;
     }
 
-    public static Material Build( SceneContext context, string baseTextureName )
+    public static Material Build( SceneContext context, string baseTextureName, Dictionary<string, ITextureAsset> textureLookup )
     {
-      var builder = new MaterialBuilder( context, baseTextureName );
+      var builder = new MaterialBuilder( context, baseTextureName, textureLookup );
       return builder.Build();
     }
 
@@ -38,12 +41,17 @@ namespace Index.Profiles.HaloCEA.Meshes
       // Default Shader Parameters
       material.ColorSpecular = new Color4D( 0 );
 
-      if ( TryFindTexture( BaseTextureName, out var diffusePath ) )
-        material.TextureDiffuse = CreateTextureSlot( diffusePath, TextureType.Diffuse, 0, 0 );
-      if ( TryFindTexture( BaseTextureName + "_nm", out var normalPath ) )
-        material.TextureNormal = CreateTextureSlot( normalPath, TextureType.Normals, 0, 0 );
-      if ( TryFindTexture( BaseTextureName + "_spec", out var specPath ) )
-        material.TextureSpecular = CreateTextureSlot( specPath, TextureType.Specular, 0, 0 );
+      // Texture Slots
+      if ( TextureExists( BaseTextureName ) )
+        material.TextureDiffuse = CreateTextureSlot( BaseTextureName, TextureType.Diffuse, 0, 0 );
+
+      var normalTextureName = BaseTextureName + "_nm";
+      if ( TextureExists( normalTextureName ) )
+        material.TextureNormal = CreateTextureSlot( normalTextureName, TextureType.Normals, 0, 0 );
+
+      var specTextureName = BaseTextureName + "_spec";
+      if ( TextureExists( specTextureName ) )
+        material.TextureSpecular = CreateTextureSlot( specTextureName, TextureType.Specular, 0, 0 );
 
       return material;
     }
@@ -63,19 +71,8 @@ namespace Index.Profiles.HaloCEA.Meshes
       return new TextureSlot( filePath, typeSemantic, texIndex, mapping, uvIndex, blendFactor, texOp, wrapModeU, wrapModeV, flags );
     }
 
-    private bool TryFindTexture( string textureName, out string path )
-    {
-      const string TEX_PATH = @"G:\h1a\textures_tga";
-      path = default;
-
-      var searchPattern = textureName + ".*";
-      var files = Directory.GetFiles( TEX_PATH, searchPattern );
-      if ( files.Length == 0 )
-        return false;
-
-      path = files[ 0 ];
-      return true;
-    }
+    private bool TextureExists( string textureName )
+      => TextureLookup.ContainsKey( textureName );
 
     #endregion
 

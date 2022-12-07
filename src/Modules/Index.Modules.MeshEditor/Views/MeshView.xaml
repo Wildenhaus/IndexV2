@@ -8,6 +8,15 @@
              d:DesignHeight="450"
              d:DesignWidth="800"
              mc:Ignorable="d">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Index.UI;component/Themes/Converters.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
     <Grid Background="{DynamicResource Brushes.Background.Deeper}">
         <hx:Viewport3DX x:Name="ViewportControl"
                         TextBrush="{DynamicResource Brushes.Foreground.Static}"
@@ -17,11 +26,13 @@
                         CameraMode="Inspect"
                         CameraRotationMode="Turntable"
                         EffectsManager="{Binding Scene.EffectsManager}"
-                        EnableSwapChainRendering="True"
+                        EnableSwapChainRendering="{Binding IsInitialized}"
                         FXAALevel="High"
                         IsMoveEnabled="True"
+                        ZoomExtentsWhenLoaded="True"
                         ZoomDistanceLimitNear="0"
-                        EnableRenderFrustum="True">
+                        EnableRenderFrustum="True"
+                        Visibility="{Binding IsInitialized, Converter={StaticResource VisibilityConverter}}">
 
             <hx:Viewport3DX.InputBindings>
                 <MouseBinding Command="hx:ViewportCommands.Rotate"
@@ -31,6 +42,7 @@
             </hx:Viewport3DX.InputBindings>
 
             <hx:Element3DPresenter Content="{Binding Scene.GroupModel}" />
+            <hx:DirectionalLight3D Direction="{Binding Scene.Camera.LookDirection}" Color="#FFF" />
 
         </hx:Viewport3DX>
 

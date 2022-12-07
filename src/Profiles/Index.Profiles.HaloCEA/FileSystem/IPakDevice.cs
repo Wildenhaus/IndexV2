@@ -89,7 +89,7 @@ namespace Index.Profiles.HaloCEA.FileSystem
     private void CreateFileNode( NativeReader reader, IFileSystemNode parent )
     {
       // The texture's file name is always 0x100 bytes long.
-      var fileName = reader.ReadFixedLengthString( TEXTURE_NAME_LENGTH );
+      var fileName = reader.ReadFixedLengthString( TEXTURE_NAME_LENGTH ).Replace( '\x00'.ToString(), "" );
       _ = reader.ReadInt64();
       _ = reader.ReadInt32();
 
