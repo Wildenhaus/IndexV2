@@ -12,7 +12,7 @@ namespace LibSaber.HaloCEA.Structures
 
     #region Data Members
 
-    public short SharedObjectId;
+    public short SharingObjectId;
     public int VertexOffset;
     public int FaceOffset;
 
@@ -24,7 +24,7 @@ namespace LibSaber.HaloCEA.Structures
     {
       var data = new Data_0129();
 
-      data.SharedObjectId = reader.ReadInt16();
+      data.SharingObjectId = reader.ReadInt16();
       data.VertexOffset = reader.ReadInt32();
       data.FaceOffset = reader.ReadInt32();
 

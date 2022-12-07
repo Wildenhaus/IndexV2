@@ -14,7 +14,7 @@ namespace LibSaber.HaloCEA.Structures
     [Sentinel( SentinelIds.Sentinel_0104 )]
     [Sentinel( SentinelIds.Sentinel_0137 )]
     public SentinelId SubmeshListSentinel;
-    public List<Data_0104_0137> UnkSubmeshList;
+    public List<SubmeshInfo> SubmeshList;
 
     [Sentinel( SentinelIds.Sentinel_0109 )]
     public List<Data_0108> Sentinel_0109;
@@ -38,10 +38,10 @@ namespace LibSaber.HaloCEA.Structures
           case SentinelIds.Sentinel_0104:
           case SentinelIds.Sentinel_0137:
 #if DEBUG
-            ASSERT( data.UnkSubmeshList is null, "Duplicate submesh data." );
+            ASSERT( data.SubmeshList is null, "Duplicate submesh data." );
 #endif
             data.SubmeshListSentinel = sentinelReader.SentinelId;
-            data.UnkSubmeshList = DataList<Data_0104_0137>.Deserialize( reader, context, Data_0104_0137.Deserialize );
+            data.SubmeshList = DataList<SubmeshInfo>.Deserialize( reader, context, SubmeshInfo.Deserialize );
             break;
           case SentinelIds.Sentinel_0109:
             data.Sentinel_0109 = DataList<Data_0108>.Deserialize( reader, context, Data_0108.Deserialize );
