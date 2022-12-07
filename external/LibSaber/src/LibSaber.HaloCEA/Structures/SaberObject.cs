@@ -73,7 +73,7 @@ namespace LibSaber.HaloCEA.Structures
     public Matrix4<float>? Matrix;
 
     [Sentinel( SaberObjectSentinelIds.Sentinel_00FA )]
-    public int? BoneId; // Bone ID?
+    public int BoneId; // Bone ID?
 
     [Sentinel( SaberObjectSentinelIds.Sentinel_00FD )]
     public string? UnkScripting; // Scripting?

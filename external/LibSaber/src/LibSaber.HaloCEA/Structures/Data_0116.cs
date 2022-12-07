@@ -8,7 +8,7 @@ namespace LibSaber.HaloCEA.Structures
 {
 
   [Sentinel( SentinelIds.ObjectSkinningData )]
-  public struct Data_0116
+  public class Data_0116
   {
 
     #region Data Members
@@ -20,13 +20,11 @@ namespace LibSaber.HaloCEA.Structures
 
     public List<short> Sentinel_0118;
     public byte[] Sentinel_0119;
-    //public int[] Sentinel_011A;
     public Vector4<float>[] BoneWeights;
     public (int, int)[] Sentinel_011B;
 
-    public short Sentinel_0133_00;
-    public short Sentinel_0133_01;
-    //public byte[] Sentinel_0133_02;
+    public short FirstObjectId;
+    public short ObjectCount;
     public Vector4<byte>[] BoneIds;
 
     #endregion
@@ -66,18 +64,8 @@ namespace LibSaber.HaloCEA.Structures
 
             break;
           }
-          case SentinelIds.Sentinel_011A:
+          case SentinelIds.ObjectSkinningBoneWeights:
           {
-            // vert blend weights?
-            //var count = obj.ObjectInfo.VertexCount;
-            //var buffer = data.BoneWeights = new int[ count ];
-
-            //if ( obj.GeometryFlags[ 5 ] )
-            //  for ( var i = 0; i < count; i++ )
-            //    buffer[ i ] = reader.ReadByte();
-            //else
-            //  for ( var i = 0; i < count; i++ )
-            //    buffer[ i ] = reader.ReadInt32();
             var count = obj.ObjectInfo.VertexCount;
             var buffer = data.BoneWeights = new Vector4<float>[ count ];
 
@@ -113,14 +101,11 @@ namespace LibSaber.HaloCEA.Structures
 
             break;
           }
-          case SentinelIds.Sentinel_0133:
+          case SentinelIds.ObjectSkinningBoneIds:
           {
-            data.Sentinel_0133_00 = reader.ReadInt16();
-            data.Sentinel_0133_01 = reader.ReadInt16();
+            data.FirstObjectId = reader.ReadInt16();
+            data.ObjectCount = reader.ReadInt16();
 
-            //var count = obj.ObjectInfo.VertexCount * data.ElementSize;
-            //var buffer = data.Sentinel_0133_02 = new byte[ count ]; // bone ids?
-            //reader.ReadBytes( buffer );
             var count = obj.ObjectInfo.VertexCount;
             var buffer = data.BoneIds = new Vector4<byte>[ count ]; // bone ids?
             for ( var i = 0; i < count; i++ )
