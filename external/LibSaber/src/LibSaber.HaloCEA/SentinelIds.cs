@@ -27,7 +27,7 @@
     public const SentinelId Sentinel_0117 = 0x0117; // unk vertex bind data
     public const SentinelId Sentinel_0118 = 0x0118;
     public const SentinelId Sentinel_0119 = 0x0119;
-    public const SentinelId Sentinel_011A = 0x011A; // unk vertex blend weight
+    public const SentinelId ObjectSkinningBoneWeights = 0x011A; // unk vertex blend weight
     public const SentinelId Sentinel_011B = 0x011B;
     public const SentinelId Sentinel_011C = 0x011C; // unk submesh data
     public const SentinelId ObjectBoundingBox = 0x011D; // mesh bounding box
@@ -51,7 +51,7 @@
     public const SentinelId ObjectInterleavedBuffer = 0x0130; // Interleaved Data Buffer (uv, tan, etc)
     public const SentinelId Sentinel_0131 = 0x0131;
     public const SentinelId Sentinel_0132 = 0x0132; // unk submesh transform?
-    public const SentinelId Sentinel_0133 = 0x0133; // unk vertex blend indices?
+    public const SentinelId ObjectSkinningBoneIds = 0x0133; // unk vertex blend indices?
     public const SentinelId Sentinel_0134 = 0x0134; // skincompound id
     public const SentinelId Sentinel_0135 = 0x0135; // PosScaleTransformVectors
     public const SentinelId Sentinel_0136 = 0x0136;
