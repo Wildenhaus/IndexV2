@@ -65,7 +65,7 @@ namespace Index.Profiles.HaloCEA.FileSystem
     private IFileSystemNode InitNodes()
     {
       // Initialize Root Node
-      var pakName = Path.GetFileName( _filePath );
+      var pakName = Path.GetFileNameWithoutExtension( _filePath );
       var rootNode = new CEAFileNode( this, pakName );
 
       // Initialize Entries
@@ -86,14 +86,25 @@ namespace Index.Profiles.HaloCEA.FileSystem
       var fileType = ( CEAFileType ) reader.ReadInt32();
       var unk_00 = reader.ReadInt64(); // TODO: Figure out what this is
 
-      var node = new CEAFileNode( this, fileName, parent )
-      {
-        StartOffset = startOffset,
-        SizeInBytes = fileSize,
-        FileType = fileType
-      };
+      var node = CreateTypedFileNode( fileType, fileName, parent );
+      node.StartOffset = startOffset;
+      node.SizeInBytes = fileSize;
+      node.FileType = fileType;
+
 
       parent.AddChild( node );
+    }
+
+    private CEAFileNode CreateTypedFileNode( CEAFileType fileType, string fileName, IFileSystemNode parent )
+    {
+      switch ( fileType )
+      {
+        case CEAFileType.Template:
+          return new CEATemplateFileNode( this, fileName, parent );
+
+        default:
+          return new CEAFileNode( this, fileName, parent );
+      }
     }
 
     #endregion

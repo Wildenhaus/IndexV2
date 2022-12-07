@@ -71,7 +71,7 @@ namespace Index.Profiles.HaloCEA.FileSystem
     private IFileSystemNode InitNodes()
     {
       // Initialize Root Node
-      var pakName = Path.GetFileName( _filePath );
+      var pakName = Path.GetFileNameWithoutExtension( _filePath );
       var rootNode = new CEAFileNode( this, pakName );
 
       // Initialize Entries

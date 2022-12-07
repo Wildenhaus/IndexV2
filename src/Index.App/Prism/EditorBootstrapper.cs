@@ -5,6 +5,7 @@ using Index.App.Views;
 using Index.Modules.DataExplorer;
 using Index.Modules.JobManager;
 using Index.Modules.Logging;
+using Index.Modules.MeshEditor;
 using Index.Modules.TextureEditor;
 using Index.UI.Commands;
 using Index.UI.Windows;
@@ -40,6 +41,7 @@ namespace Index.App.Prism
       moduleCatalog.AddModule<DataExplorerModule>();
 
       moduleCatalog.AddModule<TextureEditorModule>();
+      moduleCatalog.AddModule<MeshEditorModule>();
     }
 
     protected override void RegisterTypes( IContainerRegistry containerRegistry )

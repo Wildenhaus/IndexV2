@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSaber.HaloCEA", "externa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSaber", "external\LibSaber\src\LibSaber\LibSaber.csproj", "{1BE2A012-9466-489D-BC6F-23D06D5151BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Index.Modules.MeshEditor", "src\Modules\Index.Modules.MeshEditor\Index.Modules.MeshEditor.csproj", "{53DC9A5B-CAB0-4E6F-AE18-B903BDC5647E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,14 @@ Global
 		{1BE2A012-9466-489D-BC6F-23D06D5151BF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1BE2A012-9466-489D-BC6F-23D06D5151BF}.Release|x64.ActiveCfg = Release|x64
 		{1BE2A012-9466-489D-BC6F-23D06D5151BF}.Release|x64.Build.0 = Release|x64
+		{53DC9A5B-CAB0-4E6F-AE18-B903BDC5647E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53DC9A5B-CAB0-4E6F-AE18-B903BDC5647E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53DC9A5B-CAB0-4E6F-AE18-B903BDC5647E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{53DC9A5B-CAB0-4E6F-AE18-B903BDC5647E}.Debug|x64.Build.0 = Debug|Any CPU
+		{53DC9A5B-CAB0-4E6F-AE18-B903BDC5647E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53DC9A5B-CAB0-4E6F-AE18-B903BDC5647E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53DC9A5B-CAB0-4E6F-AE18-B903BDC5647E}.Release|x64.ActiveCfg = Release|Any CPU
+		{53DC9A5B-CAB0-4E6F-AE18-B903BDC5647E}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,6 +149,7 @@ Global
 		{F8B10BAD-750B-47B1-AA50-094A77C08439} = {930CFEFD-5610-4BBB-B82A-CBEC1338C4BD}
 		{D7A76CB5-CF4C-4C3A-9AE0-48246BFBB58A} = {288A106C-EA68-4E26-8A3F-F77CE14B6006}
 		{1BE2A012-9466-489D-BC6F-23D06D5151BF} = {288A106C-EA68-4E26-8A3F-F77CE14B6006}
+		{53DC9A5B-CAB0-4E6F-AE18-B903BDC5647E} = {930CFEFD-5610-4BBB-B82A-CBEC1338C4BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6855B3DD-6FA8-4D39-96A2-C69AF901D39C}
