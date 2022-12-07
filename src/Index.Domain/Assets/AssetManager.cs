@@ -82,10 +82,14 @@ namespace Index.Domain.Assets
     {
       assetReference = default;
 
-      if ( !_references.TryGetValue( assetType, out var referenceCollection ) )
-        return false;
+      var referenceCollections = _references.Where( x => x.Key.IsAssignableTo( assetType ) );
+      foreach ( var referenceCollection in referenceCollections )
+      {
+        if ( referenceCollection.Value.TryGetReference( assetName, out assetReference ) )
+          return true;
+      }
 
-      return referenceCollection.TryGetReference( assetName, out assetReference );
+      return false;
     }
 
     public IEnumerable<IAssetReference> GetAssetReferencesOfType<TAsset>()
