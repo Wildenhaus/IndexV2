@@ -112,10 +112,12 @@
                         Model="{Binding Scene.GroupModel}"
                         IsFlycamEnabled="{Binding IsFlycamEnabled}"/>
 
-        <ResizeGrip Grid.Row="0"
-                    Grid.RowSpan="2"
-                    Grid.Column="1"
-                    Width="2" />
+        <GridSplitter Grid.Row="0"
+                      Grid.RowSpan="2"
+                      Grid.Column="1"
+                      Width="2"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch"/>
 
     </Grid>
 </views:EditorView>
