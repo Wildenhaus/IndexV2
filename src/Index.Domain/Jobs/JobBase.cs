@@ -40,6 +40,8 @@ namespace Index.Jobs
 
     #region Properties
 
+    public Guid Id { get; }
+
     public string Name
     {
       get => _name;
@@ -99,6 +101,8 @@ namespace Index.Jobs
 
     internal JobBase()
     {
+      Id = Guid.NewGuid();
+
       _progress = new ProgressInfo();
       _statusList = new StatusList();
 
@@ -170,10 +174,10 @@ namespace Index.Jobs
       }
 
       ASSERT( _state == JobState.Pending );
+      State = JobState.Initializing;
 
       try
       {
-        State = JobState.Initializing;
         await OnInitializing();
 
         if ( IsCancellationRequested )

@@ -19,6 +19,7 @@ namespace Index.Jobs
 
     #region Properties
 
+    Guid Id { get; }
     string Name { get; }
     JobState State { get; }
     StatusList StatusList { get; }

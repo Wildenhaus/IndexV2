@@ -67,9 +67,14 @@ namespace Index.Jobs
       ASSERT( job.State == JobState.Pending );
 
       lock ( _collectionLock )
-        _jobs.Add( job );
-
-      Task.Factory.StartNew( job.Execute, TaskCreationOptions.LongRunning );
+      {
+        var existingJob = _jobs.FirstOrDefault( x => x.Id == job.Id );
+        if ( existingJob is null )
+        {
+          Task.Factory.StartNew( job.Execute, TaskCreationOptions.LongRunning );
+          _jobs.Add( job );
+        }
+      }
 
       job.Completion.ContinueWith( t =>
       {
