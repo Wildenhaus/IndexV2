@@ -217,7 +217,7 @@
         <Grid x:Name="PART_TemplateRoot"
               ClipToBounds="True"
               SnapsToDevicePixels="True"
-              KeyboardNavigation.TabNavigation="Local">
+              KeyboardNavigation.TabNavigation="None">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="ColumnLeft" />
@@ -237,8 +237,7 @@
                       Margin="2,2,2,0"
                       Panel.ZIndex="1"
                       Background="Transparent"
-                      IsItemsHost="True"
-                      KeyboardNavigation.TabIndex="1" />
+                      IsItemsHost="True" />
 
             <Border x:Name="PART_ContentPanel"
                     Grid.Row="1"
@@ -246,9 +245,7 @@
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     Background="{TemplateBinding Background}"
-                    KeyboardNavigation.DirectionalNavigation="Contained"
-                    KeyboardNavigation.TabIndex="2"
-                    KeyboardNavigation.TabNavigation="Local">
+                    KeyboardNavigation.TabNavigation="None">
                 <ContentPresenter x:Name="PART_SelectedContentHost"
                                   Margin="{TemplateBinding Padding}"
                                   ContentSource="SelectedContent"
