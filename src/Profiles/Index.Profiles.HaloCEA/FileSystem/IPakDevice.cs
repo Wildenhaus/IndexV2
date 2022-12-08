@@ -119,6 +119,9 @@ namespace Index.Profiles.HaloCEA.FileSystem
       ASSERT( startOffset >= TEXTURE_DATA_OFFSET,
         "Texture data start offset does not fall within correct bounds." );
 
+      if ( fileSize <= 0x8 )
+        return;
+
       var node = new CEATextureFileNode( this, fileName, parent )
       {
         StartOffset = startOffset,
