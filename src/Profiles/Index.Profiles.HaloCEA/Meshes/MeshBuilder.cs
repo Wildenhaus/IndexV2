@@ -56,6 +56,13 @@ namespace Index.Profiles.HaloCEA.Meshes
       var builder = new MeshBuilder( context, obj, submeshInfo );
       builder.Build();
 
+      var vtxCount = builder.Mesh.VertexCount;
+      foreach ( var face in builder.Mesh.Faces )
+      {
+        if ( face.Indices.Any( x => x >= vtxCount ) )
+          System.Diagnostics.Debugger.Break();
+      }
+
       return builder.Mesh;
     }
 
@@ -98,9 +105,6 @@ namespace Index.Profiles.HaloCEA.Meshes
       for ( var i = 0; i < vertices.Length; i++ )
       {
         var skinObjectIds = skinData.BoneIds[ i ];
-        ASSERT( skinObjectIds.Y == 0 );
-        ASSERT( skinObjectIds.Z == 0 );
-        ASSERT( skinObjectIds.W == 0 );
 
         if ( skinObjectIds.X != skinObjectId )
           continue;
@@ -241,9 +245,6 @@ namespace Index.Profiles.HaloCEA.Meshes
       for ( var i = 0; i < interleavedData.Length; i++ )
       {
         var skinObjectIds = skinData.BoneIds[ i ];
-        ASSERT( skinObjectIds.Y == 0 );
-        ASSERT( skinObjectIds.Z == 0 );
-        ASSERT( skinObjectIds.W == 0 );
 
         if ( skinObjectIds.X != skinObjectId )
           continue;
@@ -267,6 +268,9 @@ namespace Index.Profiles.HaloCEA.Meshes
 
     private void AddSubmeshInterleavedData()
     {
+      if ( Object.InterleavedDataBuffer is null )
+        return;
+
       var vertexOffset = SubmeshInfo.VertexInfo.Value.VertexOffset;
       var vertexCount = SubmeshInfo.VertexInfo.Value.VertexCount;
 
@@ -345,6 +349,9 @@ namespace Index.Profiles.HaloCEA.Meshes
       ASSERT( materialInfo.Sentinel_010E.HasValue );
 
       var materialIndex = materialInfo.Sentinel_010E.Value.UnkMaterialIndex;
+      if ( materialIndex == -1 )
+        return;
+
       Mesh.MaterialIndex = materialIndex;
     }
 
@@ -355,6 +362,9 @@ namespace Index.Profiles.HaloCEA.Meshes
       ASSERT( materialInfo.Sentinel_010E.HasValue );
 
       var materialIndex = materialInfo.Sentinel_010E.Value.UnkMaterialIndex;
+      if ( materialIndex == -1 )
+        return;
+
       Mesh.MaterialIndex = materialIndex;
     }
 
@@ -367,6 +377,9 @@ namespace Index.Profiles.HaloCEA.Meshes
       ASSERT( materialInfo.Sentinel_010E.HasValue );
 
       var materialIndex = materialInfo.Sentinel_010E.Value.UnkMaterialIndex;
+      if ( materialIndex == -1 )
+        return;
+
       Mesh.MaterialIndex = materialIndex;
     }
 

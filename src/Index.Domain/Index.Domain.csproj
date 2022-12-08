@@ -12,8 +12,8 @@
 
   <ItemGroup>
     <PackageReference Include="AssimpNet" Version="5.0.0-beta1" />
-    <PackageReference Include="HelixToolkit.SharpDX.Assimp" Version="2.21.1" />
-    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.21.1" />
+    <PackageReference Include="HelixToolkit.SharpDX.Assimp" Version="2.23.0" />
+    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.23.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0" />
     <PackageReference Include="Prism.Core" Version="8.1.97" />
     <PackageReference Include="Serilog" Version="2.12.0" />

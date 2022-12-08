@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows.Threading;
 using Prism.Regions;
 using PropertyChanged;
 
@@ -22,10 +23,17 @@ namespace Index.UI.ViewModels
 
     #endregion
 
+    #region Properties
+
+    public Dispatcher Dispatcher { get; }
+
+    #endregion
+
     #region Constructor
 
     protected ViewModelBase()
     {
+      Dispatcher = Dispatcher.CurrentDispatcher;
     }
 
     ~ViewModelBase()

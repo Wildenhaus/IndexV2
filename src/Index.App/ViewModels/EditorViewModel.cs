@@ -1,5 +1,8 @@
-﻿using Index.Domain.Models;
+﻿using Index.Domain.Assets;
+using Index.Domain.Assets.Meshes;
+using Index.Domain.Models;
 using Index.Modules.JobManager.Views;
+using Index.UI.Commands;
 using Index.UI.ViewModels;
 using Prism.Ioc;
 using Serilog;
@@ -37,6 +40,10 @@ namespace Index.App.ViewModels
         EditorEnvironment.GameName,
         EditorEnvironment.GameProfile.Version,
         EditorEnvironment.GameProfile.Author );
+
+      var assetManager = Container.Resolve<IAssetManager>();
+      assetManager.TryGetAssetReference( typeof( IMeshAsset ), "a10/captain", out var modelRef );
+      EditorCommands.NavigateToAssetCommand.Execute( modelRef );
     }
 
     #endregion

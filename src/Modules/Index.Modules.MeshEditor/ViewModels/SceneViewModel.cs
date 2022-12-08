@@ -13,17 +13,12 @@ namespace Index.Modules.MeshEditor.ViewModels
   public class SceneViewModel : ViewModelBase
   {
 
-    public Viewport3DX Viewport { get; set; }
-    public Camera Camera { get; private set; }
-    public EffectsManager EffectsManager { get; private set; }
     public SceneNodeGroupModel3D GroupModel { get; private set; }
 
     private SceneViewModel()
     {
       Application.Current.Dispatcher.Invoke( () =>
       {
-        Camera = new PerspectiveCamera { FarPlaneDistance = 300000 };
-        EffectsManager = new DefaultEffectsManager();
         GroupModel = new SceneNodeGroupModel3D();
       } );
     }

@@ -20,29 +20,30 @@
     <Grid Background="{DynamicResource Brushes.Background.Deeper}">
         <hx:Viewport3DX x:Name="ViewportControl"
                         TextBrush="{DynamicResource Brushes.Foreground.Static}"
-                        Background="white"
+                        Background="{DynamicResource Brushes.Background.Deeper}"
                         BackgroundColor="{DynamicResource Colors.Background.Deeper}"
-                        Camera="{Binding Scene.Camera}"
+                        Camera="{Binding Camera}"
                         CameraMode="Inspect"
                         CameraRotationMode="Turntable"
-                        EffectsManager="{Binding Scene.EffectsManager}"
+                        EffectsManager="{Binding EffectsManager}"
                         EnableSwapChainRendering="{Binding IsInitialized}"
                         FXAALevel="High"
                         IsMoveEnabled="True"
-                        ZoomExtentsWhenLoaded="True"
+                        IsZoomEnabled="True"
                         ZoomDistanceLimitNear="0"
-                        EnableRenderFrustum="True"
-                        Visibility="{Binding IsInitialized, Converter={StaticResource VisibilityConverter}}">
+                        EnableRenderFrustum="True">
 
             <hx:Viewport3DX.InputBindings>
                 <MouseBinding Command="hx:ViewportCommands.Rotate"
                               Gesture="RightClick" />
                 <MouseBinding Command="hx:ViewportCommands.Pan"
                               Gesture="LeftClick" />
+                <MouseBinding Command="hx:ViewportCommands.ZoomExtents"
+                              Gesture="MiddleClick" />
             </hx:Viewport3DX.InputBindings>
 
             <hx:Element3DPresenter Content="{Binding Scene.GroupModel}" />
-            <hx:DirectionalLight3D Direction="{Binding Scene.Camera.LookDirection}" Color="#FFF" />
+            <hx:DirectionalLight3D Direction="{Binding Camera.LookDirection}" Color="#FFF" />
 
         </hx:Viewport3DX>
 

@@ -1,12 +1,14 @@
-﻿using System.Windows;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
-using Index.Domain.Assets;
 using Index.Domain.Assets.Meshes;
 using Index.Jobs;
-using Index.Modules.MeshEditor.Views;
 using Index.UI.ViewModels;
+using Prism.Commands;
 using Prism.Ioc;
-using Prism.Regions;
+using SharpDX;
 
 namespace Index.Modules.MeshEditor.ViewModels
 {
@@ -16,9 +18,13 @@ namespace Index.Modules.MeshEditor.ViewModels
 
     #region Properties
 
-    private IRegionManager _regionManager;
-    public SceneViewModel Scene { get; private set; }
     public Viewport3DX Viewport { get; set; }
+    public Camera Camera { get; set; }
+    public EffectsManager EffectsManager { get; set; }
+
+    public SceneViewModel Scene { get; set; }
+
+    public ICommand ZoomExtentsCommand { get; }
 
     #endregion
 
@@ -27,7 +33,10 @@ namespace Index.Modules.MeshEditor.ViewModels
     public MeshEditorViewModel( IContainerProvider container )
       : base( container )
     {
-      _regionManager = container.Resolve<IRegionManager>();
+      Camera = new PerspectiveCamera() { FarPlaneDistance = 300000 };
+      EffectsManager = new DefaultEffectsManager();
+
+      ZoomExtentsCommand = new DelegateCommand( ZoomExtents );
     }
 
     #endregion
@@ -40,14 +49,26 @@ namespace Index.Modules.MeshEditor.ViewModels
       var asset = typedJob.Result;
 
       Scene = SceneViewModel.Create( asset );
+      ZoomExtents();
+    }
 
-      Application.Current.Dispatcher.Invoke( () =>
+    #endregion
+
+    #region Private Methods
+
+    private void ZoomExtents()
+    {
+      if ( !Scene.GroupModel.SceneNode.TryGetBound( out var bound ) )
+        return;
+
+      var maxWidth = Math.Max( Math.Max( bound.Width, bound.Height ), bound.Depth );
+      var pos = bound.Center + new SharpDX.Vector3( 0, 0, maxWidth * 2 );
+
+      Camera.Dispatcher.Invoke( () =>
       {
-        Scene.Camera.ZoomExtents( Viewport );
-        //var region = _regionManager.Regions[ "ModelViewerContentRegion" ];
-        //var meshView = Container.Resolve<MeshView>();
-
-        //region.Add( meshView );
+        Camera.Position = pos.ToPoint3D();
+        Camera.LookDirection = ( bound.Center - pos ).ToVector3D();
+        Camera.UpDirection = Vector3.UnitY.ToVector3D();
       } );
     }
 
