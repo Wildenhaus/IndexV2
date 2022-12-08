@@ -196,7 +196,7 @@ namespace Index.Profiles.HaloCEA.Meshes
     {
       var mesh = Mesh;
       var sharingInfo = Object.SharingObjectInfo;
-      var faceOffset = sharingInfo.VertexOffset;
+      var faceOffset = sharingInfo.FaceOffset;
       var faceCount = SubmeshInfo.FaceInfo.Value.FaceCount;
 
       var faces = CollectionsMarshal.AsSpan( SharingObject.Faces ).Slice( faceOffset, faceCount );
@@ -259,7 +259,8 @@ namespace Index.Profiles.HaloCEA.Meshes
       var vertexOffset = sharingInfo.VertexOffset;
       var vertexCount = SubmeshInfo.VertexInfo.Value.VertexCount;
 
-      ASSERT( SharingObject.UvScaling is null );
+      if ( Object.InterleavedDataBuffer is null )
+        return;
 
       var interleavedData = SharingObject.InterleavedDataBuffer.ElementData.AsSpan( vertexOffset, vertexCount );
       foreach ( var datum in interleavedData )
@@ -371,7 +372,7 @@ namespace Index.Profiles.HaloCEA.Meshes
     private void AddSubmeshMaterials()
     {
       var materialList = SubmeshInfo.MaterialList;
-      ASSERT( materialList.Count == 1 );
+      //ASSERT( materialList.Count == 1 );
 
       var materialInfo = materialList[ 0 ];
       ASSERT( materialInfo.Sentinel_010E.HasValue );

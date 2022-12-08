@@ -101,6 +101,8 @@ namespace Index.Profiles.HaloCEA.FileSystem
       {
         case CEAFileType.Template:
           return new CEATemplateFileNode( this, fileName, parent );
+        case CEAFileType.Scene:
+          return new CEASceneFileNode( this, fileName, parent );
 
         default:
           return new CEAFileNode( this, fileName, parent );

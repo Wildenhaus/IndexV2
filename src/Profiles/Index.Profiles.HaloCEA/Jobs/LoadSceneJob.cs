@@ -10,18 +10,18 @@ using Prism.Ioc;
 namespace Index.Profiles.HaloCEA.Jobs
 {
 
-  public class LoadTemplateJob : LoadGeometryJobBase<CEATemplateAsset>
+  public class LoadSceneJob : LoadGeometryJobBase<CEASceneAsset>
   {
 
     #region Properties
 
-    protected Template Template { get; set; }
+    protected SaberScene Scene { get; set; }
 
     #endregion
 
     #region Constructor
 
-    public LoadTemplateJob( IContainerProvider container, IParameterCollection parameters )
+    public LoadSceneJob( IContainerProvider container, IParameterCollection parameters )
       : base( container, parameters )
     {
     }
@@ -37,20 +37,20 @@ namespace Index.Profiles.HaloCEA.Jobs
         var stream = assetReference.Node.Open();
         var reader = new NativeReader( stream, Endianness.LittleEndian );
 
-        Template = Template.Deserialize( reader, new SerializationContext() );
+        Scene = SaberScene.Deserialize( reader, new SerializationContext() );
 
-        var context = SceneContext.Create( Template.Data_02E4.Objects );
+        var context = SceneContext.Create( Scene.Objects );
 
         return context;
       } );
     }
 
     protected override IList<TextureListEntry> GetTextureList()
-      => Template.Data_02E4.TextureList;
+      => Scene.TextureList;
 
-    protected override CEATemplateAsset CreateAsset( Scene assimpScene )
+    protected override CEASceneAsset CreateAsset( Scene assimpScene )
     {
-      var asset = new CEATemplateAsset( AssetReference );
+      var asset = new CEASceneAsset( AssetReference );
       asset.AssimpScene = assimpScene;
       asset.Textures = Textures;
 
