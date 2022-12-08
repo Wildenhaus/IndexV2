@@ -15,6 +15,23 @@ namespace Index.Profiles.HaloCEA.Jobs
     where TAsset : class, IMeshAsset
   {
 
+    #region Constants
+
+    private static readonly string[] VOLUME_NAME_HINTS = new string[]
+    {
+      ".sh_cast",
+      "sh_cast",
+      "cin_",
+      "start1",
+      ".pCube",
+      "path_",
+      "add_",
+      ".pPlane",
+
+    };
+
+    #endregion
+
     #region Properties
 
     public IAssetManager AssetManager { get; }
@@ -58,6 +75,9 @@ namespace Index.Profiles.HaloCEA.Jobs
       SetIndeterminate();
 
       var asset = CreateAsset( Context.Scene );
+      CreateLodMeshSet( asset, Context.Scene );
+      CreateVolumeMeshSet( asset, Context.Scene );
+
       SetResult( asset );
     }
 
@@ -77,12 +97,24 @@ namespace Index.Profiles.HaloCEA.Jobs
 
     protected virtual async Task CreateScene( SceneContext context )
     {
-      AddNodes();
-      AddMeshes();
-
       var textureList = GetTextureList();
       Textures = await GatherTextures( textureList );
       AddMaterials( textureList );
+
+      AddNodes();
+      AddMeshes();
+    }
+
+    protected virtual bool IsLodMesh( string meshName )
+      => meshName.Contains( ".lod." );
+
+    protected virtual bool IsVolumeMesh( string meshName )
+    {
+      foreach ( var hint in VOLUME_NAME_HINTS )
+        if ( meshName.StartsWith( hint, StringComparison.InvariantCultureIgnoreCase ) )
+          return true;
+
+      return false;
     }
 
     #endregion
@@ -215,6 +247,28 @@ namespace Index.Profiles.HaloCEA.Jobs
       }
 
       return loadedTextures;
+    }
+
+    private void CreateLodMeshSet( IMeshAsset meshAsset, Scene scene )
+      => EvaluateMesh( meshAsset.LodMeshNames, scene.RootNode, IsLodMesh );
+
+    private void CreateVolumeMeshSet( IMeshAsset meshAsset, Scene scene )
+      => EvaluateMesh( meshAsset.VolumeMeshNames, scene.RootNode, IsVolumeMesh );
+
+    private void EvaluateMesh( ISet<string> set, Node node, Func<string, bool> evaluatorFunc )
+    {
+      var name = node.Name;
+      if ( evaluatorFunc( name ) )
+        set.Add( name );
+
+      foreach ( var child in EnumerateSceneNodeChildren( node ) )
+        EvaluateMesh( set, child, evaluatorFunc );
+    }
+
+    private IEnumerable<Node> EnumerateSceneNodeChildren( Node node )
+    {
+      foreach ( var child in node.Children )
+        yield return child;
     }
 
     #endregion

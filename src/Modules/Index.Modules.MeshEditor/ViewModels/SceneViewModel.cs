@@ -1,11 +1,14 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.SharpDX.Core.Assimp;
 using HelixToolkit.SharpDX.Core.Model;
 using HelixToolkit.SharpDX.Core.Model.Scene;
 using HelixToolkit.Wpf.SharpDX;
 using Index.Domain.Assets.Meshes;
+using Index.Domain.Assets.Textures.Dxgi;
 using Index.UI.ViewModels;
+using Serilog;
 
 namespace Index.Modules.MeshEditor.ViewModels
 {
@@ -37,7 +40,15 @@ namespace Index.Modules.MeshEditor.ViewModels
         foreach ( var node in helixScene.Root.Traverse() )
         {
           if ( node is MeshNode meshNode )
+          {
             ApplyMaterialToNode( meshAsset, meshNode );
+
+            if ( meshAsset.LodMeshNames.Contains( meshNode.Name ) )
+              meshNode.Visible = false;
+            else if ( meshAsset.VolumeMeshNames.Contains( meshNode.Name ) )
+              meshNode.Visible = false;
+            meshNode.CullMode = SharpDX.Direct3D11.CullMode.Back;
+          }
         }
 
         sceneModel.ApplyTransforms();
@@ -52,11 +63,14 @@ namespace Index.Modules.MeshEditor.ViewModels
       if ( nodeMaterial is null )
         return;
 
-      if ( nodeMaterial.DiffuseMapFilePath != null )
-        nodeMaterial.DiffuseMap = TextureModel.Create( meshAsset.Textures[ nodeMaterial.DiffuseMapFilePath ].Images[ 0 ].PreviewStream );
+      if ( nodeMaterial.DiffuseMap is null && nodeMaterial.DiffuseMapFilePath is not null )
+      {
+        if ( !meshAsset.Textures.TryGetValue( nodeMaterial.DiffuseMapFilePath, out var texture ) )
+          Log.Logger.Error( "Failed to load texture {texPath}.", nodeMaterial.DiffuseMapFilePath );
 
-      nodeMaterial.UVTransform = new UVTransform( 0, 1, -1, 0, 0 );
-      nodeMaterial.EnableTessellation = true;
+        nodeMaterial.DiffuseMap = TextureModel.Create( texture.Images[ 0 ].PreviewStream );
+        nodeMaterial.UVTransform = new UVTransform( 0, 1, -1, 0, 0 );
+      }
     }
 
     private void ApplyTransforms()

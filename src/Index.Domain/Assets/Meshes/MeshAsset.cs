@@ -16,6 +16,9 @@ namespace Index.Domain.Assets.Meshes
     public Scene AssimpScene { get; set; }
     public IReadOnlyDictionary<string, ITextureAsset> Textures { get; set; }
 
+    public ISet<string> LodMeshNames { get; }
+    public ISet<string> VolumeMeshNames { get; }
+
     #endregion
 
     #region Constructor
@@ -23,6 +26,8 @@ namespace Index.Domain.Assets.Meshes
     public MeshAsset( IAssetReference assetReference )
       : base( assetReference )
     {
+      LodMeshNames = new HashSet<string>();
+      VolumeMeshNames = new HashSet<string>();
     }
 
     #endregion
