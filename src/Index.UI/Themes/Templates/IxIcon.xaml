@@ -25,10 +25,12 @@
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
                               Stretch="Uniform"
+                              Height="{TemplateBinding Height}"
+                              Width="{TemplateBinding Width}"
                               Margin="{TemplateBinding Padding}"
                               Stroke="{TemplateBinding Foreground}"
                               Fill="{TemplateBinding Foreground}"
-                              Data="{TemplateBinding Path}" />
+                              Data="{TemplateBinding Path.Data}" />
 
                     </Grid>
                     <ControlTemplate.Triggers>

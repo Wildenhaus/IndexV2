@@ -4,11 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Index.Modules.MeshEditor.Views"
+             xmlns:controls="clr-namespace:Index.Modules.MeshEditor.Controls"
              xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
+             x:Name="self"
              d:DesignHeight="450"
              d:DesignWidth="800"
+             Focusable="True"
              mc:Ignorable="d">
-    
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,13 +19,14 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
+
     <Grid Background="{DynamicResource Brushes.Background.Deeper}">
-        <hx:Viewport3DX x:Name="ViewportControl"
+        <hx:Viewport3DX x:Name="Viewport"
                         TextBrush="{DynamicResource Brushes.Foreground.Static}"
                         Background="{DynamicResource Brushes.Background.Deeper}"
                         BackgroundColor="{DynamicResource Colors.Background.Deeper}"
-                        Camera="{Binding Camera}"
+                        Camera="{Binding Camera, ElementName=self}"
+                        CameraInertiaFactor="0.7"
                         CameraMode="Inspect"
                         CameraRotationMode="Turntable"
                         EffectsManager="{Binding EffectsManager}"
@@ -31,7 +35,10 @@
                         IsMoveEnabled="True"
                         IsZoomEnabled="True"
                         ZoomDistanceLimitNear="0"
-                        EnableRenderFrustum="True">
+                        EnableRenderFrustum="True"
+                        Focusable="{Binding IsFlycamEnabled, ElementName=self, Converter={StaticResource InverseBoolConverter}}"
+                        IsHitTestVisible="{Binding IsFlycamEnabled, ElementName=self, Converter={StaticResource InverseBoolConverter}}"
+                        ShowViewCube="{Binding IsFlycamEnabled, ElementName=self, Converter={StaticResource InverseBoolConverter}}">
 
             <hx:Viewport3DX.InputBindings>
                 <MouseBinding Command="hx:ViewportCommands.Rotate"
@@ -42,8 +49,14 @@
                               Gesture="MiddleClick" />
             </hx:Viewport3DX.InputBindings>
 
-            <hx:Element3DPresenter Content="{Binding Scene.GroupModel}" />
-            <hx:DirectionalLight3D Direction="{Binding Camera.LookDirection}" Color="#FFF" />
+            <hx:Element3DPresenter Content="{Binding Model, ElementName=self}" />
+            <hx:DirectionalLight3D Direction="{Binding Camera.LookDirection}"
+                                   Color="#FFF" />
+
+            <hx:Viewport3DX.Content2D>
+                <controls:ViewportDisplay Foreground="{DynamicResource Brushes.Foreground.Static}"
+                                          FramesPerSecond="{Binding ElementName=Viewport, Path=FrameRate}"/>
+            </hx:Viewport3DX.Content2D>
 
         </hx:Viewport3DX>
 

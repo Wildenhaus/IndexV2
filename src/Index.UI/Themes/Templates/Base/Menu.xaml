@@ -23,7 +23,7 @@
     <!--#endregion-->
     
     <!--#region Colors-->
-    <SolidColorBrush x:Key="Menu.Static.Background" Color="Transparent" />
+    <SolidColorBrush x:Key="Menu.Static.Background" Color="{DynamicResource Colors.Background.Deep}" />
     <SolidColorBrush x:Key="Menu.Static.Foreground" Color="{DynamicResource Colors.Foreground.Static}" />
     <SolidColorBrush x:Key="Menu.Disabled.Background" Color="{DynamicResource Colors.Foreground.Disabled}" />
 
@@ -639,7 +639,7 @@
 
     <!--#region Style: Menu-->
     <Style TargetType="{x:Type Menu}">
-        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Background" Value="{StaticResource Menu.Static.Background}" />
         <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}" />
         <Setter Property="FontSize" Value="{DynamicResource {x:Static SystemFonts.MenuFontSizeKey}}" />
         <Setter Property="FontStyle" Value="{DynamicResource {x:Static SystemFonts.MenuFontStyleKey}}" />

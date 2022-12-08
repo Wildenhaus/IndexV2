@@ -18,13 +18,14 @@ namespace Index.Modules.MeshEditor.ViewModels
 
     #region Properties
 
-    public Viewport3DX Viewport { get; set; }
     public Camera Camera { get; set; }
     public EffectsManager EffectsManager { get; set; }
 
     public SceneViewModel Scene { get; set; }
 
-    public ICommand ZoomExtentsCommand { get; }
+    public bool IsFlycamEnabled { get; set; }
+
+    public ICommand ZoomExtentsCommand { get; set; }
 
     #endregion
 
@@ -62,7 +63,7 @@ namespace Index.Modules.MeshEditor.ViewModels
         return;
 
       var maxWidth = Math.Max( Math.Max( bound.Width, bound.Height ), bound.Depth );
-      var pos = bound.Center + new SharpDX.Vector3( 0, 0, maxWidth * 2 );
+      var pos = bound.Center + new Vector3( 0, 0, maxWidth * 1.5f );
 
       Camera.Dispatcher.Invoke( () =>
       {
