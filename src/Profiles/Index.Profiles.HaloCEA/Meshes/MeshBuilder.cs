@@ -264,7 +264,7 @@ namespace Index.Profiles.HaloCEA.Meshes
 
       var interleavedData = SharingObject.InterleavedDataBuffer.ElementData.AsSpan( vertexOffset, vertexCount );
       foreach ( var datum in interleavedData )
-        AddInterleavedDatum( datum, SharingObject.UvScaling );
+        AddInterleavedDatum( datum, Object.UvScaling );
     }
 
     private void AddSubmeshInterleavedData()
@@ -284,14 +284,14 @@ namespace Index.Profiles.HaloCEA.Meshes
     {
       // UVs/Texture Coordinates
       if ( datum.UV0.HasValue ) AddVertexUV( datum.UV0, 0, uvScaling );
-      if ( datum.UV1.HasValue ) AddVertexUV( datum.UV0, 0, uvScaling );
-      if ( datum.UV2.HasValue ) AddVertexUV( datum.UV0, 0, uvScaling );
-      if ( datum.UV3.HasValue ) AddVertexUV( datum.UV0, 0, uvScaling );
+      if ( datum.UV1.HasValue ) AddVertexUV( datum.UV1, 1, uvScaling );
+      if ( datum.UV2.HasValue ) AddVertexUV( datum.UV2, 2, uvScaling );
+      if ( datum.UV3.HasValue ) AddVertexUV( datum.UV3, 3, uvScaling );
 
       // Vertex Colors
       if ( datum.Color0.HasValue ) AddVertexColor( datum.Color0, 0 );
-      if ( datum.Color1.HasValue ) AddVertexColor( datum.Color1, 0 );
-      if ( datum.Color2.HasValue ) AddVertexColor( datum.Color2, 0 );
+      if ( datum.Color1.HasValue ) AddVertexColor( datum.Color1, 1 );
+      if ( datum.Color2.HasValue ) AddVertexColor( datum.Color2, 2 );
 
       // Tangents
       // TODO: Assimp only supports a single tangent channel?
