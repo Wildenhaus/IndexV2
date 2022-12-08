@@ -201,6 +201,7 @@ namespace Index.Profiles.HaloCEA.Jobs
 
       SetCompletedUnits( 0 );
       SetTotalUnits( toLoadSet.Count );
+      SetIndeterminate( false );
 
       var loadedTextures = new Dictionary<string, ITextureAsset>();
       foreach ( var assetToLoad in toLoadSet )
@@ -210,6 +211,7 @@ namespace Index.Profiles.HaloCEA.Jobs
 
         var texture = loadJob.Result;
         loadedTextures.Add( texture.AssetName, texture );
+        IncreaseCompletedUnits( 1 );
       }
 
       return loadedTextures;
