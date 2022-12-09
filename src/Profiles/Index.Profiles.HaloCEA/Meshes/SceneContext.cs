@@ -1,4 +1,5 @@
 ﻿using Assimp;
+using Index.Profiles.HaloCEA.Common;
 using LibSaber.HaloCEA.Structures;
 
 namespace Index.Profiles.HaloCEA.Meshes
@@ -60,6 +61,13 @@ namespace Index.Profiles.HaloCEA.Meshes
       meshNode.MeshIndices.Add( Scene.MeshCount - 1 );
 
       return meshNode;
+    }
+
+    public int AddMaterial( Material material )
+    {
+      var matIndex = Scene.MaterialCount;
+      Scene.Materials.Add( material );
+      return matIndex;
     }
 
     public IEnumerable<SaberObject> EnumerateObjectChildren( short objectId )
