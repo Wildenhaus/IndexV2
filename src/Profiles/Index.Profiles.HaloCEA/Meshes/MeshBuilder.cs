@@ -426,7 +426,9 @@ namespace Index.Profiles.HaloCEA.Meshes
       var boneObjectId = ( short ) ( rootBoneObjectId + boneOffset );
       var boneObject = Context.Objects[ boneObjectId ];
       var boneId = boneObject.BoneId;
-      ASSERT( boneId != -1 );
+      //ASSERT( boneId != -1 );
+      if ( boneId == -1 ) // TODO
+        return;
 
       var bone = GetOrCreateBone( boneId );
       bone.VertexWeights.Add( new VertexWeight( vertIndex, weight ) );
