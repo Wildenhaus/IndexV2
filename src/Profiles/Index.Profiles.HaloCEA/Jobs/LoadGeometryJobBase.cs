@@ -1,4 +1,6 @@
-﻿using Assimp;
+﻿using System.Diagnostics;
+using System.Numerics;
+using Assimp;
 using Index.Domain.Assets;
 using Index.Domain.Assets.Meshes;
 using Index.Domain.Assets.Textures;
@@ -53,6 +55,8 @@ namespace Index.Profiles.HaloCEA.Jobs
 
       AssetReference = parameters.Get<IAssetReference>();
       Name = $"Loading {AssetReference.AssetName}";
+
+      Textures = new Dictionary<string, ITextureAsset>();
     }
 
     #endregion
@@ -79,6 +83,21 @@ namespace Index.Profiles.HaloCEA.Jobs
       CreateVolumeMeshSet( asset, Context.Scene );
 
       SetResult( asset );
+
+      var haloCoordinates = new System.Numerics.Matrix4x4(
+        1, 0, 0, 0,
+        0, 0, -1, 0,
+        0, 1, 0, 0,
+        0, 0, 0, 1 );
+
+      //var sceneTransform = haloCoordinates.ToAssimp();
+      //sceneTransform.Transpose();
+      //Context.RootNode.Transform = sceneTransform;
+
+      using ( var ctx = new AssimpContext() )
+      {
+        ctx.ExportFile( Context.Scene, @"F:\cea\test.fbx", "fbx" );
+      }
     }
 
     #endregion
@@ -98,7 +117,7 @@ namespace Index.Profiles.HaloCEA.Jobs
     protected virtual async Task CreateScene( SceneContext context )
     {
       var textureList = GetTextureList();
-      Textures = await GatherTextures( textureList );
+      await GatherTextures( textureList );
       AddMaterials( textureList );
 
       AddNodes();
@@ -129,6 +148,14 @@ namespace Index.Profiles.HaloCEA.Jobs
       SetIndeterminate( false );
 
       AddNode( Context.RootObject );
+      //PrintNodes( Context.RootNode );
+    }
+
+    private void PrintNodes( Node node, int level = 0 )
+    {
+      Debug.WriteLine( "{0}{1}", new string( ' ', level ), node.Name );
+      foreach ( var child in node.Children )
+        PrintNodes( child, level + 1 );
     }
 
     protected void AddNode( SaberObject obj, Node parent = null )
@@ -137,15 +164,17 @@ namespace Index.Profiles.HaloCEA.Jobs
         parent = Context.Scene.RootNode;
 
       // Ensure armature is at root
-      if ( obj.BoneId == 0 )
-        parent = Context.Scene.RootNode;
+      //if ( obj.BoneId == 0 )
+      //  parent = Context.Scene.RootNode;
 
       var node = new Node( obj.ObjectInfo.Name, parent );
       parent.Children.Add( node );
+      Context.Nodes[ obj.ObjectInfo.Id ] = node;
 
-      var transform = obj.Matrix.Value.ToMatrix4();
-      transform.Transpose();
+      var transform = GetTransform( obj );
+      //transform.Transpose();
       node.Transform = transform;
+      //node.Transform = GetTransformMatrix( obj );
 
       foreach ( var child in Context.EnumerateObjectChildren( obj ) )
         AddNode( child, node );
@@ -153,7 +182,7 @@ namespace Index.Profiles.HaloCEA.Jobs
       IncreaseCompletedUnits( 1 );
     }
 
-    private void AddMeshes()
+    protected void AddMeshes()
     {
       SetStatus( "Preparing Meshes" );
       SetCompletedUnits( 0 );
@@ -178,6 +207,9 @@ namespace Index.Profiles.HaloCEA.Jobs
 
     private void AddMesh( SaberObject obj )
     {
+      if ( obj.ObjectInfo.Name == "shield" )
+        return;
+
       if ( obj.SubmeshData.SubmeshList.Count == 0 )
         System.Diagnostics.Debugger.Break();
 
@@ -188,11 +220,26 @@ namespace Index.Profiles.HaloCEA.Jobs
     private void AddSubMesh( SaberObject obj, SubmeshInfo submeshInfo )
     {
       var mesh = MeshBuilder.Build( Context, obj, submeshInfo );
-      var meshNode = Context.AddMesh( mesh );
+      //var meshNode = Context.AddMesh( mesh );
+      //meshNode.Transform = GetTransform( obj, submeshInfo );
 
-      var transform = obj.Matrix.Value.ToMatrix4();
-      transform.Transpose();
-      meshNode.Transform = transform;
+      //var meshNode = Context.Nodes[ obj.ObjectInfo.Id ];
+      //var meshIndex = Context.Scene.MeshCount;
+      //Context.Scene.Meshes.Add( mesh );
+      //meshNode.MeshIndices.Add( meshIndex );
+
+      var meshNodeParent = Context.Nodes[ obj.ObjectInfo.Id ];
+      var meshNode = new Node( obj.ObjectInfo.Name, meshNodeParent );
+      meshNodeParent.Children.Add( meshNode );
+      var meshIndex = Context.Scene.MeshCount;
+      Context.Scene.Meshes.Add( mesh );
+      meshNode.MeshIndices.Add( meshIndex );
+
+      var t = meshNodeParent.Transform;
+      t.Inverse();
+      //meshNode.Transform = t;
+
+      //meshNode.Transform = GetTransform( obj, submeshInfo );
     }
 
     private void AddMaterials( IList<TextureListEntry> textures )
@@ -216,7 +263,7 @@ namespace Index.Profiles.HaloCEA.Jobs
       IncreaseCompletedUnits( 1 );
     }
 
-    private async Task<Dictionary<string, ITextureAsset>> GatherTextures( IList<TextureListEntry> textureNames )
+    private async Task GatherTextures( IList<TextureListEntry> textureNames )
     {
       SetStatus( "Loading Textures" );
       SetIndeterminate();
@@ -241,12 +288,10 @@ namespace Index.Profiles.HaloCEA.Jobs
         var loadJob = AssetManager.LoadAsset<ITextureAsset>( assetToLoad );
         await loadJob.Completion;
 
-        var texture = loadJob.Result;
-        loadedTextures.Add( texture.AssetName, texture );
+        ITextureAsset texture = loadJob.Result;
+        Textures.Add( assetToLoad.AssetName, texture );
         IncreaseCompletedUnits( 1 );
       }
-
-      return loadedTextures;
     }
 
     private void CreateLodMeshSet( IMeshAsset meshAsset, Scene scene )
@@ -261,14 +306,51 @@ namespace Index.Profiles.HaloCEA.Jobs
       if ( evaluatorFunc( name ) )
         set.Add( name );
 
-      foreach ( var child in EnumerateSceneNodeChildren( node ) )
+      foreach ( var child in node.EnumerateChildren() )
         EvaluateMesh( set, child, evaluatorFunc );
     }
 
-    private IEnumerable<Node> EnumerateSceneNodeChildren( Node node )
+    protected Assimp.Matrix4x4 GetTransform( SaberObject obj, SubmeshInfo submeshInfo = null )
     {
-      foreach ( var child in node.Children )
-        yield return child;
+      Vector3 scaleVector = new Vector3( 1 );
+      Vector3 translationVector = new Vector3( 0 );
+
+      //if ( submeshInfo != null )
+      //{
+      //  if ( submeshInfo.SkinCompoundId.HasValue )
+      //    obj = Context.Objects[ ( short ) submeshInfo.SkinCompoundId.Value ];
+      //}
+
+      //if ( obj.TranslationVectors != null )
+      //{
+      //  scaleVector = obj.TranslationVectors.Scale;
+      //  translationVector = obj.TranslationVectors.Translation;
+      //}
+      //else if ( obj.Vertices != null && obj.Vertices.Count > 0 )
+      //{
+      //  scaleVector = obj.Vertices.Scale;
+      //  translationVector = obj.Vertices.Translation;
+      //}
+
+      //var scaleMatrix = System.Numerics.Matrix4x4.CreateScale( scaleVector );
+      //var translationMatrix = System.Numerics.Matrix4x4.CreateTranslation( translationVector );
+      //var transform = scaleMatrix * translationMatrix;
+
+      var transform = System.Numerics.Matrix4x4.Identity;
+
+      var parent = obj;
+      do
+      {
+        transform *= System.Numerics.Matrix4x4.Transpose( parent.Matrix.Value );
+        break;
+        var parentId = parent.ParentId;
+        parent = parentId.HasValue ? Context.Objects[ ( short ) parentId.Value ] : null;
+      }
+      while ( parent != null );
+
+      var m = transform.ToAssimp();
+      //m.Transpose();
+      return m;
     }
 
     #endregion

@@ -1,4 +1,5 @@
-﻿using LibSaber.Shared.Structures;
+﻿using System.Numerics;
+using LibSaber.Shared.Structures;
 
 namespace LibSaber.HaloCEA.Structures
 {
@@ -8,14 +9,14 @@ namespace LibSaber.HaloCEA.Structures
 
     #region Data Members
 
-    public Vector3<float> Position;
-    public Vector3<float> Normal;
+    public Vector3 Position;
+    public Vector3 Normal;
 
     #endregion
 
     #region Constructor
 
-    public Vertex( Vector3<float> position, Vector3<float> normal )
+    public Vertex( Vector3 position, Vector3 normal )
     {
       Position = position;
       Normal = normal;
@@ -23,8 +24,8 @@ namespace LibSaber.HaloCEA.Structures
 
     public Vertex( Vector3<SNorm16> position, Vector3<SNorm16> normal )
     {
-      Position = new Vector3<float>( position.X, position.Y, position.Z );
-      Normal = new Vector3<float>( normal.X, normal.Y, normal.Z );
+      Position = new Vector3( position.X, position.Y, position.Z );
+      Normal = new Vector3( normal.X, normal.Y, normal.Z );
     }
 
     #endregion

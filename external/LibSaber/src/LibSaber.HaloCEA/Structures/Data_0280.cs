@@ -1,4 +1,5 @@
-﻿using LibSaber.IO;
+﻿using System.Numerics;
+using LibSaber.IO;
 using LibSaber.Serialization;
 using LibSaber.Shared.Attributes;
 using LibSaber.Shared.Structures;
@@ -53,7 +54,7 @@ namespace LibSaber.HaloCEA.Structures
     public string Name;
 
     [Sentinel( SentinelIds.Sentinel_0283 )]
-    public Matrix4<float> Matrix;
+    public Matrix4x4 Matrix;
 
     [Sentinel( SentinelIds.Sentinel_0284 )]
     public Vector3<float> Color;
@@ -99,7 +100,7 @@ namespace LibSaber.HaloCEA.Structures
             data.Name = reader.ReadNullTerminatedString();
             break;
           case SentinelIds.Sentinel_0283:
-            data.Matrix = Matrix4<float>.Deserialize( reader, context );
+            data.Matrix = reader.ReadMatrix4x4();
             break;
           case SentinelIds.Sentinel_0284:
             data.Color = Vector3<float>.Deserialize( reader, context );

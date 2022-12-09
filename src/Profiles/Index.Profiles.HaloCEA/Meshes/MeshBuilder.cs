@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Numerics;
+using System.Runtime.InteropServices;
 using Assimp;
 using Index.Profiles.HaloCEA.Common;
 using LibSaber.HaloCEA.Structures;
@@ -112,8 +113,8 @@ namespace Index.Profiles.HaloCEA.Meshes
         _vertexLookup.Add( i, mesh.Vertices.Count );
 
         var vertex = vertices[ i ];
-        mesh.Vertices.Add( vertex.Position.ToVector3D() );
-        mesh.Normals.Add( vertex.Normal.ToVector3D() );
+        mesh.Vertices.Add( vertex.Position.ToAssimp() );
+        mesh.Normals.Add( vertex.Normal.ToAssimp() );
       }
     }
 
@@ -124,8 +125,8 @@ namespace Index.Profiles.HaloCEA.Meshes
       var vertexOffset = sharingInfo.VertexOffset;
       var vertexCount = SubmeshInfo.VertexInfo.Value.VertexCount;
 
-      var vtxScale = new Vector3<short>( 1, 1, 1 );
-      var vtxPos = new Vector3<short>( 0, 0, 0 );
+      var vtxScale = new Vector3( 1 );
+      var vtxPos = new Vector3( 0 );
       if ( Object.TranslationVectors is not null )
       {
         vtxScale = Object.TranslationVectors.Scale;
@@ -140,7 +141,7 @@ namespace Index.Profiles.HaloCEA.Meshes
           ( vertex.Position.Y * vtxScale.Y ) + vtxPos.Y,
           ( vertex.Position.Z * vtxScale.Z ) + vtxPos.Z ) );
 
-        mesh.Normals.Add( vertex.Normal.ToVector3D() );
+        mesh.Normals.Add( vertex.Normal.ToAssimp() );
       }
     }
 
@@ -153,8 +154,8 @@ namespace Index.Profiles.HaloCEA.Meshes
       var vertices = CollectionsMarshal.AsSpan( Object.Vertices ).Slice( vertexOffset, vertexCount );
       foreach ( var vertex in vertices )
       {
-        mesh.Vertices.Add( vertex.Position.ToVector3D() );
-        mesh.Normals.Add( vertex.Normal.ToVector3D() );
+        mesh.Vertices.Add( vertex.Position.ToAssimp() );
+        mesh.Normals.Add( vertex.Normal.ToAssimp() );
       }
     }
 
@@ -298,7 +299,7 @@ namespace Index.Profiles.HaloCEA.Meshes
       if ( datum.Tangent0.HasValue ) AddVertexTangent( datum.Tangent0, 0 );
     }
 
-    private void AddVertexUV( Vector3<float>? coords, int channel, UvScalingMap uvScaling )
+    private void AddVertexUV( Vector3? coords, int channel, UvScalingMap uvScaling )
     {
       var u = coords.Value.X;
       var v = coords.Value.Y;
@@ -316,14 +317,14 @@ namespace Index.Profiles.HaloCEA.Meshes
       Mesh.UVComponentCount[ channel ] = 2;
     }
 
-    private void AddVertexColor( Vector4<byte>? color, int channel )
+    private void AddVertexColor( Vector4? color, int channel )
     {
-      Mesh.VertexColorChannels[ channel ].Add( color.Value.ToColor4D() );
+      Mesh.VertexColorChannels[ channel ].Add( color.Value.ToAssimpColor4D() );
     }
 
-    private void AddVertexTangent( Vector4<float>? tangent, int channel )
+    private void AddVertexTangent( Vector4? tangent, int channel )
     {
-      Mesh.Tangents.Add( tangent.Value.ToVector3D() );
+      Mesh.Tangents.Add( tangent.Value.ToAssimpVector3D() );
     }
 
     #endregion
@@ -442,7 +443,7 @@ namespace Index.Profiles.HaloCEA.Meshes
       var boneObject = Context.BoneObjects[ boneId ];
       bone = new Bone { Name = boneObject.ObjectInfo.Name };
 
-      var matrix = boneObject.Matrix.Value.ToMatrix4();
+      var matrix = boneObject.Matrix.Value.ToAssimp();
       matrix.Transpose();
       bone.OffsetMatrix = matrix;
 

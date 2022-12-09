@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Numerics;
+using System.Text;
 
 namespace LibSaber.IO
 {
@@ -128,6 +129,22 @@ namespace LibSaber.IO
 
     public string ReadLengthPrefixedString32()
       => ReadFixedLengthString( ReadUnmanaged<Int32>() );
+
+    public Vector3 ReadVector3()
+      => new Vector3( ReadFloat32(), ReadFloat32(), ReadFloat32() );
+
+    public Vector4 ReadVector4()
+      => new Vector4( ReadFloat32(), ReadFloat32(), ReadFloat32(), ReadFloat32() );
+
+    public Matrix4x4 ReadMatrix4x4()
+    {
+      return new Matrix4x4(
+        ReadFloat32(), ReadFloat32(), ReadFloat32(), ReadFloat32(),
+        ReadFloat32(), ReadFloat32(), ReadFloat32(), ReadFloat32(),
+        ReadFloat32(), ReadFloat32(), ReadFloat32(), ReadFloat32(),
+        ReadFloat32(), ReadFloat32(), ReadFloat32(), ReadFloat32()
+        );
+    }
 
     public void Seek( long offset, SeekOrigin origin = SeekOrigin.Begin )
       => BaseStream.Seek( offset, origin );

@@ -111,7 +111,6 @@ namespace LibSaber.HaloCEA.Structures
             template.Sentinel_0305 = Data_0305.Deserialize( reader, context );
             break;
           case SentinelIds.Sentinel_0308:
-            _ = reader.ReadInt32(); // unk
             template.BoundingBox = Box.Deserialize( reader, context );
             break;
           case SentinelIds.Sentinel_030E:

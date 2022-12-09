@@ -42,8 +42,12 @@ namespace Index.App.ViewModels
         EditorEnvironment.GameProfile.Author );
 
       var assetManager = Container.Resolve<IAssetManager>();
-      assetManager.TryGetAssetReference( typeof( IMeshAsset ), "a10/captain", out var modelRef );
+      assetManager.TryGetAssetReference( typeof( IMeshAsset ), "a10/a10.lg", out var modelRef );
       EditorCommands.NavigateToAssetCommand.Execute( modelRef );
+      assetManager.TryGetAssetReference( typeof( IMeshAsset ), "a10/cryotube_a10__h", out modelRef );
+      //EditorCommands.NavigateToAssetCommand.Execute( modelRef );
+      assetManager.TryGetAssetReference( typeof( IMeshAsset ), "a10/cyborg", out modelRef );
+      //EditorCommands.NavigateToAssetCommand.Execute( modelRef );
     }
 
     #endregion

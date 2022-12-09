@@ -1,4 +1,5 @@
-﻿using LibSaber.Extensions;
+﻿using System.Numerics;
+using LibSaber.Extensions;
 using LibSaber.HaloCEA.Enumerations;
 using LibSaber.IO;
 using LibSaber.Serialization;
@@ -12,19 +13,19 @@ namespace LibSaber.HaloCEA.Structures
 
     #region Data Members
 
-    public Vector4<float>? Tangent0;
-    public Vector4<float>? Tangent1;
-    public Vector4<float>? Tangent2;
-    public Vector4<float>? Tangent3;
+    public Vector4? Tangent0;
+    public Vector4? Tangent1;
+    public Vector4? Tangent2;
+    public Vector4? Tangent3;
 
-    public Vector4<byte>? Color0;
-    public Vector4<byte>? Color1;
-    public Vector4<byte>? Color2;
+    public Vector4? Color0;
+    public Vector4? Color1;
+    public Vector4? Color2;
 
-    public Vector3<float>? UV0;
-    public Vector3<float>? UV1;
-    public Vector3<float>? UV2;
-    public Vector3<float>? UV3;
+    public Vector3? UV0;
+    public Vector3? UV1;
+    public Vector3? UV2;
+    public Vector3? UV3;
 
     public float? UnkUvDeltaU;
     public float? UnkUvDeltaV;
@@ -59,7 +60,7 @@ namespace LibSaber.HaloCEA.Structures
         data.Tangent3 = ReadTangent( reader, flags[ InterleavedDataFlags._COMPRESSED_TANG_3 ] );
     }
 
-    private static Vector4<float> ReadTangent( NativeReader reader, bool isCompressed )
+    private static Vector4 ReadTangent( NativeReader reader, bool isCompressed )
     {
       if ( isCompressed )
       {
@@ -75,7 +76,7 @@ namespace LibSaber.HaloCEA.Structures
         ASSERT( w >= -1.01 && w <= 1.01, "Tangent W coord out of bounds." );
 #endif
 
-        return new Vector4<float>( x, y, z, w );
+        return new Vector4( x, y, z, w );
       }
       else
       {
@@ -84,7 +85,7 @@ namespace LibSaber.HaloCEA.Structures
         var z = reader.ReadFloat32();
         var w = reader.ReadFloat32();
 
-        return new Vector4<float>( x, y, z, w );
+        return new Vector4( x, y, z, w );
       }
     }
 
@@ -98,14 +99,14 @@ namespace LibSaber.HaloCEA.Structures
         data.Color2 = ReadColor( reader, flags );
     }
 
-    private static Vector4<byte> ReadColor( NativeReader reader, BitSet<short> flags )
+    private static Vector4 ReadColor( NativeReader reader, BitSet<short> flags )
     {
-      var r = reader.ReadByte();
-      var g = reader.ReadByte();
-      var b = reader.ReadByte();
-      var a = reader.ReadByte();
+      var r = reader.ReadByte() / 255.0f;
+      var g = reader.ReadByte() / 255.0f;
+      var b = reader.ReadByte() / 255.0f;
+      var a = reader.ReadByte() / 255.0f;
 
-      return new Vector4<byte>( r, g, b, a );
+      return new Vector4( r, g, b, a );
     }
 
     private static void ReadUVs( ref InterleavedData data, NativeReader reader, BitSet<short> flags )
@@ -125,21 +126,21 @@ namespace LibSaber.HaloCEA.Structures
         data.UnkUvDeltaV = reader.ReadInt16().SNormToFloat();
     }
 
-    private static Vector3<float> ReadUV( NativeReader reader, bool isCompressed )
+    private static Vector3 ReadUV( NativeReader reader, bool isCompressed )
     {
       if ( isCompressed )
       {
         var u = reader.ReadInt16().SNormToFloat();
         var v = 1 - reader.ReadInt16().SNormToFloat();
 
-        return new Vector3<float>( u, v, 0 );
+        return new Vector3( u, v, 0 );
       }
       else
       {
         var u = reader.ReadFloat32();
         var v = 1 - reader.ReadFloat32();
 
-        return new Vector3<float>( u, v, 0 );
+        return new Vector3( u, v, 0 );
       }
     }
 

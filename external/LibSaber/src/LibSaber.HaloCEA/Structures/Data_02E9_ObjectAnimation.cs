@@ -1,4 +1,5 @@
-﻿using LibSaber.IO;
+﻿using System.Numerics;
+using LibSaber.IO;
 using LibSaber.Serialization;
 using LibSaber.Shared.Attributes;
 using LibSaber.Shared.Structures;
@@ -17,35 +18,35 @@ namespace LibSaber.HaloCEA.Structures
 
     [Sentinel( SentinelIds.ObjectAnim_IniTranslation )]
     [SaberInternalName( "iniTranslation" )]
-    public Vector3<float>? TranslationInitial;
+    public Vector3 TranslationInitial;
 
     [Sentinel( SentinelIds.ObjectAnim_PTranslation )]
     [SaberInternalName( "pTranslation" )]
-    public SplineData? TranslationSpline;
+    public SplineData TranslationSpline;
 
     [Sentinel( SentinelIds.ObjectAnim_IniRotation )]
     [SaberInternalName( "iniRotation" )]
-    public Vector4<float>? RotationInitial;
+    public Vector4 RotationInitial;
 
     [Sentinel( SentinelIds.ObjectAnim_PRotation )]
     [SaberInternalName( "pRotation" )]
-    public SplineData? RotationSpline;
+    public SplineData RotationSpline;
 
     [Sentinel( SentinelIds.ObjectAnim_IniScale )]
     [SaberInternalName( "iniScale" )]
-    public Vector3<float>? ScaleInitial;
+    public Vector3 ScaleInitial;
 
     [Sentinel( SentinelIds.ObjectAnim_PScale )]
     [SaberInternalName( "pScale" )]
-    public SplineData? ScaleSpline;
+    public SplineData ScaleSpline;
 
     [Sentinel( SentinelIds.ObjectAnim_PVisibility )]
     [SaberInternalName( "iniVisibility" )]
-    public float? VisibilityInitial;
+    public float VisibilityInitial;
 
     [Sentinel( SentinelIds.ObjectAnim_PVisibility )]
     [SaberInternalName( "pVisibility" )]
-    public SplineData? VisibilitySpline;
+    public SplineData VisibilitySpline;
 
     #endregion
 
@@ -76,13 +77,13 @@ namespace LibSaber.HaloCEA.Structures
             break;
 
           case SentinelIds.ObjectAnim_IniTranslation:
-            objectAnim.TranslationInitial = Vector3<float>.Deserialize( reader, context );
+            objectAnim.TranslationInitial = reader.ReadVector3();
             break;
           case SentinelIds.ObjectAnim_IniRotation:
-            objectAnim.RotationInitial = Vector4<float>.Deserialize( reader, context );
+            objectAnim.RotationInitial = reader.ReadVector4();
             break;
           case SentinelIds.ObjectAnim_IniScale:
-            objectAnim.ScaleInitial = Vector3<float>.Deserialize( reader, context );
+            objectAnim.ScaleInitial = reader.ReadVector3();
             break;
           case SentinelIds.ObjectAnim_IniVisibility:
             objectAnim.VisibilityInitial = reader.ReadFloat32();

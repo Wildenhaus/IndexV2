@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using LibSaber.Shared.Structures;
 
 namespace LibSaber.Common
 {
@@ -51,7 +50,7 @@ namespace LibSaber.Common
     /// <returns>
     ///   The unpacked vector.
     /// </returns>
-    public static Vector3<float> UnpackVector3FromInt16( short w )
+    public static Vector3 UnpackVector3FromInt16( short w )
     {
       /* Shader code works as follows:
        *  xz  = (-1.f + 2.f * frac( float2(1.f/181, 1.f/181.0/181.0) * abs(w))) * float2(181.f/179.f, 181.f/180.f);
@@ -78,7 +77,7 @@ namespace LibSaber.Common
       ASSERT( !float.IsNaN( z ) );
 #endif
 
-      return new Vector3<float>( x, y, z );
+      return new Vector3( x, y, z );
     }
 
   }

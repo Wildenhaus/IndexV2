@@ -1,6 +1,4 @@
 ﻿using Assimp;
-using LibSaber.Extensions;
-using LibSaber.Shared.Structures;
 
 namespace Index.Profiles.HaloCEA.Common
 {
@@ -8,24 +6,7 @@ namespace Index.Profiles.HaloCEA.Common
   public static class AssimpHelper
   {
 
-    public static Matrix4x4 ComposeTransformMatrix(
-      Vector3<float> translation,
-      Vector3<float> scale,
-      Vector4<float> rotation )
-    {
-      var t = translation;
-      var s = scale;
-      var r = rotation.QuatToRotationMatrix();
-
-      return new Matrix4x4(
-        s.X, r.A2, r.A3, t.X,
-        r.B1, s.Y, r.B3, t.Y,
-        r.C1, r.C2, s.Z, t.Z,
-        0, 0, 0, 1
-        );
-    }
-
-    public static Matrix4x4 ToMatrix4( this Matrix4<float> m )
+    public static Assimp.Matrix4x4 ToAssimp( this System.Numerics.Matrix4x4 m )
     {
       return new Matrix4x4(
           m.M11, m.M12, m.M13, m.M14,
@@ -35,50 +16,41 @@ namespace Index.Profiles.HaloCEA.Common
           );
     }
 
-    public static Vector3D ToVector3D( this Vector3<float> v )
+    public static Assimp.Vector3D ToAssimp( this System.Numerics.Vector3 v )
     {
       return new Vector3D( v.X, v.Y, v.Z );
     }
 
-    public static Vector3D ToVector3D( this Vector4<float> v )
+    public static Assimp.Vector3D ToAssimpVector3D( this System.Numerics.Vector4 v )
     {
       return new Vector3D( v.X, v.Y, v.Z );
     }
 
-    public static Color4D ToColor4D( this Vector4<byte> c )
+    public static Assimp.Color4D ToAssimpColor4D( this System.Numerics.Vector4 c )
     {
       return new Color4D(
-        c.X.UNormToFloat(),
-        c.Y.UNormToFloat(),
-        c.Z.UNormToFloat(),
-        c.W.UNormToFloat()
+        c.X,
+        c.Y,
+        c.Z,
+        c.W
         );
     }
 
-    public static Matrix3x3 QuatToRotationMatrix( this Vector4<float> quat )
+    public static IEnumerable<Node> EnumerateChildren( this Node node )
     {
-      var q0 = quat.X;
-      var q1 = quat.Y;
-      var q2 = quat.Z;
-      var q3 = quat.W;
+      foreach ( var child in node.Children )
+        yield return child;
+    }
 
-      var r00 = 2 * ( q0 * q0 + q1 * q1 ) - 1;
-      var r01 = 2 * ( q1 * q2 - q0 * q3 );
-      var r02 = 2 * ( q1 * q3 + q0 * q2 );
+    public static IEnumerable<Node> TraverseChildren( this Node node )
+    {
+      foreach ( var child in node.Children )
+      {
+        yield return child;
+        foreach ( var childOfChild in TraverseChildren( child ) )
+          yield return childOfChild;
+      }
 
-      var r10 = 2 * ( q1 * q2 + q0 * q3 );
-      var r11 = 2 * ( q0 * q0 + q2 * q2 ) - 1;
-      var r12 = 2 * ( q2 * q3 - q0 * q1 );
-
-      var r20 = 2 * ( q1 * q3 - q0 * q2 );
-      var r21 = 2 * ( q2 * q3 + q0 * q1 );
-      var r22 = 2 * ( q0 * q0 + q3 * q3 ) - 1;
-
-      return new Matrix3x3(
-        r00, r01, r02,
-        r10, r11, r12,
-        r20, r21, r22
-        );
     }
 
   }

@@ -1,7 +1,7 @@
-﻿using LibSaber.IO;
+﻿using System.Numerics;
+using LibSaber.IO;
 using LibSaber.Serialization;
 using LibSaber.Shared.Attributes;
-using LibSaber.Shared.Structures;
 
 namespace LibSaber.HaloCEA.Structures
 {
@@ -12,8 +12,8 @@ namespace LibSaber.HaloCEA.Structures
 
     #region Data Members
 
-    public Vector3<short> Translation;
-    public Vector3<short> Scale;
+    public Vector3 Translation;
+    public Vector3 Scale;
 
     #endregion
 
@@ -23,8 +23,8 @@ namespace LibSaber.HaloCEA.Structures
     {
       var data = new Data_0135();
 
-      data.Translation = Vector3<short>.Deserialize( reader, context );
-      data.Scale = Vector3<short>.Deserialize( reader, context );
+      data.Translation = new Vector3( reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16() );
+      data.Scale = new Vector3( reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16() );
 
       return data;
     }

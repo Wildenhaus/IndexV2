@@ -66,7 +66,10 @@ namespace Index.Modules.MeshEditor.ViewModels
       if ( nodeMaterial.DiffuseMap is null && nodeMaterial.DiffuseMapFilePath is not null )
       {
         if ( !meshAsset.Textures.TryGetValue( nodeMaterial.DiffuseMapFilePath, out var texture ) )
+        {
           Log.Logger.Error( "Failed to load texture {texName}.", nodeMaterial.Name );
+          return;
+        }
 
         nodeMaterial.DiffuseMap = TextureModel.Create( texture.Images[ 0 ].PreviewStream );
         nodeMaterial.UVTransform = new UVTransform( 0, 1, -1, 0, 0 );
