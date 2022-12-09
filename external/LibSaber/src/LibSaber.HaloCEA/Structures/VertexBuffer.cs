@@ -58,22 +58,16 @@ namespace LibSaber.HaloCEA.Structures
       var parentObject = context.GetMostRecentObject<SaberObject>();
       var normInVert4 = parentObject.GeometryFlags.HasFlag( ObjectGeometryFlags.NormInVert4 );
 
-      buffer.Translation = new Vector3( reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16() );
-      buffer.Scale = new Vector3( reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16() );
+      var translation = buffer.Translation = new Vector3( reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16() );
+      var scale = buffer.Scale = new Vector3( reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16() );
 
       for ( var i = 0; i < vertexCount; i++ )
       {
         var position = new Vector3(
-            ( reader.ReadInt16().SNormToFloat() * buffer.Scale.X ) + buffer.Translation.X,
-            ( reader.ReadInt16().SNormToFloat() * buffer.Scale.Y ) + buffer.Translation.Y,
-            ( reader.ReadInt16().SNormToFloat() * buffer.Scale.Z ) + buffer.Translation.Z
+            ( reader.ReadInt16().SNormToFloat() * scale.X ) + translation.X,
+            ( reader.ReadInt16().SNormToFloat() * scale.Y ) + translation.Y,
+            ( reader.ReadInt16().SNormToFloat() * scale.Z ) + translation.Z
           );
-
-        //var position = new Vector3(
-        //    reader.ReadInt16().SNormToFloat(),
-        //    reader.ReadInt16().SNormToFloat(),
-        //    reader.ReadInt16().SNormToFloat()
-        //  );
 
         Vector3 normal;
         if ( normInVert4 )
