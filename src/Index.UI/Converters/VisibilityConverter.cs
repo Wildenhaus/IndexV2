@@ -50,4 +50,48 @@ namespace Index.UI.Converters
 
   }
 
+  public class InverseVisibilityConverter : IValueConverter
+  {
+
+    public object Convert( object value, Type targetType, object parameter, CultureInfo culture )
+      => Convert( value, targetType );
+
+    public object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )
+      => Convert( value, targetType );
+
+    private static object Convert( object value, Type targetType )
+    {
+      if ( targetType == typeof( bool ) )
+        return ConvertToBool( value );
+
+      if ( targetType == typeof( Visibility ) )
+        return ConvertToVisibility( value );
+
+      throw new ArgumentException( $"Unsupported type: {targetType.Name}" );
+    }
+
+    private static bool ConvertToBool( object value )
+    {
+      if ( value is Visibility visibilityValue )
+        return GetBool( visibilityValue );
+
+      return true;
+    }
+
+    private static Visibility ConvertToVisibility( object value )
+    {
+      if ( value is bool boolValue )
+        return GetVisibility( boolValue );
+
+      return Visibility.Visible;
+    }
+
+    private static Visibility GetVisibility( bool value )
+      => value ? Visibility.Collapsed : Visibility.Visible;
+
+    private static bool GetBool( Visibility visibility )
+      => visibility != Visibility.Visible;
+
+  }
+
 }

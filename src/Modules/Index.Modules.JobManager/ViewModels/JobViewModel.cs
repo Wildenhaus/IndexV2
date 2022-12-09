@@ -13,8 +13,7 @@ namespace Index.Modules.JobManager.ViewModels
 
     public string Name { get; private set; }
     public JobState State { get; private set; }
-    public string Status { get; private set; }
-    public double PercentCompleted { get; private set; }
+    public IProgressInfo Progress { get; private set; }
 
     public JobViewModel( IJob job )
     {
@@ -26,7 +25,6 @@ namespace Index.Modules.JobManager.ViewModels
     private void SubscribeToEvents()
     {
       _job.PropertyChanged += OnJobPropertyChanged;
-      _job.Progress.PropertyChanged += OnJobProgressChanged;
 
       _job.Cancelled += OnJobExecutionCompleted;
       _job.Faulted += OnJobExecutionCompleted;
@@ -34,14 +32,12 @@ namespace Index.Modules.JobManager.ViewModels
 
       Name = _job.Name;
       State = _job.State;
-      Status = _job.Progress.Status;
-      PercentCompleted = _job.Progress.PercentCompleted;
+      Progress = _job.Progress;
     }
 
     private void UnsubscribeFromEvents()
     {
       _job.PropertyChanged -= OnJobPropertyChanged;
-      _job.Progress.PropertyChanged -= OnJobProgressChanged;
 
       _job.Cancelled -= OnJobExecutionCompleted;
       _job.Faulted -= OnJobExecutionCompleted;
@@ -52,20 +48,6 @@ namespace Index.Modules.JobManager.ViewModels
     {
       if ( e.PropertyName == nameof( IJob.State ) )
         State = _job.State;
-    }
-
-    private void OnJobProgressChanged( object? sender, System.ComponentModel.PropertyChangedEventArgs e )
-    {
-      switch ( e.PropertyName )
-      {
-        case nameof( IProgressInfo.Status ):
-          Status = _job.Progress.Status;
-          break;
-
-        case nameof( IProgressInfo.PercentCompleted ):
-          PercentCompleted = _job.Progress.PercentCompleted;
-          break;
-      }
     }
 
     private void OnJobExecutionCompleted( object? sender, EventArgs e )

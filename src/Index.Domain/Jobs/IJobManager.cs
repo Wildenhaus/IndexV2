@@ -6,9 +6,16 @@ namespace Index.Jobs
   public interface IJobManager
   {
 
+    #region Events
+
+    event EventHandler<IJob> JobStarted;
+    event EventHandler<IJob> JobCompleted;
+
+    #endregion
+
     #region Properties
 
-    IReadOnlyList<IJob> Jobs { get; }
+    IReadOnlyDictionary<Guid, IJob> Jobs { get; }
 
     #endregion
 

@@ -7,13 +7,13 @@
              xmlns:Extensions="clr-namespace:Index.UI.Extensions;assembly=Index.UI"
              xmlns:prism="http://prismlibrary.com/"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             mc:Ignorable="d"
              d:DesignHeight="450"
-             d:DesignWidth="800">
+             d:DesignWidth="800"
+             mc:Ignorable="d">
     <Grid>
-        <ListView ItemsSource="{Binding Jobs}"
-                  Extensions:ListViewColumns.Stretch="AllColumns"
-                  Extensions:ListViewScrollBehavior.AutoScroll="True">
+        <ListView Extensions:ListViewColumns.Stretch="AllColumns"
+                  Extensions:ListViewScrollBehavior.AutoScroll="True"
+                  ItemsSource="{Binding Jobs}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}"
                        BasedOn="{StaticResource {x:Type ListViewItem}}">
@@ -28,25 +28,26 @@
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
-                        <GridViewColumn Header="Name"
-                                        Width="150"
+                        <GridViewColumn Width="150"
+                                        Header="Name"
                                         DisplayMemberBinding="{Binding Name, Mode=OneWay}" />
-                        <GridViewColumn Header="State"
-                                        Width="100"
+                        <GridViewColumn Width="100"
+                                        Header="State"
                                         DisplayMemberBinding="{Binding State, Mode=OneWay}" />
-                        <GridViewColumn Header="Progress"
-                                        Width="100">
+                        <GridViewColumn Width="100"
+                                        Header="Progress">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid>
-                                        <ProgressBar DockPanel.Dock="Left"
-                                                     IsIndeterminate="{Binding Progress.IsIndeterminate, Mode=OneWay}"
-                                                     Value="{Binding Progress.PercentCompleted, Mode=OneWay}"
-                                                     Margin="0,1"
+                                        <ProgressBar Margin="0,1"
                                                      Padding="0"
-                                                     Maximum="1" />
+                                                     DockPanel.Dock="Left"
+                                                     IsIndeterminate="{Binding Progress.IsIndeterminate, Mode=OneWay}"
+                                                     Maximum="1"
+                                                     Value="{Binding Progress.PercentCompleted, Mode=OneWay}" />
 
                                         <TextBlock Text="{Binding Progress.PercentCompleted, Mode=OneWay, StringFormat='0.00%'}"
+                                                   Visibility="{Binding Progress.IsIndeterminate, Mode=OneWay, Converter={StaticResource InverseVisibilityConverter}}"
                                                    TextAlignment="Center">
                                             <TextBlock.Effect>
                                                 <DropShadowEffect ShadowDepth="1"

@@ -263,6 +263,9 @@ namespace Index.Jobs
       PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
     }
 
+    internal void InternalSetAsCompleted()
+      => _executeCompletionSource.SetResult();
+
     #endregion
 
   }

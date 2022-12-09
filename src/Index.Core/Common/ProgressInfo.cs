@@ -101,7 +101,7 @@ namespace Index.Common
       get
       {
         if ( _isIndeterminate )
-          return double.NaN;
+          return 0;
 
         if ( _totalUnits == 0 )
           return 0;

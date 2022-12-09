@@ -4,5 +4,6 @@
 
     <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
     <converters:VisibilityConverter x:Key="VisibilityConverter" />
+    <converters:InverseVisibilityConverter x:Key="InverseVisibilityConverter" />
 
 </ResourceDictionary>
