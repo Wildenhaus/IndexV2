@@ -1,7 +1,7 @@
 ﻿namespace Index.Domain.Assets
 {
 
-  public interface IAssetReference
+  public interface IAssetReference : IEquatable<IAssetReference>
   {
 
     string AssetName { get; }

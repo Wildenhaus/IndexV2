@@ -50,14 +50,14 @@ namespace Index.Domain.Assets
 
     #region Overrides
 
-    public override bool Equals( object? obj )
+    public bool Equals( IAssetReference other )
     {
-      if ( !( obj is IAssetReference assetReference ) )
-        return false;
-
-      return this.AssetType == assetReference.AssetType
-          && this.AssetName == assetReference.AssetName;
+      return this.AssetType == other.AssetType
+          && this.AssetName == other.AssetName;
     }
+
+    public override bool Equals( object? obj )
+      => obj is IAssetReference other && Equals( other );
 
     public override int GetHashCode()
       => AssetName.GetHashCode();

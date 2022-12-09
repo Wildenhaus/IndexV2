@@ -1,4 +1,5 @@
 ﻿using Index.Domain.FileSystem;
+using Index.Domain.Jobs;
 using Index.Jobs;
 using Prism.Ioc;
 
@@ -13,6 +14,7 @@ namespace Index.Domain.Assets
     private readonly IContainerProvider _container;
     private readonly IJobManager _jobManager;
 
+    private readonly Dictionary<IAssetReference, IAsset> _loadedAssets;
     private readonly Dictionary<Type, IAssetReferenceCollection> _references;
 
     private bool _isInitialized;
@@ -34,6 +36,8 @@ namespace Index.Domain.Assets
     {
       _container = container;
       _jobManager = _container.Resolve<IJobManager>();
+
+      _loadedAssets = new Dictionary<IAssetReference, IAsset>();
       _references = new Dictionary<Type, IAssetReferenceCollection>();
     }
 
@@ -62,11 +66,21 @@ namespace Index.Domain.Assets
       ASSERT_NOT_NULL( assetReference );
       ASSERT( assetReference.AssetType.IsAssignableTo( typeof( TAsset ) ), $"Asset type mismatch." );
 
+      if ( _loadedAssets.TryGetValue( assetReference, out var loadedAsset ) )
+        return new CompletedJob<TAsset>( loadedAsset as TAsset );
+
       var factoryType = assetReference.AssetFactoryType;
-      //var factory = ( IAssetFactory<TAsset> ) Activator.CreateInstance( factoryType );
       var factory = ( IAssetFactory<TAsset> ) _container.Resolve( factoryType );
 
       var loadAssetJob = factory.LoadAsset( assetReference );
+      Task.WhenAny( loadAssetJob.Completion ).ContinueWith( t =>
+      {
+        if ( loadAssetJob.State != JobState.Completed )
+          return;
+
+        lock ( _loadedAssets )
+          _loadedAssets.Add( assetReference, loadAssetJob.Result );
+      } );
       return loadAssetJob;
     }
 
