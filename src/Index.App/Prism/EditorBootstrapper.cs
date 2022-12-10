@@ -32,7 +32,7 @@ namespace Index.App.Prism
       => _dryIocContainer.Resolve<IContainerExtension>();
 
     protected override DependencyObject CreateShell()
-      => Container.Resolve<EditorView>();
+      => Container.Resolve<MainShell>();
 
     protected override void ConfigureModuleCatalog( IModuleCatalog moduleCatalog )
     {
