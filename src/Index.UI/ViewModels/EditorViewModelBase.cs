@@ -3,6 +3,9 @@ using System.Windows.Input;
 using Index.Domain.Assets;
 using Index.Domain.Jobs;
 using Index.Jobs;
+using Index.UI.Commands;
+using Index.UI.Controls.Menus;
+using Prism.Commands;
 using Prism.Ioc;
 using Prism.Regions;
 using PropertyChanged;
@@ -17,6 +20,7 @@ namespace Index.UI.ViewModels
     #region Properties
 
     public string TabName { get; set; }
+    public ICommand CloseCommand { get; set; }
 
     [DoNotNotify] public TAsset Asset { get; protected set; }
     [DoNotNotify] public IAssetReference AssetReference { get; protected set; }
@@ -33,6 +37,7 @@ namespace Index.UI.ViewModels
     {
       Container = container;
       AssetManager = container.Resolve<IAssetManager>();
+      CloseCommand = new DelegateCommand( Close );
     }
 
     #endregion
@@ -57,6 +62,32 @@ namespace Index.UI.ViewModels
         Initialize();
       }
     }
+
+    protected override void OnConfigureContextMenu( MenuViewModelBuilder builder )
+    {
+      if ( AssetReference is null )
+        return;
+
+      builder.AddItem( config =>
+        config.Header( "Close" )
+              .Command( EditorCommands.CloseTabCommand, AssetReference ) );
+
+      builder.AddItem( config =>
+        config.Header( "Close All Tabs" )
+              .Command( EditorCommands.CloseAllTabsCommand ) );
+
+      builder.AddItem( config =>
+        config.Header( "Close All But This" )
+              .Command( EditorCommands.CloseAllTabsButThisCommand, AssetReference ) );
+
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void Close()
+      => EditorCommands.CloseTabCommand.Execute( AssetReference );
 
     #endregion
 

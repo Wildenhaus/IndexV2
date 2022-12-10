@@ -1,4 +1,6 @@
-﻿using Index.UI.ViewModels;
+﻿using System.Windows.Controls;
+using System.Windows.Input;
+using Index.UI.ViewModels;
 
 namespace Index.UI.ViewModels
 {
@@ -9,6 +11,7 @@ namespace Index.UI.ViewModels
     #region Properties
 
     public string TabName { get; set; }
+    public ICommand CloseCommand { get; }
 
     #endregion
 

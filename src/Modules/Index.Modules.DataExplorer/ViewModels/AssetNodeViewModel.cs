@@ -46,7 +46,7 @@ namespace Index.Modules.DataExplorer.ViewModels
       builder
         .AddItem( "Open", item =>
         {
-          item.Command( EditorCommands.NavigateToAssetCommand, _assetReference );
+          item.Command( EditorCommands.OpenTabCommand, _assetReference );
         } )
         .AddSeparator()
         .AddItem( "Properties" )

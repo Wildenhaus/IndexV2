@@ -79,6 +79,8 @@ namespace Index.UI.ViewModels
       IsInitializing = false;
       IsInitialized = true;
       _initializationJob = null;
+
+      ConfigureContextMenu();
     }
 
     #endregion

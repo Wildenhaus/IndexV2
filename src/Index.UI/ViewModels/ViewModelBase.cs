@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows.Controls;
 using System.Windows.Threading;
+using Index.UI.Controls.Menus;
 using Prism.Regions;
 using PropertyChanged;
 
@@ -20,12 +22,19 @@ namespace Index.UI.ViewModels
     #region Data Members
 
     private bool _isDisposed;
+    private ContextMenu _contextMenu;
 
     #endregion
 
     #region Properties
 
     public Dispatcher Dispatcher { get; }
+
+    public ContextMenu ContextMenu
+    {
+      get => _contextMenu;
+      protected set => _contextMenu = value;
+    }
 
     #endregion
 
@@ -39,6 +48,34 @@ namespace Index.UI.ViewModels
     ~ViewModelBase()
     {
       Dispose( false );
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    protected void ConfigureContextMenu()
+    {
+      var builder = new MenuViewModelBuilder();
+      OnConfigureContextMenu( builder );
+
+      if ( builder.Items.Count == 0 )
+      {
+        ContextMenu = null;
+        return;
+      }
+
+      Dispatcher.Invoke( () =>
+      {
+        var menu = new ContextMenu();
+        menu.ItemsSource = builder.Items;
+
+        ContextMenu = menu;
+      } );
+    }
+
+    protected virtual void OnConfigureContextMenu( MenuViewModelBuilder builder )
+    {
     }
 
     #endregion
