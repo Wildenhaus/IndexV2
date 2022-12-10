@@ -1,4 +1,5 @@
-﻿using Index.UI.Windows;
+﻿using System.ComponentModel;
+using Index.UI.Windows;
 using Prism.Ioc;
 using Prism.Regions;
 using PropertyChanged;
@@ -36,7 +37,7 @@ namespace Index.UI.ViewModels
     {
     }
 
-    protected virtual void OnWindowClosing()
+    protected virtual void OnWindowClosing( CancelEventArgs e )
     {
     }
 
@@ -45,20 +46,23 @@ namespace Index.UI.ViewModels
     #region Private Methods
 
     protected virtual void Close()
-    {
-      OnWindowClosing();
-      Window.Close();
-    }
+      => Window.Close();
 
     #endregion
 
     #region Internal Methods
 
     internal void SetWindow( IxWindow window )
-      => Window = window;
+    {
+      Window = window;
+      Window.Closing += ( s, e ) => OnWindowClosing( e );
+    }
 
     internal void WindowAppeared()
       => OnWindowAppeared();
+
+    internal void WindowClosing( CancelEventArgs e )
+      => OnWindowClosing( e );
 
     #endregion
 

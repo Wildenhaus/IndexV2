@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Shapes;
 using Index.UI.ViewModels;
 
@@ -11,7 +12,6 @@ namespace Index.UI.Windows
     #region Properties
 
     public bool CanClose { get; set; } = true;
-
     public Path? TitleBarIcon { get; set; }
 
     #endregion

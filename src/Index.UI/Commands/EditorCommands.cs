@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Index.Domain;
@@ -129,6 +130,16 @@ namespace Index.UI.Commands
 
       InvokeOnNavigatedFrom( tab, navigationContext );
       region.Remove( tab );
+
+      var view = tab as FrameworkElement;
+      if ( view is null )
+        return;
+
+      if ( view.DataContext is IDisposable disposableViewModel )
+        disposableViewModel?.Dispose();
+
+      if ( tab is IDisposable disposableTab )
+        disposableTab?.Dispose();
     }
 
     private static bool CanRemoveTabFromRegion( object item, NavigationContext navigationContext )

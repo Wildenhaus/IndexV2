@@ -106,7 +106,8 @@
 
         </StackPanel>
 
-        <local:MeshView Grid.Row="1"
+        <local:MeshView x:Name="MeshViewer" 
+                        Grid.Row="1"
                         Grid.Column="0"
                         Camera="{Binding Camera}"
                         Model="{Binding Scene.GroupModel}"

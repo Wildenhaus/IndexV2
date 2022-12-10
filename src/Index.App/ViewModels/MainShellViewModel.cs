@@ -1,6 +1,8 @@
-﻿using Index.Domain;
+﻿using System.ComponentModel;
+using Index.Domain;
 using Index.Domain.Models;
 using Index.Modules.JobManager.Views;
+using Index.UI.Commands;
 using Index.UI.ViewModels;
 using Prism.Ioc;
 using Serilog;
@@ -46,6 +48,11 @@ namespace Index.App.ViewModels
       //EditorCommands.NavigateToAssetCommand.Execute( modelRef );
       //assetManager.TryGetAssetReference( typeof( IMeshAsset ), "a10/cyborg", out modelRef );
       //EditorCommands.NavigateToAssetCommand.Execute( modelRef );
+    }
+
+    protected override void OnWindowClosing( CancelEventArgs e )
+    {
+      EditorCommands.CloseAllTabsCommand.Execute( null );
     }
 
     #endregion
