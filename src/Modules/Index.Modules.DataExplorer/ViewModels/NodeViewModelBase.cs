@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Index.UI.Controls.Menus;
 using Prism.Mvvm;
 
@@ -52,6 +53,8 @@ namespace Index.Modules.DataExplorer.ViewModels
     {
       get => _children.Count == 0;
     }
+
+    public ICommand DoubleClickCommand { get; protected set; }
 
     public ContextMenu ContextMenu
     {

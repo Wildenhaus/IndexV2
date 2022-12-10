@@ -1,6 +1,7 @@
 ﻿using Index.Domain.Assets;
 using Index.UI.Commands;
 using Index.UI.Controls.Menus;
+using Prism.Commands;
 
 namespace Index.Modules.DataExplorer.ViewModels
 {
@@ -30,6 +31,8 @@ namespace Index.Modules.DataExplorer.ViewModels
     {
       _assetReference = assetReference;
       _name = assetReference.AssetName;
+
+      DoubleClickCommand = new DelegateCommand( HandleDoubleClick );
     }
 
     public AssetNodeViewModel( string assetTypeName )
@@ -52,6 +55,13 @@ namespace Index.Modules.DataExplorer.ViewModels
         .AddItem( "Properties" )
         .AddItem( "Extract" );
     }
+
+    #endregion
+
+    #region Private Methods
+
+    private void HandleDoubleClick()
+      => EditorCommands.OpenTabCommand.Execute( _assetReference );
 
     #endregion
 
