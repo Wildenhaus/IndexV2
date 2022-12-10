@@ -105,7 +105,7 @@ namespace Index.Profiles.HaloCEA.Jobs
           continue;
         }
 
-        var job = AssetManager.LoadAsset<IMeshAsset>( templateAssetRef );
+        var job = AssetManager.LoadAsset<IMeshAsset>( templateAssetRef, AssetLoadContext );
         await job.Completion;
 
         loadedProps.Add( templateName, job.Result );

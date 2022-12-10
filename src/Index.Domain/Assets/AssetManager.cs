@@ -14,7 +14,6 @@ namespace Index.Domain.Assets
     private readonly IContainerProvider _container;
     private readonly IJobManager _jobManager;
 
-    private readonly Dictionary<IAssetReference, IAsset> _loadedAssets;
     private readonly Dictionary<Type, IAssetReferenceCollection> _references;
 
     private bool _isInitialized;
@@ -37,7 +36,6 @@ namespace Index.Domain.Assets
       _container = container;
       _jobManager = _container.Resolve<IJobManager>();
 
-      _loadedAssets = new Dictionary<IAssetReference, IAsset>();
       _references = new Dictionary<Type, IAssetReferenceCollection>();
     }
 
@@ -60,14 +58,17 @@ namespace Index.Domain.Assets
       _isInitialized = true;
     }
 
-    public IJob<TAsset> LoadAsset<TAsset>( IAssetReference assetReference )
+    public IJob<TAsset> LoadAsset<TAsset>( IAssetReference assetReference, IAssetLoadContext loadContext = null )
       where TAsset : class, IAsset
     {
       ASSERT_NOT_NULL( assetReference );
       ASSERT( assetReference.AssetType.IsAssignableTo( typeof( TAsset ) ), $"Asset type mismatch." );
 
-      if ( _loadedAssets.TryGetValue( assetReference, out var loadedAsset ) )
-        return new CompletedJob<TAsset>( loadedAsset as TAsset );
+      if ( loadContext is not null )
+      {
+        if ( loadContext.TryGetAsset<TAsset>( assetReference, out var loadedAsset ) )
+          return new CompletedJob<TAsset>( loadedAsset );
+      }
 
       var factoryType = assetReference.AssetFactoryType;
       var factory = ( IAssetFactory<TAsset> ) _container.Resolve( factoryType );
@@ -78,8 +79,8 @@ namespace Index.Domain.Assets
         if ( loadAssetJob.State != JobState.Completed )
           return;
 
-        lock ( _loadedAssets )
-          _loadedAssets.Add( assetReference, loadAssetJob.Result );
+        if ( loadContext is not null )
+          loadContext.AddAsset( loadAssetJob.Result );
       } );
       return loadAssetJob;
     }

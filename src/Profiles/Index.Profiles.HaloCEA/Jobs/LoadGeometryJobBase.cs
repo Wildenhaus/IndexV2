@@ -37,6 +37,7 @@ namespace Index.Profiles.HaloCEA.Jobs
     #region Properties
 
     public IAssetManager AssetManager { get; }
+    public IAssetLoadContext AssetLoadContext { get; }
 
     protected SceneContext Context { get; private set; }
 
@@ -52,6 +53,7 @@ namespace Index.Profiles.HaloCEA.Jobs
       : base( container, parameters )
     {
       AssetManager = container.Resolve<IAssetManager>();
+      AssetLoadContext = new AssetLoadContext();
 
       AssetReference = parameters.Get<IAssetReference>();
       Name = $"Loading {AssetReference.AssetName}";
@@ -285,7 +287,7 @@ namespace Index.Profiles.HaloCEA.Jobs
       var loadedTextures = new Dictionary<string, ITextureAsset>();
       foreach ( var assetToLoad in toLoadSet )
       {
-        var loadJob = AssetManager.LoadAsset<ITextureAsset>( assetToLoad );
+        var loadJob = AssetManager.LoadAsset<ITextureAsset>( assetToLoad, AssetLoadContext );
         await loadJob.Completion;
 
         ITextureAsset texture = loadJob.Result;

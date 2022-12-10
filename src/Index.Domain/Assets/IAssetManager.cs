@@ -17,7 +17,7 @@ namespace Index.Domain.Assets
 
     void InitializeFromFileSystem( IFileSystem fileSystem );
 
-    IJob<TAsset> LoadAsset<TAsset>( IAssetReference assetReference )
+    IJob<TAsset> LoadAsset<TAsset>( IAssetReference assetReference, IAssetLoadContext loadContext = null )
       where TAsset : class, IAsset;
 
     void AddAssetReference( IAssetReference assetReference );
