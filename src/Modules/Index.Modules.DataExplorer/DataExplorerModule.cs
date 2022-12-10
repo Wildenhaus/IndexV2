@@ -1,4 +1,5 @@
-﻿using Index.Modules.DataExplorer.Views;
+﻿using Index.Domain;
+using Index.Modules.DataExplorer.Views;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
@@ -28,7 +29,7 @@ namespace Index.Modules.DataExplorer
 
     public void OnInitialized( IContainerProvider containerProvider )
     {
-      _regionManager.RegisterViewWithRegion( "DataExplorerRegion", typeof( DataExplorerView ) );
+      _regionManager.RegisterViewWithRegion( RegionKeys.DataExplorerRegion, typeof( DataExplorerView ) );
     }
 
     public void RegisterTypes( IContainerRegistry containerRegistry )

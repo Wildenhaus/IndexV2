@@ -33,7 +33,6 @@ namespace Index.Modules.Logging
     public void OnInitialized( IContainerProvider containerProvider )
     {
       ConfigureLogger();
-      //_regionManager.RegisterViewWithRegion<LogView>( "BottomTabPanelRegion" );
     }
 
     public void RegisterTypes( IContainerRegistry containerRegistry )

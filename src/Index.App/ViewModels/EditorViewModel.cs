@@ -1,8 +1,6 @@
-﻿using Index.Domain.Assets;
-using Index.Domain.Assets.Meshes;
+﻿using Index.Domain;
 using Index.Domain.Models;
 using Index.Modules.JobManager.Views;
-using Index.UI.Commands;
 using Index.UI.ViewModels;
 using Prism.Ioc;
 using Serilog;
@@ -41,12 +39,12 @@ namespace Index.App.ViewModels
         EditorEnvironment.GameProfile.Version,
         EditorEnvironment.GameProfile.Author );
 
-      var assetManager = Container.Resolve<IAssetManager>();
-      assetManager.TryGetAssetReference( typeof( IMeshAsset ), "a10/a10.lg", out var modelRef );
-      EditorCommands.NavigateToAssetCommand.Execute( modelRef );
-      assetManager.TryGetAssetReference( typeof( IMeshAsset ), "a10/cryotube_a10__h", out modelRef );
+      //var assetManager = Container.Resolve<IAssetManager>();
+      //assetManager.TryGetAssetReference( typeof( IMeshAsset ), "a10/a10.lg", out var modelRef );
       //EditorCommands.NavigateToAssetCommand.Execute( modelRef );
-      assetManager.TryGetAssetReference( typeof( IMeshAsset ), "a10/cyborg", out modelRef );
+      //assetManager.TryGetAssetReference( typeof( IMeshAsset ), "a10/cryotube_a10__h", out modelRef );
+      //EditorCommands.NavigateToAssetCommand.Execute( modelRef );
+      //assetManager.TryGetAssetReference( typeof( IMeshAsset ), "a10/cyborg", out modelRef );
       //EditorCommands.NavigateToAssetCommand.Execute( modelRef );
     }
 
@@ -56,10 +54,9 @@ namespace Index.App.ViewModels
 
     private void InitializeBottomTabPanel()
     {
-      RegionManager.RequestNavigate( "BottomTabPanelRegion", "LogView" );
+      RegionManager.RequestNavigate( RegionKeys.BottomPanelRegion, "LogView" );
 
-      var region = RegionManager.Regions[ "BottomTabPanelRegion" ];
-
+      var region = RegionManager.Regions[ RegionKeys.BottomPanelRegion ];
       region.Add( Container.Resolve<JobsView>() );
     }
 

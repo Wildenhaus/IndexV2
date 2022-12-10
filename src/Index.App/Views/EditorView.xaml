@@ -4,6 +4,7 @@
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:local="clr-namespace:Index.App.Views"
+                  xmlns:domain="clr-namespace:Index.Domain;assembly=Index.Domain"
                   xmlns:windows="clr-namespace:Index.UI.Windows;assembly=Index.UI"
                   xmlns:prism="http://prismlibrary.com/"
                   Width="1280"
@@ -20,7 +21,7 @@
         </Grid.ColumnDefinitions>
 
         <ContentControl Grid.Column="0"
-                        prism:RegionManager.RegionName="DataExplorerRegion" />
+                        prism:RegionManager.RegionName="{x:Static domain:RegionKeys.DataExplorerRegion}" />
 
         <GridSplitter Grid.Column="1"
                       Width="3"
@@ -35,7 +36,7 @@
             </Grid.RowDefinitions>
 
             <TabControl Grid.Row="0"
-                        prism:RegionManager.RegionName="EditorRegion" />
+                        prism:RegionManager.RegionName="{x:Static domain:RegionKeys.EditorDocumentRegion}" />
 
             <GridSplitter Grid.Row="1"
                           Height="1"
@@ -43,7 +44,7 @@
                           VerticalAlignment="Center" />
 
             <TabControl Grid.Row="2"
-                        prism:RegionManager.RegionName="BottomTabPanelRegion" />
+                        prism:RegionManager.RegionName="{x:Static domain:RegionKeys.BottomPanelRegion}" />
 
         </Grid>
 
