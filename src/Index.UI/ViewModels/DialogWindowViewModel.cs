@@ -69,7 +69,6 @@ namespace Index.UI.ViewModels
     protected virtual void OnConfigureButtons( DialogButtonBuilder builder )
     {
       builder.AddButton().Content( "Close" ).Command( CloseDialogCommand );
-      builder.AddButton().Content( "Close" ).Command( CloseDialogCommand );
     }
 
     #endregion
