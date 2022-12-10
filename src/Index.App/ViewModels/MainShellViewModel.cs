@@ -8,7 +8,7 @@ using Serilog;
 namespace Index.App.ViewModels
 {
 
-  public class EditorViewModel : WindowViewModel
+  public class MainShellViewModel : WindowViewModel
   {
 
     #region Properties
@@ -19,7 +19,7 @@ namespace Index.App.ViewModels
 
     #region Constructor
 
-    public EditorViewModel( IContainerProvider container, IEditorEnvironment environment )
+    public MainShellViewModel( IContainerProvider container, IEditorEnvironment environment )
       : base( container )
     {
       Title = $"Index | {environment.GameName}";
