@@ -96,7 +96,7 @@ namespace Index.Modules.MeshEditor.ViewModels
 
       Log.Logger.Information( "{bound}", bound );
       var maxWidth = Math.Max( Math.Max( bound.Width, bound.Height ), bound.Depth );
-      var pos = bound.Center + new Vector3( 0, 0, maxWidth );
+      var pos = bound.Center + new Vector3( 0, 0, maxWidth * 2 );
 
       Camera.Dispatcher.Invoke( () =>
       {
