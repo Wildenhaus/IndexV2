@@ -1,5 +1,6 @@
 ﻿using Index.Domain.Assets;
 using Index.Domain.Assets.Textures;
+using Index.Domain.Jobs;
 using Index.Jobs;
 using LibSaber.HaloCEA.Structures;
 using Prism.Ioc;
@@ -55,16 +56,27 @@ namespace Index.Profiles.HaloCEA.Jobs
       SetIndeterminate( false );
 
       var loadedTextures = new Dictionary<string, ITextureAsset>();
+
+      var jobs = new List<Task>();
+      var jobSemaphore = new SemaphoreSlim( 5 );
       foreach ( var assetToLoad in toLoadSet )
       {
+        jobSemaphore.Wait();
         var loadJob = AssetManager.LoadAsset<ITextureAsset>( assetToLoad, AssetLoadContext );
-        await loadJob.Completion;
-
-        var texture = loadJob.Result;
-        loadedTextures.Add( texture.AssetName, texture );
-        IncreaseCompletedUnits( 1 );
+        loadJob.RegisterCompletionCallback( job =>
+        {
+          lock ( loadedTextures )
+          {
+            var texture = loadJob.Result;
+            loadedTextures.Add( texture.AssetName, texture );
+            IncreaseCompletedUnits( 1 );
+            jobSemaphore.Release();
+          }
+        } );
+        jobs.Add( loadJob.Completion );
       }
 
+      await Task.WhenAll( jobs );
       return loadedTextures;
     }
 
