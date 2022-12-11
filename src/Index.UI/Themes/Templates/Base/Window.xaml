@@ -52,21 +52,21 @@
                 </Grid.Background>
 
                 <StackPanel Orientation="Horizontal">
-                    <Canvas x:Name="PART_Icon"
-                            Width="18"
-                            Height="18"
-                            Margin="6,4,0,4"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center">
-                        <!--  TODO  -->
-                    </Canvas>
+
+                    <Path x:Name="PART_Icon"
+                          Margin="5,5,0,5"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Stretch="Uniform"
+                          Stroke="{TemplateBinding Foreground}"
+                          Data="{Binding RelativeSource={RelativeSource AncestorType={x:Type windows:IxWindow}}, Path=TitleBarIcon.Data}" />
 
                     <TextBlock Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Text="{Binding Title}"
                                FontFamily="{TemplateBinding FontFamily}"
-                               FontSize="{TemplateBinding FontSize}"
-                               FontWeight="{TemplateBinding FontWeight}"
+                               FontSize="12"
+                               FontWeight="SemiBold"
                                Foreground="{TemplateBinding Foreground}" />
                 </StackPanel>
 
@@ -183,7 +183,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="WindowState" Value="Maximized">
-                <Setter Property="BorderThickness" Value="8"/>
+                <Setter Property="BorderThickness" Value="8" />
             </Trigger>
         </Style.Triggers>
     </Style>

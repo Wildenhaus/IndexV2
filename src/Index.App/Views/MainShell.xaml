@@ -11,6 +11,7 @@
                   Height="720"
                   prism:ViewModelLocator.AutoWireViewModel="True"
                   WindowStartupLocation="CenterScreen"
+                  TitleBarIcon="{StaticResource Path.IndexLogo}"
                   mc:Ignorable="d">
 
     <Grid>
