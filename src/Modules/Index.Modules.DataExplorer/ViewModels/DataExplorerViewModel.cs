@@ -52,7 +52,7 @@ namespace Index.Modules.DataExplorer.ViewModels
 
       NavigateToAssetCommand = new DelegateCommand<IAssetReference>( NavigateToAsset );
 
-      _searchDebouncer = new ActionDebouncer( 500, ApplySearchTerm );
+      _searchDebouncer = new ActionDebouncer( 1000, ApplySearchTerm );
     }
 
     #endregion
@@ -85,11 +85,12 @@ namespace Index.Modules.DataExplorer.ViewModels
     private void ApplySearchTerm()
     {
       var searchTerm = SearchTerm.ToLower();
-      Task.Factory.StartNew( () =>
+      var searchTask = Task.Factory.StartNew( () =>
       {
         foreach ( var node in AssetNodes )
           node.ApplySearchCriteria( searchTerm );
       }, TaskCreationOptions.LongRunning );
+      searchTask.Wait();
     }
 
     #endregion
