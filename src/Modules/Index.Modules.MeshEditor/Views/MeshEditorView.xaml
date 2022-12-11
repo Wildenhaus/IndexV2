@@ -13,6 +13,14 @@
                   d:DesignWidth="800"
                   mc:Ignorable="d">
 
+    <views:EditorView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Index.UI;component/Themes/Paths.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </views:EditorView.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -98,9 +106,11 @@
                           ToolTip="Flycam"
                           IsChecked="{Binding IsFlycamEnabled}">
                 <ToggleButton.Content>
-                    <controls:IxIcon Width="14"
-                                     Height="14"
-                                     Path="{StaticResource Path.Crosshair}" />
+                    <Path Width="12"
+                          Height="12"
+                          Stretch="UniformToFill"
+                          Fill="{DynamicResource Brushes.Foreground.Static}"
+                          Data="{Binding Source={StaticResource Path.Crosshair}, Path=Data}" />
                 </ToggleButton.Content>
             </ToggleButton>
 
