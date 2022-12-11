@@ -50,7 +50,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="200">
+            <ColumnDefinition Width="100">
                 <ColumnDefinition.Style>
                     <Style TargetType="ColumnDefinition">
                         <Style.Triggers>
