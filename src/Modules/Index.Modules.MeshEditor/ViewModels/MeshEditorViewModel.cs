@@ -25,6 +25,11 @@ namespace Index.Modules.MeshEditor.ViewModels
 
     public SceneViewModel Scene { get; }
     public bool IsFlycamEnabled { get; set; }
+
+    public double MinMoveSpeed { get; set; }
+    public double MoveSpeed { get; set; }
+    public double MaxMoveSpeed { get; set; }
+
     public ICommand ZoomExtentsCommand { get; set; }
 
     #endregion
@@ -48,6 +53,7 @@ namespace Index.Modules.MeshEditor.ViewModels
     protected override void OnAssetLoaded( IMeshAsset asset )
     {
       Scene.ApplyMeshAsset( asset );
+      RecalculateMoveSpeed();
       ZoomExtents();
     }
 
@@ -61,6 +67,27 @@ namespace Index.Modules.MeshEditor.ViewModels
     #endregion
 
     #region Private Methods
+
+    private void RecalculateMoveSpeed()
+    {
+      if ( !Scene.GroupModel.SceneNode.TryGetBound( out var bound ) )
+        return;
+
+      const double BASELINE_MIN_SPEED = 0.00001;
+      const double BASELINE_DEFAULT_SPEED = 0.01;
+      const double BASELINE_MAX_SPEED = 0.5;
+
+      float maxDim;
+      maxDim = Math.Max( bound.Width, bound.Height );
+      maxDim = Math.Max( maxDim, bound.Depth );
+      var coef = maxDim / 5;
+
+      MinMoveSpeed = BASELINE_MIN_SPEED * coef;
+      MoveSpeed = BASELINE_DEFAULT_SPEED * coef;
+      MaxMoveSpeed = BASELINE_MAX_SPEED * coef;
+      Serilog.Log.Information( "Bounds {min} {def} {max}", bound.Width, bound.Height, bound.Depth );
+      Serilog.Log.Information( "MoveSpeed {min} {def} {max}", MinMoveSpeed, MoveSpeed, MaxMoveSpeed );
+    }
 
     private void ZoomExtents()
     {

@@ -106,19 +106,22 @@
 
         </StackPanel>
 
-        <local:MeshView x:Name="MeshViewer" 
+        <local:MeshView x:Name="MeshViewer"
                         Grid.Row="1"
                         Grid.Column="0"
                         Camera="{Binding Camera}"
                         Model="{Binding Scene.GroupModel}"
-                        IsFlycamEnabled="{Binding IsFlycamEnabled}"/>
+                        IsFlycamEnabled="{Binding IsFlycamEnabled}"
+                        MinMoveSpeed="{Binding MinMoveSpeed}"
+                        MoveSpeed="{Binding MoveSpeed}"
+                        MaxMoveSpeed="{Binding MaxMoveSpeed}" />
 
         <GridSplitter Grid.Row="0"
                       Grid.RowSpan="2"
                       Grid.Column="1"
                       Width="2"
                       HorizontalAlignment="Center"
-                      VerticalAlignment="Stretch"/>
+                      VerticalAlignment="Stretch" />
 
     </Grid>
 </views:EditorView>
