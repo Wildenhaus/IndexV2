@@ -64,8 +64,7 @@ namespace Index.Profiles.HaloCEA.Common
     public static Assimp.Matrix4x4 GetSceneRootTransform()
     {
       var rot = System.Numerics.Matrix4x4.CreateFromAxisAngle( new System.Numerics.Vector3( 0, 1, 0 ), 0 );
-      var scale = System.Numerics.Matrix4x4.CreateScale( MetersToFeet * 100 );
-      return ( rot ).ToAssimp();
+      return rot.ToAssimp();
     }
 
     #endregion
