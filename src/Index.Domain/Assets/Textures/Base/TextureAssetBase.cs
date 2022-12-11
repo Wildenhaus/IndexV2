@@ -25,6 +25,16 @@ namespace Index.Domain.Assets.Textures
 
     #endregion
 
+    #region Overrides
+
+    protected override void OnDisposing()
+    {
+      foreach ( var image in Images )
+        image?.Dispose();
+    }
+
+    #endregion
+
   }
 
 }

@@ -39,6 +39,7 @@ namespace Index.Profiles.HaloCEA.Jobs
     {
       var assetReference = Parameters.Get<IAssetReference>();
       var asset = new CEASceneAsset( assetReference );
+      asset.AssetLoadContext = Parameters.Get<IAssetLoadContext>();
       asset.AssimpScene = Parameters.Get<SceneContext>().Scene;
       asset.Textures = Parameters.Get<Dictionary<string, ITextureAsset>>( "Textures" );
       asset.LodMeshNames = Parameters.Get<ISet<string>>( "LodMeshSet" );

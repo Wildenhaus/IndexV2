@@ -32,6 +32,18 @@ namespace Index.Domain.Assets.Meshes
 
     #endregion
 
+    #region Overrides
+
+    protected override void OnDisposing()
+    {
+      AssimpScene = null;
+      Textures = null;
+      LodMeshNames = null;
+      VolumeMeshNames = null;
+    }
+
+    #endregion
+
   }
 
 }

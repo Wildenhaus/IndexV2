@@ -1,7 +1,7 @@
 ﻿namespace Index.Domain.Assets.Textures
 {
 
-  public interface ITextureAssetImage
+  public interface ITextureAssetImage : IDisposable
   {
 
     #region Properties

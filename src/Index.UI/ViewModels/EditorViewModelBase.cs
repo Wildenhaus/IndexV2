@@ -5,6 +5,7 @@ using Index.Domain.Jobs;
 using Index.Jobs;
 using Index.UI.Commands;
 using Index.UI.Controls.Menus;
+using Index.Utilities;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Regions;
@@ -47,6 +48,13 @@ namespace Index.UI.ViewModels
     protected override IJob CreateInitializationJob( IContainerProvider container )
       => AssetManager.LoadAsset<TAsset>( AssetReference );
 
+    protected override void OnInitializationJobCompleted( IJob job )
+    {
+      var assetJob = job as IJob<TAsset>;
+      Asset = assetJob.Result;
+      OnAssetLoaded( Asset );
+    }
+
     public override bool IsNavigationTarget( NavigationContext navigationContext )
     {
       var assetReference = ( IAssetReference ) navigationContext.Parameters[ "AssetReference" ];
@@ -80,6 +88,22 @@ namespace Index.UI.ViewModels
         config.Header( "Close All But This" )
               .Command( EditorCommands.CloseAllTabsButThisCommand, AssetReference ) );
 
+    }
+
+    protected override void OnDisposing()
+    {
+      Asset?.AssetLoadContext?.Dispose();
+      Asset?.Dispose();
+
+      GCHelper.ForceCollect();
+    }
+
+    #endregion
+
+    #region Virtual Methods
+
+    protected virtual void OnAssetLoaded( TAsset asset )
+    {
     }
 
     #endregion

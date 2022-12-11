@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Index.Domain;
 using Index.Domain.Assets;
 using Index.UI.ViewModels;
+using Index.Utilities;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Regions;
@@ -140,6 +141,8 @@ namespace Index.UI.Commands
 
       if ( tab is IDisposable disposableTab )
         disposableTab?.Dispose();
+
+      GCHelper.ForceCollect();
     }
 
     private static bool CanRemoveTabFromRegion( object item, NavigationContext navigationContext )

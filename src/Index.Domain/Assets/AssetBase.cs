@@ -1,7 +1,7 @@
 ﻿namespace Index.Domain.Assets
 {
 
-  public abstract class AssetBase : IAsset
+  public abstract class AssetBase : DisposableObject, IAsset
   {
 
     #region Properties
@@ -11,6 +11,7 @@
 
     public string AssetName => AssetReference.AssetName;
     public IAssetReference AssetReference { get; set; }
+    public IAssetLoadContext AssetLoadContext { get; set; }
 
     #endregion
 

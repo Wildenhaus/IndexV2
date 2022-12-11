@@ -6,6 +6,14 @@ namespace Index.Profiles.HaloCEA.Common
   public static class AssimpHelper
   {
 
+    #region Constants
+
+    private const float MetersToFeet = .0328084f;
+
+    #endregion
+
+    #region Public Methods
+
     public static Assimp.Matrix4x4 ToAssimp( this System.Numerics.Matrix4x4 m )
     {
       return new Matrix4x4(
@@ -52,6 +60,15 @@ namespace Index.Profiles.HaloCEA.Common
       }
 
     }
+
+    public static Assimp.Matrix4x4 GetSceneRootTransform()
+    {
+      var rot = System.Numerics.Matrix4x4.CreateFromAxisAngle( new System.Numerics.Vector3( 0, 1, 0 ), 0 );
+      var scale = System.Numerics.Matrix4x4.CreateScale( MetersToFeet * 100 );
+      return ( rot ).ToAssimp();
+    }
+
+    #endregion
 
   }
 

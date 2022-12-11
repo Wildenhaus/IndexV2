@@ -1,7 +1,7 @@
 ﻿namespace Index.Domain.Assets
 {
 
-  public interface IAssetLoadContext
+  public interface IAssetLoadContext : IDisposable
   {
 
     #region Properties

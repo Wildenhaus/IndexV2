@@ -80,7 +80,10 @@ namespace Index.Domain.Assets
           return;
 
         if ( loadContext is not null )
+        {
+          loadAssetJob.Result.AssetLoadContext = loadContext;
           loadContext.AddAsset( loadAssetJob.Result );
+        }
       } );
       return loadAssetJob;
     }

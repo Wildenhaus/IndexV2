@@ -1,7 +1,7 @@
 ﻿namespace Index.Domain.Assets
 {
 
-  public class AssetLoadContext : IAssetLoadContext
+  public class AssetLoadContext : DisposableObject, IAssetLoadContext
   {
 
     #region Data Members
@@ -49,6 +49,16 @@
 
       asset = ( TAsset ) untypedAsset;
       return true;
+    }
+
+    #endregion
+
+    #region Overrides
+
+    protected override void OnDisposing()
+    {
+      foreach ( var asset in _loadedAssets.Values )
+        asset?.Dispose();
     }
 
     #endregion

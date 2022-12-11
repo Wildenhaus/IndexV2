@@ -12,8 +12,13 @@
 
   <ItemGroup>
     <PackageReference Include="AssimpNet" Version="5.0.0-beta1" />
+    <PackageReference Include="FlexLabs.EntityFrameworkCore.Upsert" Version="6.0.2" />
     <PackageReference Include="HelixToolkit.SharpDX.Assimp" Version="2.23.0" />
     <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.23.0" />
+    <PackageReference Include="IDisposableAnalyzers" Version="4.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0" />
     <PackageReference Include="Prism.Core" Version="8.1.97" />
     <PackageReference Include="Serilog" Version="2.12.0" />

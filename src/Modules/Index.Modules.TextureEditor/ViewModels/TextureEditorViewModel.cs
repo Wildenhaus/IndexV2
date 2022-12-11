@@ -23,11 +23,8 @@ namespace Index.Modules.TextureEditor.ViewModels
       Texture = new TextureViewModel();
     }
 
-    protected override void OnInitializationJobCompleted( IJob job )
+    protected override void OnAssetLoaded( ITextureAsset asset )
     {
-      var typedJob = job as IJob<ITextureAsset>;
-      var asset = typedJob.Result;
-
       foreach ( var image in asset.Images )
       {
         var imageModel = new TextureImageViewModel();

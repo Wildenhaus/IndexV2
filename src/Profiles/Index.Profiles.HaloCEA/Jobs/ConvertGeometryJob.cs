@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Assimp;
 using Index.Domain.Assets;
 using Index.Domain.Assets.Meshes;
@@ -39,6 +40,27 @@ namespace Index.Profiles.HaloCEA.Jobs
       AddMaterials( textureList );
       AddNodes();
       AddMeshes();
+
+      //foreach ( var node in Context.RootNode.EnumerateChildren() )
+      //{
+      //  var scale = 100f;
+      //  node.Transform.Decompose( out _, out var rot, out var pos );
+      //  var transform = System.Numerics.Matrix4x4.CreateFromQuaternion( new System.Numerics.Quaternion( rot.X, rot.Y, rot.Z, rot.W ) );
+      //  transform *= System.Numerics.Matrix4x4.CreateScale( scale );
+      //  node.Transform = transform.ToAssimp();
+      //}
+
+      //if ( Context.BoneObjects.Count > 0 )
+
+      //{
+      //  var rootBone = Context.BoneObjects[ 0 ];
+      //  var armatureNode = Context.Nodes[ rootBone.ObjectInfo.Id ];
+      //  var scale = 0.0328f;
+      //  armatureNode.Transform.Decompose( out _, out var rot, out var pos );
+      //  var transform = System.Numerics.Matrix4x4.CreateFromQuaternion( new System.Numerics.Quaternion( rot.X, rot.Y, rot.Z, rot.W ) );
+      //  transform *= System.Numerics.Matrix4x4.CreateScale( scale );
+      //  armatureNode.Transform = transform.ToAssimp();
+      //}
     }
 
     protected void AddNodes()

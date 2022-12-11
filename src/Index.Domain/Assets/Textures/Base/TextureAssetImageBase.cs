@@ -1,7 +1,7 @@
 ﻿namespace Index.Domain.Assets.Textures
 {
 
-  public abstract class TextureAssetImageBase : ITextureAssetImage
+  public abstract class TextureAssetImageBase : DisposableObject, ITextureAssetImage
   {
 
     #region Properties
@@ -13,6 +13,15 @@
 
     public Stream PreviewStream { get; set; }
     public IReadOnlyDictionary<TextureExportFormat, CreateTextureExportStreamDelegate> ExportDelegates { get; set; }
+
+    #endregion
+
+    #region Overrides
+
+    protected override void OnDisposing()
+    {
+      PreviewStream?.Dispose();
+    }
 
     #endregion
 

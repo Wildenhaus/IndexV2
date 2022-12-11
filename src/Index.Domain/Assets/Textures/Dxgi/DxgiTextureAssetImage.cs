@@ -8,7 +8,7 @@ using Index.Textures;
 namespace Index.Domain.Assets.Textures.Dxgi
 {
 
-  public class DxgiTextureAssetImage : IDxgiTextureAssetImage
+  public class DxgiTextureAssetImage : DisposableObject, IDxgiTextureAssetImage
   {
 
     #region Data Members
@@ -40,6 +40,15 @@ namespace Index.Domain.Assets.Textures.Dxgi
     {
       Index = imageIndex;
       _textureInfo = textureInfo;
+    }
+
+    #endregion
+
+    #region Overrides
+
+    protected override void OnDisposing()
+    {
+      PreviewStream?.Dispose();
     }
 
     #endregion

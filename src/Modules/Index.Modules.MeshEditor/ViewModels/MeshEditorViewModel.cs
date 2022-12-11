@@ -8,6 +8,7 @@ using Index.Jobs;
 using Index.UI.ViewModels;
 using Prism.Commands;
 using Prism.Ioc;
+using Serilog;
 using SharpDX;
 
 namespace Index.Modules.MeshEditor.ViewModels
@@ -18,13 +19,12 @@ namespace Index.Modules.MeshEditor.ViewModels
 
     #region Properties
 
-    public Camera Camera { get; set; }
-    public EffectsManager EffectsManager { get; set; }
 
-    public SceneViewModel Scene { get; set; }
+    public Camera Camera { get; }
+    public EffectsManager EffectsManager { get; }
 
+    public SceneViewModel Scene { get; }
     public bool IsFlycamEnabled { get; set; }
-
     public ICommand ZoomExtentsCommand { get; set; }
 
     #endregion
@@ -36,6 +36,7 @@ namespace Index.Modules.MeshEditor.ViewModels
     {
       Camera = new PerspectiveCamera() { FarPlaneDistance = 300000 };
       EffectsManager = new DefaultEffectsManager();
+      Scene = new SceneViewModel();
 
       ZoomExtentsCommand = new DelegateCommand( ZoomExtents );
     }
@@ -44,13 +45,17 @@ namespace Index.Modules.MeshEditor.ViewModels
 
     #region Overrides
 
-    protected override void OnInitializationJobCompleted( IJob job )
+    protected override void OnAssetLoaded( IMeshAsset asset )
     {
-      var typedJob = job as IJob<IMeshAsset>;
-      var asset = typedJob.Result;
-
-      Scene = SceneViewModel.Create( asset );
+      Scene.ApplyMeshAsset( asset );
       ZoomExtents();
+    }
+
+    protected override void OnDisposing()
+    {
+      base.OnDisposing();
+      Scene?.Dispose();
+      EffectsManager?.Dispose();
     }
 
     #endregion
@@ -62,8 +67,9 @@ namespace Index.Modules.MeshEditor.ViewModels
       if ( !Scene.GroupModel.SceneNode.TryGetBound( out var bound ) )
         return;
 
+      Log.Logger.Information( "{bound}", bound );
       var maxWidth = Math.Max( Math.Max( bound.Width, bound.Height ), bound.Depth );
-      var pos = bound.Center + new Vector3( 0, 0, maxWidth * 1.5f );
+      var pos = bound.Center + new Vector3( 0, 0, maxWidth );
 
       Camera.Dispatcher.Invoke( () =>
       {

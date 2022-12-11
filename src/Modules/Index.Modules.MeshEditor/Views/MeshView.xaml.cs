@@ -21,7 +21,7 @@ using Vector3 = SharpDX.Vector3;
 namespace Index.Modules.MeshEditor.Views
 {
 
-  public partial class MeshView : UserControl, IDisposable
+  public sealed partial class MeshView : UserControl, IDisposable
   {
 
     #region Data Members
@@ -428,6 +428,12 @@ namespace Index.Modules.MeshEditor.Views
     {
       DisposeMonitorThread();
       DisposeEventHandlers();
+
+      _moveSpeedThrottler?.Dispose();
+      Viewport?.Dispose();
+
+      Camera = null;
+      Model = null;
     }
 
     #endregion
