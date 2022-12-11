@@ -1,4 +1,6 @@
 ﻿using Index.Common;
+using Prism.Ioc;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Index.Jobs
 {
@@ -7,6 +9,8 @@ namespace Index.Jobs
   {
 
     #region Data Members
+
+    private readonly IJobManager _jobManager;
 
     private readonly List<(int jobKey, IJob job)> _jobs;
 
@@ -18,8 +22,11 @@ namespace Index.Jobs
 
     #region Constructor
 
-    protected CompositeJobBase()
+    protected CompositeJobBase( IContainerProvider container, IParameterCollection parameters )
+      : base( container, parameters )
     {
+      _jobManager = container.Resolve<IJobManager>();
+
       _jobs = new List<(int jobKey, IJob job)>();
     }
 
@@ -33,6 +40,7 @@ namespace Index.Jobs
 
       Progress.CompletedUnits = 0;
       Progress.TotalUnits = _jobs.Count;
+      Progress.IsIndeterminate = false;
     }
 
     protected override async Task OnExecuting()
@@ -52,6 +60,7 @@ namespace Index.Jobs
         }
         finally
         {
+          _completedJobs++;
           job.Progress.PropertyChanged -= OnSubJobProgressPropertyChanged;
         }
 
@@ -73,9 +82,18 @@ namespace Index.Jobs
 
     protected virtual Task OnSubJobCompleted( int jobKey, IJob job ) => Task.CompletedTask;
 
-    protected void AddJob( int jobKey, IJob job )
+    protected int AddJob<TJob>( IParameterCollection parameters = null )
+      where TJob : class, IJob
     {
+      if ( parameters is null )
+        parameters = this.Parameters;
+
+      var job = _jobManager.CreateJob<TJob>( parameters );
+      var jobKey = _jobs.Count;
+
       _jobs.Add( (jobKey, job) );
+
+      return jobKey;
     }
 
     #endregion
@@ -101,6 +119,33 @@ namespace Index.Jobs
           return;
       }
     }
+
+    #endregion
+
+  }
+
+  public abstract class CompositeJobBase<TResult> : CompositeJobBase, IJob<TResult>
+  {
+
+    #region Properties
+
+    public TResult? Result { get; private set; }
+
+    #endregion
+
+    #region Constructor
+
+    protected CompositeJobBase( IContainerProvider container, IParameterCollection parameters )
+      : base( container, parameters )
+    {
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    protected void SetResult( TResult result )
+      => Result = result;
 
     #endregion
 

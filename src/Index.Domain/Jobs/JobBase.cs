@@ -144,13 +144,9 @@ namespace Index.Jobs
 
         await OnExecuting();
 
-        if ( !IsCancellationRequested )
-        {
-          State = JobState.Completed;
-          RaiseCompletedEvent();
-        }
-        else
-          HandleCancellation();
+        await OnCompleted();
+        State = JobState.Completed;
+        RaiseCompletedEvent();
       }
       catch ( Exception ex )
       {

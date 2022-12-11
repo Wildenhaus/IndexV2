@@ -16,8 +16,8 @@ namespace Index.Domain.Assets.Meshes
     public Scene AssimpScene { get; set; }
     public IReadOnlyDictionary<string, ITextureAsset> Textures { get; set; }
 
-    public ISet<string> LodMeshNames { get; }
-    public ISet<string> VolumeMeshNames { get; }
+    public ISet<string> LodMeshNames { get; set; }
+    public ISet<string> VolumeMeshNames { get; set; }
 
     #endregion
 

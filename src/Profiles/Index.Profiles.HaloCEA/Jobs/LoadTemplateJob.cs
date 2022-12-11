@@ -1,60 +1,51 @@
-﻿using Assimp;
-using Index.Domain.Assets;
+﻿using Index.Domain.Assets;
+using Index.Domain.Assets.Textures;
+using Index.Jobs;
 using Index.Profiles.HaloCEA.Assets;
 using Index.Profiles.HaloCEA.Meshes;
-using LibSaber.HaloCEA.Structures;
-using LibSaber.IO;
-using LibSaber.Serialization;
 using Prism.Ioc;
 
 namespace Index.Profiles.HaloCEA.Jobs
 {
 
-  public class LoadTemplateJob : LoadGeometryJobBase<CEATemplateAsset>
+  public class LoadTemplateJob : CompositeJobBase<CEATemplateAsset>
   {
-
-    #region Properties
-
-    protected Template Template { get; set; }
-
-    #endregion
 
     #region Constructor
 
     public LoadTemplateJob( IContainerProvider container, IParameterCollection parameters )
       : base( container, parameters )
     {
+      var assetReference = Parameters.Get<IAssetReference>();
+      Name = $"Loading Template {assetReference.AssetName}";
+      SetStatus( Name );
+
+      Parameters.Set<IAssetLoadContext>( new AssetLoadContext() );
     }
 
     #endregion
 
     #region Overrides
 
-    protected override Task<SceneContext> CreateSceneContext( IAssetReference assetReference )
+    protected override void CreateSubJobs()
     {
-      return Task.Run( () =>
-      {
-        var stream = assetReference.Node.Open();
-        var reader = new NativeReader( stream, Endianness.LittleEndian );
-
-        Template = Template.Deserialize( reader, new SerializationContext() );
-
-        var context = SceneContext.Create( Template.Data_02E4.Objects );
-
-        return context;
-      } );
+      AddJob<DeserializeTemplateJob>();
+      AddJob<LoadGeometryTexturesJob>();
+      AddJob<ConvertGeometryJob>();
+      AddJob<IdentifyMeshesJob>();
     }
 
-    protected override IList<TextureListEntry> GetTextureList()
-      => Template.Data_02E4.TextureList;
-
-    protected override CEATemplateAsset CreateAsset( Scene assimpScene )
+    protected override async Task OnCompleted()
     {
-      var asset = new CEATemplateAsset( AssetReference );
-      asset.AssimpScene = assimpScene;
-      asset.Textures = Textures;
+      var assetReference = Parameters.Get<IAssetReference>();
+      var asset = new CEATemplateAsset( assetReference );
+      asset.AssimpScene = Parameters.Get<SceneContext>().Scene;
+      asset.Textures = Parameters.Get<Dictionary<string, ITextureAsset>>( "Textures" );
 
-      return asset;
+      asset.LodMeshNames = Parameters.Get<ISet<string>>( "LodMeshSet" );
+      asset.VolumeMeshNames = Parameters.Get<ISet<string>>( "VolumeMeshSet" );
+
+      SetResult( asset );
     }
 
     #endregion
