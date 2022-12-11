@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Assimp;
-using Index.Domain.Assets;
-using Index.Domain.Assets.Meshes;
+﻿using Assimp;
 using Index.Domain.Assets.Textures;
 using Index.Jobs;
 using Index.Profiles.HaloCEA.Common;
@@ -40,9 +32,6 @@ namespace Index.Profiles.HaloCEA.Jobs
       AddMaterials( textureList );
       AddNodes();
       AddMeshes();
-
-      if ( Context.BoneObjects.Count == 0 )
-        ScaleStaticMeshes();
     }
 
     protected void AddNodes()
@@ -138,15 +127,6 @@ namespace Index.Profiles.HaloCEA.Jobs
       var material = MaterialBuilder.Build( Context, baseTextureName, Textures );
       Context.Scene.Materials.Add( material );
       IncreaseCompletedUnits( 1 );
-    }
-
-    private void ScaleStaticMeshes()
-    {
-      foreach ( var node in Context.RootNode.EnumerateChildren() )
-      {
-        var scale = 100f;
-        node.Transform = System.Numerics.Matrix4x4.CreateScale( scale ).ToAssimp();
-      }
     }
 
     protected Assimp.Matrix4x4 GetTransform( SaberObject obj, SubmeshInfo submeshInfo = null )

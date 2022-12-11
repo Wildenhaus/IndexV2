@@ -1,5 +1,4 @@
-﻿using Assimp;
-using Index.Domain.Assets;
+﻿using Index.Domain.Assets;
 using Index.Domain.Assets.Textures;
 using Index.Jobs;
 using Index.Profiles.HaloCEA.Assets;
@@ -45,11 +44,6 @@ namespace Index.Profiles.HaloCEA.Jobs
       asset.Textures = Parameters.Get<Dictionary<string, ITextureAsset>>( "Textures" );
       asset.LodMeshNames = Parameters.Get<ISet<string>>( "LodMeshSet" );
       asset.VolumeMeshNames = Parameters.Get<ISet<string>>( "VolumeMeshSet" );
-
-      using ( var c = new AssimpContext() )
-      {
-        c.ExportFile( asset.AssimpScene, @"F:\cea\test.fbx", "fbx" );
-      }
 
       SetResult( asset );
     }
