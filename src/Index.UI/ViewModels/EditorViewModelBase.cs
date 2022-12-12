@@ -92,6 +92,7 @@ namespace Index.UI.ViewModels
 
     protected override void OnDisposing()
     {
+      CancelInitialization();
       Asset?.AssetLoadContext?.Dispose();
       Asset?.Dispose();
 

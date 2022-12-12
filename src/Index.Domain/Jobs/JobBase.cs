@@ -143,6 +143,11 @@ namespace Index.Jobs
         RaiseStartedEvent();
 
         await OnExecuting();
+        if ( IsCancellationRequested )
+        {
+          HandleCancellation();
+          return;
+        }
 
         await OnCompleted();
         State = JobState.Completed;

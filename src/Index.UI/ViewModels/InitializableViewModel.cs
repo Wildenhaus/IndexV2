@@ -57,6 +57,9 @@ namespace Index.UI.ViewModels
 
     public void CancelInitialization()
     {
+      if ( !IsInitializing )
+        return;
+
       _jobManager.CancelJob( _initializationJob );
       CancelInitializationCommand?.RaiseCanExecuteChanged();
     }
@@ -74,6 +77,9 @@ namespace Index.UI.ViewModels
 
     private void InitializationJobCompleted( IJob job )
     {
+      if ( job.State == JobState.Cancelled )
+        return;
+
       CancelInitializationCommand = null;
       OnInitializationJobCompleted( job );
       IsInitializing = false;
