@@ -2,52 +2,114 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Index.UI.Controls">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Index.UI;component/Themes/Converters.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
     <!--#region Template: IxProgressOverlayTemplate-->
     <ControlTemplate x:Key="IxProgressOverlayTemplate"
                      TargetType="{x:Type controls:IxProgressOverlay}">
-        <Border x:Name="PART_Border"
-                Background="{TemplateBinding Background}">
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="25" />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+        <Grid>
 
-                <Button x:Name="PART_CancelButton"
-                        Grid.Row="0"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        FontFamily="{DynamicResource Fonts.Symbols}"
-                        BorderThickness="0"
-                        Content="&#xE8BB;"
-                        Command="{TemplateBinding CancelCommand}" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="150" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-                <TextBlock x:Name="PART_Status"
-                           Grid.Row="1"
-                           Margin="5"
-                           FontSize="24"
-                           HorizontalAlignment="Center"
-                           Text="{Binding Path=ProgressInfo.Status, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
-                <TextBlock x:Name="PART_SubStatus"
-                           Grid.Row="2"
-                           Margin="5"
-                           FontSize="16"
-                           HorizontalAlignment="Center"
-                           Text="{Binding Path=ProgressInfo.SubStatus, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
-                <ProgressBar x:Name="PART_ProgressBar"
-                             Grid.Row="3"
-                             Margin="5"
-                             Maximum="1"
-                             Value="{Binding Path=ProgressInfo.PercentCompleted, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
-                             IsIndeterminate="{Binding Path=ProgressInfo.IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"/>
+            <Border x:Name="PART_OuterBorder"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="3"
+                    Background="{TemplateBinding BorderBrush}"
+                    ClipToBounds="True">
 
-            </Grid>
-        </Border>
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="4*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--#region Inner Banner-->
+                    <Border x:Name="PART_Border"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Background="{TemplateBinding Background}">
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Button x:Name="PART_CancelButton"
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    FontFamily="{DynamicResource Fonts.Symbols}"
+                                    BorderThickness="0"
+                                    Content="&#xE8BB;"
+                                    Command="{TemplateBinding CancelCommand}" />
+
+                            <TextBlock x:Name="PART_Status"
+                                       Grid.Row="1"
+                                       Margin="0"
+                                       HorizontalAlignment="Center"
+                                       FontSize="24"
+                                       FontWeight="SemiBold"
+                                       Text="{Binding Path=ProgressInfo.Status, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
+                            <TextBlock x:Name="PART_SubStatus"
+                                       Grid.Row="2"
+                                       Margin="5"
+                                       HorizontalAlignment="Center"
+                                       FontSize="16"
+                                       Text="{Binding Path=ProgressInfo.SubStatus, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
+
+                            <ProgressBar x:Name="PART_ProgressBar"
+                                         Grid.Row="3"
+                                         Margin="5"
+                                         Maximum="1"
+                                         IsIndeterminate="{Binding Path=ProgressInfo.IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
+                                         Value="{Binding Path=ProgressInfo.PercentCompleted, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
+
+                            <TextBlock x:Name="PART_PercentCompleted"
+                                       Grid.Row="3"
+                                       Margin="0,0,0,1"
+                                       VerticalAlignment="Center"
+                                       FontWeight="SemiBold"
+                                       SnapsToDevicePixels="True"
+                                       FontSize="12"
+                                       Text="{Binding Path=ProgressInfo.PercentCompleted, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay, StringFormat='0.00%'}"
+                                       Visibility="{Binding Path=ProgressInfo.IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay, Converter={StaticResource InverseVisibilityConverter}}"
+                                       TextAlignment="Center">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect ShadowDepth="0"
+                                                      BlurRadius="1"
+                                                      Opacity="1"
+                                                      Color="#000" />
+                                </TextBlock.Effect>
+                            </TextBlock>
+
+                        </Grid>
+
+                        <Border.Effect>
+                            <DropShadowEffect ShadowDepth="0"
+                                              BlurRadius="50"
+                                              Opacity="1"
+                                              Color="#000" />
+                        </Border.Effect>
+                    </Border>
+                    <!--#endregion-->
+
+                </Grid>
+            </Border>
+        </Grid>
         <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding Path=CancelCommand, RelativeSource={RelativeSource TemplatedParent}}" Value="{x:Null}">
+            <DataTrigger Binding="{Binding Path=CancelCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                         Value="{x:Null}">
                 <Setter TargetName="PART_CancelButton" Property="Visibility" Value="Collapsed" />
             </DataTrigger>
         </ControlTemplate.Triggers>
@@ -57,6 +119,7 @@
     <!--#region Style: IxProgressOverlay-->
     <Style TargetType="{x:Type controls:IxProgressOverlay}">
         <Setter Property="Background" Value="{DynamicResource Brushes.Secondary.Background.Static}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Deep.Background.Static}" />
         <Setter Property="Template" Value="{StaticResource IxProgressOverlayTemplate}" />
     </Style>
     <!--#endregion-->

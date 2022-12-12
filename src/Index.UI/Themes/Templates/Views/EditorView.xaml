@@ -27,8 +27,6 @@
 
             <controls:IxProgressOverlay x:Name="PART_ProgressOverlay"
                                         Panel.ZIndex="999999"
-                                        Width="450"
-                                        Height="150"
                                         CancelCommand="{Binding CancelInitializationCommand}"
                                         ProgressInfo="{Binding InitializationProgress}" 
                                         Visibility="{Binding IsInitializing, Converter={StaticResource VisibilityConverter}}"/>
