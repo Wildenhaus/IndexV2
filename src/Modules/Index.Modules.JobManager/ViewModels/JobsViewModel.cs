@@ -35,7 +35,7 @@ namespace Index.Modules.JobManager.ViewModels
     private void OnJobStarted( object? sender, IJob job )
     {
       var model = new JobViewModel( job );
-      lock ( _collectionLock ) { }
+      lock ( _collectionLock )
       {
         Jobs.Add( model );
         _jobLookup.Add( job.Id, model );
