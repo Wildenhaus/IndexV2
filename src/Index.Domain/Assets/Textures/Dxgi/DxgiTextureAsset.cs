@@ -24,6 +24,18 @@ namespace Index.Domain.Assets.Textures.Dxgi
 
     #endregion
 
+    #region Overrides
+
+    protected override IEnumerable<(string, string)> GetTextureInformation()
+    {
+      yield return ("Format", Format.ToString().Replace( "DXGI_FORMAT_", "" ));
+      yield return ("Dimensions", $"{Width}x{Height}x{Depth}");
+      yield return ("MipMaps", MipMapCount.ToString());
+      yield return ("Faces", FaceCount.ToString());
+    }
+
+    #endregion
+
   }
 
 }

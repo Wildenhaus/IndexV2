@@ -1,7 +1,5 @@
-﻿using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 using Index.Domain.Assets.Textures;
-using Index.Jobs;
 using Index.UI.ViewModels;
 using Prism.Ioc;
 
@@ -25,6 +23,8 @@ namespace Index.Modules.TextureEditor.ViewModels
 
     protected override void OnAssetLoaded( ITextureAsset asset )
     {
+      Texture.TextureInformation = asset.TextureInformation;
+
       foreach ( var image in asset.Images )
       {
         var imageModel = new TextureImageViewModel();

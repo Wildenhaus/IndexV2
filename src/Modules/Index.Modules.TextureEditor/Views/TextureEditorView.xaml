@@ -54,7 +54,8 @@
                 <ColumnDefinition.Style>
                     <Style TargetType="ColumnDefinition">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Texture.Images.Count}" Value="1">
+                            <DataTrigger Binding="{Binding Texture.Images.Count}"
+                                         Value="1">
                                 <Setter Property="Width" Value="0" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -78,7 +79,7 @@
                               Viewport="0,0,16,16"
                               ViewportUnits="Absolute">
                     <DrawingBrush.Drawing>
-                        <GeometryDrawing Geometry="M0,0 H1 V1 H2 V2 H1 V1 H0Z" 
+                        <GeometryDrawing Geometry="M0,0 H1 V1 H2 V2 H1 V1 H0Z"
                                          Brush="{DynamicResource Brushes.Quarternary.Border.Static}" />
                     </DrawingBrush.Drawing>
                 </DrawingBrush>
@@ -87,6 +88,12 @@
                    RenderOptions.BitmapScalingMode="HighQuality"
                    Source="{Binding Texture.SelectedImage.Preview}" />
         </controls:IxImageViewer>
+
+        <local:TextureInformationView Grid.Row="1"
+                                      Grid.Column="0"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Bottom"
+                                      TextureInformation="{Binding Texture.TextureInformation}" />
 
         <DockPanel Grid.Row="1"
                    Grid.Column="1">

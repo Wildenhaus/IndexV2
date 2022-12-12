@@ -11,6 +11,12 @@ namespace Index.Domain.Assets.Textures
     public override string TypeName => "Texture";
     public override string EditorKey => DefaultEditorKeys.TextureEditor;
 
+    public int Width { get; set; }
+    public int Height { get; set; }
+
+    public TextureType TextureType { get; set; }
+    public IEnumerable<(string, string)> TextureInformation => GetTextureInformation();
+
     public IReadOnlyList<ITextureAssetImage> Images { get; set; }
     public IReadOnlyDictionary<TextureExportFormat, CreateTextureExportStreamDelegate> ExportDelegates { get; set; }
 
@@ -31,6 +37,16 @@ namespace Index.Domain.Assets.Textures
     {
       foreach ( var image in Images )
         image?.Dispose();
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    protected virtual IEnumerable<(string, string)> GetTextureInformation()
+    {
+      yield return ("Images", Images.Count.ToString());
+      yield return ("Dimensions", $"{Width}x{Height}");
     }
 
     #endregion

@@ -5,6 +5,7 @@ using Index.Jobs;
 using Index.Profiles.HaloCEA.FileSystem.Files;
 using Index.Textures;
 using Prism.Ioc;
+using SharpDX.Toolkit.Graphics;
 
 namespace Index.Profiles.HaloCEA.Jobs
 {
@@ -72,8 +73,16 @@ namespace Index.Profiles.HaloCEA.Jobs
           images.Add( image );
         }
 
-        var asset = new DxgiTextureAsset( _assetReference );
-        asset.Images = images;
+        var asset = new DxgiTextureAsset( _assetReference )
+        {
+          Width = _pictureData.Width,
+          Height = _pictureData.Height,
+          Depth = _pictureData.Depth,
+          MipMapCount = _pictureData.MipCount,
+          FaceCount = _pictureData.FaceCount,
+          Format = _pictureData.Format.ToDxgiFormat(),
+          Images = images
+        };
 
         SetResult( asset );
       } );

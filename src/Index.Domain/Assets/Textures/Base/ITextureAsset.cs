@@ -11,6 +11,12 @@ namespace Index.Domain.Assets.Textures
     string IAsset.TypeName => "Texture";
     string IAsset.EditorKey => DefaultEditorKeys.TextureEditor;
 
+    int Width { get; }
+    int Height { get; }
+
+    TextureType TextureType { get; }
+    IEnumerable<(string, string)> TextureInformation { get; }
+
     IReadOnlyList<ITextureAssetImage> Images { get; }
     IReadOnlyDictionary<TextureExportFormat, CreateTextureExportStreamDelegate> ExportDelegates { get; set; }
 

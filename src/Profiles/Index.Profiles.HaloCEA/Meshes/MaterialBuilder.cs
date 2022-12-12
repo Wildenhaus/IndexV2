@@ -1,5 +1,6 @@
 ﻿using Assimp;
 using Index.Domain.Assets.Textures;
+using TextureType = Assimp.TextureType;
 
 namespace Index.Profiles.HaloCEA.Meshes
 {
