@@ -1,6 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Shapes;
+using Index.UI.Common;
 using Index.UI.ViewModels;
 
 namespace Index.UI.Windows
@@ -22,6 +26,7 @@ namespace Index.UI.Windows
     {
       ContentRendered += OnContentRendered;
       DataContextChanged += OnDataContextChanged;
+      SourceInitialized += OnSourceInitialized;
     }
 
     static IxWindow()
@@ -29,6 +34,23 @@ namespace Index.UI.Windows
       DefaultStyleKeyProperty.OverrideMetadata(
         typeof( IxWindow ),
         new FrameworkPropertyMetadata( typeof( IxWindow ) ) );
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private IntPtr WindowProc( IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )
+    {
+      switch ( msg )
+      {
+        case 0x0024:
+          Win32.WmGetMinMaxInfo( hwnd, lParam, ( int ) MinWidth, ( int ) MinHeight );
+          handled = true;
+          break;
+      }
+
+      return IntPtr.Zero;
     }
 
     #endregion
@@ -51,6 +73,12 @@ namespace Index.UI.Windows
         return;
 
       viewModel.SetWindow( this );
+    }
+
+    private void OnSourceInitialized( object? sender, EventArgs e )
+    {
+      var handle = new WindowInteropHelper( this ).Handle;
+      HwndSource.FromHwnd( handle )?.AddHook( WindowProc );
     }
 
     #endregion

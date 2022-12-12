@@ -19,21 +19,21 @@ namespace Index.UI.Windows
       MinimizeWindowCommand = new DelegateCommand<Window>( MinimizeWindow );
     }
 
-    private static void CloseWindow(Window window)
+    private static void CloseWindow( Window window )
     {
-      if (window is null) return;
+      if ( window is null ) return;
       window.Close();
     }
 
-    private static void MaximizeWindow(Window window)
+    private static void MaximizeWindow( Window window )
     {
-      if (window is null) return;
-      window.WindowState = WindowState.Maximized;
+      if ( window is null ) return;
+      window.WindowState = window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
     }
 
-    private static void MinimizeWindow(Window window)
+    private static void MinimizeWindow( Window window )
     {
-      if (window is null) return;
+      if ( window is null ) return;
       window.WindowState = WindowState.Minimized;
     }
   }
