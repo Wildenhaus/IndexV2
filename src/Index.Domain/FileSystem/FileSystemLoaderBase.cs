@@ -55,12 +55,21 @@
         _loadedDevices.Add( device );
     }
 
-    protected async Task LoadFilesWithExtension( string extension, Func<string, IFileSystemDevice> deviceFactory )
+    protected async Task LoadFilesWithExtension( string extension, Func<string, IFileSystemDevice> deviceFactory, IEnumerable<string> excludedFileNames = null )
     {
+      if ( excludedFileNames is null )
+        excludedFileNames = Enumerable.Empty<string>();
+
+      var excludeSet = new HashSet<string>( excludedFileNames.Select( x => x.ToLower() ) );
+
       extension = SanitizeExtension( extension );
 
       foreach ( var filePath in Directory.EnumerateFiles( _basePath, extension, SearchOption.AllDirectories ) )
       {
+        var fileName = Path.GetFileNameWithoutExtension( filePath ).ToLower();
+        if ( excludeSet.Contains( fileName ) )
+          continue;
+
         // Skip files that have already been loaded
         if ( !_deviceFileNames.Add( filePath ) )
           continue;
