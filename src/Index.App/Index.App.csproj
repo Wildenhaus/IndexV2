@@ -5,10 +5,9 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-	<PublishSingleFile>true</PublishSingleFile>
-	<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
 	<PackageIcon>Icon.ico</PackageIcon>
 	<ApplicationIcon>Icon.ico</ApplicationIcon>
+	<XamlDebuggingInformation>True</XamlDebuggingInformation>
   </PropertyGroup>
 
   <ItemGroup>
