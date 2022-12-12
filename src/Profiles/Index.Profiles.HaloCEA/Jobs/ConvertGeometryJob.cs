@@ -12,13 +12,23 @@ namespace Index.Profiles.HaloCEA.Jobs
   public class ConvertGeometryJob : JobBase
   {
 
+    #region Properties
+
     protected SceneContext Context { get; set; }
     protected Dictionary<string, ITextureAsset> Textures { get; set; }
+
+    #endregion
+
+    #region Constructor
 
     public ConvertGeometryJob( IContainerProvider container, IParameterCollection parameters )
       : base( container, parameters )
     {
     }
+
+    #endregion
+
+    #region Overrides
 
     protected override async Task OnInitializing()
     {
@@ -35,6 +45,10 @@ namespace Index.Profiles.HaloCEA.Jobs
       AddNodes();
       AddMeshes();
     }
+
+    #endregion
+
+    #region Private Methods
 
     protected void AddNodes()
     {
@@ -141,6 +155,8 @@ namespace Index.Profiles.HaloCEA.Jobs
       var m = transform.ToAssimp();
       return m;
     }
+
+    #endregion
 
   }
 
