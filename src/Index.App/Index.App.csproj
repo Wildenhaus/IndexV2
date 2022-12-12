@@ -5,7 +5,19 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+	<PublishSingleFile>true</PublishSingleFile>
+	<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+	<PackageIcon>Icon.ico</PackageIcon>
+	<ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Icon.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
@@ -20,6 +32,13 @@
     <ProjectReference Include="..\Modules\Index.Modules.MeshEditor\Index.Modules.MeshEditor.csproj" />
     <ProjectReference Include="..\Modules\Index.Modules.TextureEditor\Index.Modules.TextureEditor.csproj" />
     <ProjectReference Include="..\Profiles\Index.Profiles.HaloCEA\Index.Profiles.HaloCEA.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icon.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
