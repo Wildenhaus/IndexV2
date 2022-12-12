@@ -366,12 +366,12 @@
 
     <!--#region Style: TabControl-->
     <Style TargetType="{x:Type TabControl}">
-        <Setter Property="Padding" Value="0" />
+        <Setter Property="Padding" Value="0,0,2,0" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Background" Value="{StaticResource TabControl.Static.Background}" />
         <Setter Property="BorderBrush" Value="{StaticResource TabControl.Static.Border}" />
-        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderThickness" Value="0,1" />
         <Setter Property="Foreground" Value="{StaticResource TabControl.Static.Foreground}" />
         <Setter Property="Template" Value="{StaticResource TabControlTemplate}" />
         <Setter Property="ItemTemplate" Value="{StaticResource TabItemDataTemplate}" />

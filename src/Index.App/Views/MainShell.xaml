@@ -4,6 +4,7 @@
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:local="clr-namespace:Index.App.Views"
+                  xmlns:controls="clr-namespace:Index.UI.Controls;assembly=Index.UI"
                   xmlns:domain="clr-namespace:Index.Domain;assembly=Index.Domain"
                   xmlns:windows="clr-namespace:Index.UI.Windows;assembly=Index.UI"
                   xmlns:prism="http://prismlibrary.com/"
@@ -17,7 +18,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300" />
-            <ColumnDefinition Width="3" />
+            <ColumnDefinition Width="2" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
@@ -25,15 +26,15 @@
                         prism:RegionManager.RegionName="{x:Static domain:RegionKeys.DataExplorerRegion}" />
 
         <GridSplitter Grid.Column="1"
-                      Width="3"
+                      Width="2"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Stretch" />
 
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*" />
-                <RowDefinition Height="1" />
-                <RowDefinition Height="1*" MinHeight="22" />
+                <RowDefinition Height="2" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <TabControl Grid.Row="0"
@@ -41,12 +42,14 @@
 
             <GridSplitter Grid.Row="1"
                           Height="1"
+                          ResizeBehavior="PreviousAndNext"
+                          ResizeDirection="Rows"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Center" />
 
-            <TabControl Grid.Row="2"
-                        prism:RegionManager.RegionName="{x:Static domain:RegionKeys.BottomPanelRegion}" />
-
+            <controls:IxTabExpander Grid.Row="2"
+                      prism:RegionManager.RegionName="{x:Static domain:RegionKeys.BottomPanelRegion}">
+            </controls:IxTabExpander>
         </Grid>
 
     </Grid>
