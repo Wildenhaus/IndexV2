@@ -18,7 +18,6 @@ namespace Index.Domain.Assets.Textures
     IEnumerable<(string, string)> TextureInformation { get; }
 
     IReadOnlyList<ITextureAssetImage> Images { get; }
-    IReadOnlyDictionary<TextureExportFormat, CreateTextureExportStreamDelegate> ExportDelegates { get; set; }
 
     #endregion
 

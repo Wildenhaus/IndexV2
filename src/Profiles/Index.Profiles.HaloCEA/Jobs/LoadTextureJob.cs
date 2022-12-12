@@ -1,5 +1,6 @@
 ﻿using Index.Core.IO;
 using Index.Domain.Assets;
+using Index.Domain.Assets.Textures;
 using Index.Domain.Assets.Textures.Dxgi;
 using Index.Jobs;
 using Index.Profiles.HaloCEA.FileSystem.Files;
@@ -56,33 +57,24 @@ namespace Index.Profiles.HaloCEA.Jobs
         var stream = _pictureData.DataStream;
         var textureInfo = CreateTextureInfo( _pictureData );
 
+        // TODO: Optimize this. This is creating the DDS twice.
+
         SetStatus( "Preparing DXGI Texture" );
         var textureStream = _dxgiTextureService.CreateDDSStream( stream, textureInfo );
 
         SetStatus( "Generating Previews" );
         var previewStreams = _dxgiTextureService.CreateJpegImageStreams( stream, textureInfo, includeMips: false );
 
-        var images = new List<IDxgiTextureAssetImage>();
-        foreach ( var imageStream in previewStreams )
+        var images = new List<ITextureAssetImage>();
+        for ( var i = 0; i < previewStreams.Length; i++ )
         {
-          var image = new DxgiTextureAssetImage( imageStream.ImageIndex, textureInfo )
-          {
-            PreviewStream = imageStream
-          };
-
+          var previewStream = previewStreams[ i ];
+          var image = new TextureAssetImage( i, previewStream );
           images.Add( image );
         }
 
-        var asset = new DxgiTextureAsset( _assetReference )
-        {
-          Width = _pictureData.Width,
-          Height = _pictureData.Height,
-          Depth = _pictureData.Depth,
-          MipMapCount = _pictureData.MipCount,
-          FaceCount = _pictureData.FaceCount,
-          Format = _pictureData.Format.ToDxgiFormat(),
-          Images = images
-        };
+        var textureType = GetTextureType( _assetReference );
+        var asset = new DxgiTextureAsset( _assetReference, textureType, images, textureStream );
 
         SetResult( asset );
       } );
@@ -158,6 +150,39 @@ namespace Index.Profiles.HaloCEA.Jobs
         MipCount = pict.MipCount,
         Format = pict.Format.ToDxgiFormat()
       };
+    }
+
+    private static TextureType GetTextureType( IAssetReference assetReference )
+    {
+      var assetName = assetReference.AssetName;
+
+      var suffixIndex = assetName.LastIndexOf( '_' );
+      if ( suffixIndex == -1 )
+        return TextureType.Diffuse;
+
+      var suffix = assetName.Substring( suffixIndex + 1 );
+      switch ( suffix )
+      {
+        case "nm":
+          return TextureType.Normals;
+        case "spec":
+          return TextureType.SpecularColor;
+        case "cube":
+          return TextureType.Cubemap;
+        case "lmdifdir":
+        case "sm":
+          return TextureType.Lightmap;
+
+        case "akill":
+        case "br":
+        case "hdetm":
+        case "mpmask":
+          return TextureType.ChannelPacked;
+
+        default:
+          return TextureType.Diffuse;
+      }
+
     }
 
     #endregion

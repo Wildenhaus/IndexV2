@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Index.Textures
+﻿namespace Index.Textures
 {
 
   public class DxgiImageStream : Stream
@@ -12,15 +6,13 @@ namespace Index.Textures
 
     #region Data Members
 
-    private readonly int _imageIndex;
-    private readonly DxgiTextureInfo _textureInfo;
     private readonly Stream _baseStream;
+    private readonly DxgiTextureInfo _textureInfo;
 
     #endregion
 
     #region Properties
 
-    public int ImageIndex => _imageIndex;
     public DxgiTextureInfo TextureInfo => _textureInfo;
 
     public override bool CanRead => _baseStream.CanRead;
@@ -38,10 +30,9 @@ namespace Index.Textures
 
     #region Constructor
 
-    public DxgiImageStream( Stream baseStream, int imageIndex, DxgiTextureInfo textureInfo )
+    public DxgiImageStream( Stream baseStream, DxgiTextureInfo textureInfo )
     {
       _baseStream = baseStream;
-      _imageIndex = imageIndex;
       _textureInfo = textureInfo;
     }
 

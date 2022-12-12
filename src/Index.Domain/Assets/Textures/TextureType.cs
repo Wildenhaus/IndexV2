@@ -4,9 +4,22 @@
   public enum TextureType
   {
 
+    Unknown,
     Diffuse,
-    Normal,
     Specular,
+    SpecularColor,
+    Emission,
+    EmissionColor,
+    Height,
+    Normals,
+    Alpha,
+    Displacement,
+    Lightmap,
+    Cubemap,
+    Metalness,
+    Roughness,
+    AmbientOcclusion,
+    ChannelPacked,
     Other,
 
   }

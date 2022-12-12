@@ -13,28 +13,31 @@ namespace Index.Textures
 
     #endregion
 
-    public Stream CreateDDSStream( byte[] textureData, DxgiTextureInfo textureInfo )
+    public DxgiImageStream CreateDDSStream( byte[] textureData, DxgiTextureInfo textureInfo )
     {
       var dds = CreateDDSFromRawTextureData( textureData, textureInfo );
-      return dds.SaveToDDSMemory( DDS_FLAGS.NONE );
+      var ddsStream = dds.SaveToDDSMemory( DDS_FLAGS.NONE );
+
+      dds.Dispose();
+      return new DxgiImageStream( ddsStream, textureInfo );
     }
 
-    public DxgiImageStream[] CreateHDRImageStreams( byte[] textureData, DxgiTextureInfo textureInfo, bool includeMips = false )
+    public Stream[] CreateHDRImageStreams( byte[] textureData, DxgiTextureInfo textureInfo, bool includeMips = false )
       => CreateRgbImageStreams( textureData, textureInfo, includeMips, ( dds, index ) => dds.SaveToHDRMemory( index ) );
 
-    public DxgiImageStream CreateSingleHDRImageStream( byte[] textureData, DxgiTextureInfo textureInfo, int imageIndex = 0 )
+    public Stream CreateSingleHDRImageStream( byte[] textureData, DxgiTextureInfo textureInfo, int imageIndex = 0 )
       => CreateSingleRgbImageStream( textureData, textureInfo, imageIndex, ( dds, index ) => dds.SaveToHDRMemory( index ) );
 
-    public DxgiImageStream[] CreateJpegImageStreams( byte[] textureData, DxgiTextureInfo textureInfo, float quality = 1f, bool includeMips = false )
+    public Stream[] CreateJpegImageStreams( byte[] textureData, DxgiTextureInfo textureInfo, float quality = 1f, bool includeMips = false )
       => CreateRgbImageStreams( textureData, textureInfo, includeMips, ( dds, index ) => dds.SaveToJPGMemory( index, quality ) );
 
-    public DxgiImageStream CreateSingleJpegImageStream( byte[] textureData, DxgiTextureInfo textureInfo, int imageIndex = 0, float quality = 1f )
+    public Stream CreateSingleJpegImageStream( byte[] textureData, DxgiTextureInfo textureInfo, int imageIndex = 0, float quality = 1f )
       => CreateSingleRgbImageStream( textureData, textureInfo, imageIndex, ( dds, index ) => dds.SaveToJPGMemory( index, quality ) );
 
-    public DxgiImageStream[] CreateTgaImageStreams( byte[] textureData, DxgiTextureInfo textureInfo, bool includeMips = false )
+    public Stream[] CreateTgaImageStreams( byte[] textureData, DxgiTextureInfo textureInfo, bool includeMips = false )
       => CreateRgbImageStreams( textureData, textureInfo, includeMips, ( dds, index ) => dds.SaveToTGAMemory( index ) );
 
-    public DxgiImageStream CreateSingleTgaImageStream( byte[] textureData, DxgiTextureInfo textureInfo, int imageIndex = 0 )
+    public Stream CreateSingleTgaImageStream( byte[] textureData, DxgiTextureInfo textureInfo, int imageIndex = 0 )
       => CreateSingleRgbImageStream( textureData, textureInfo, imageIndex, ( dds, index ) => dds.SaveToTGAMemory( index ) );
 
     #region Private Methods
@@ -72,19 +75,21 @@ namespace Index.Textures
       return rgbImage;
     }
 
-    private DxgiImageStream CreateSingleRgbImageStream( byte[] textureData, DxgiTextureInfo info, int imageIndex, Func<ScratchImage, int, Stream> createStreamFunc )
+    private Stream CreateSingleRgbImageStream( byte[] textureData, DxgiTextureInfo info, int imageIndex, Func<ScratchImage, int, Stream> createStreamFunc )
     {
       var dds = CreateRgbDDSFromRawTextureFormat( textureData, info );
       var stream = createStreamFunc( dds, 0 );
-      return new DxgiImageStream( stream, imageIndex, info );
+
+      dds.Dispose();
+      return stream;
     }
 
-    private DxgiImageStream[] CreateRgbImageStreams( byte[] textureData, DxgiTextureInfo info, bool includeMips, Func<ScratchImage, int, Stream> createStreamFunc )
+    private Stream[] CreateRgbImageStreams( byte[] textureData, DxgiTextureInfo info, bool includeMips, Func<ScratchImage, int, Stream> createStreamFunc )
     {
       var dds = CreateRgbDDSFromRawTextureFormat( textureData, info );
       var imageCount = dds.GetImageCount();
 
-      var streams = new List<DxgiImageStream>();
+      var streams = new List<Stream>();
       for ( var imageIdx = 0; imageIdx < imageCount; imageIdx++ )
       {
         var isMipMap = imageIdx % info.MipCount != 0;
@@ -92,9 +97,10 @@ namespace Index.Textures
           continue;
 
         var stream = createStreamFunc( dds, imageIdx );
-        streams.Add( new DxgiImageStream( stream, imageIdx, info ) );
+        streams.Add( stream );
       }
 
+      dds.Dispose();
       return streams.ToArray();
     }
 
@@ -119,6 +125,7 @@ namespace Index.Textures
       if ( format == DEFAULT_RGB_CONVERSION_FORMAT )
         return false;
 
+      // If compressed with BCx compression
       if ( format.ToString().StartsWith( "BC" ) )
         rgbImage = sourceImage.Decompress( DEFAULT_RGB_CONVERSION_FORMAT );
       else

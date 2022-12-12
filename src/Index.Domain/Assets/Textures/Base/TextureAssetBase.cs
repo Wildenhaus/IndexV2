@@ -11,22 +11,25 @@ namespace Index.Domain.Assets.Textures
     public override string TypeName => "Texture";
     public override string EditorKey => DefaultEditorKeys.TextureEditor;
 
-    public int Width { get; set; }
-    public int Height { get; set; }
+    public abstract int Width { get; }
+    public abstract int Height { get; }
 
-    public TextureType TextureType { get; set; }
+    public TextureType TextureType { get; }
+    public IReadOnlyList<ITextureAssetImage> Images { get; }
     public IEnumerable<(string, string)> TextureInformation => GetTextureInformation();
-
-    public IReadOnlyList<ITextureAssetImage> Images { get; set; }
-    public IReadOnlyDictionary<TextureExportFormat, CreateTextureExportStreamDelegate> ExportDelegates { get; set; }
 
     #endregion
 
     #region Constructor
 
-    public TextureAssetBase( IAssetReference assetReference )
+    public TextureAssetBase(
+      IAssetReference assetReference,
+      TextureType textureType,
+      IReadOnlyList<ITextureAssetImage> images )
       : base( assetReference )
     {
+      TextureType = textureType;
+      Images = images;
     }
 
     #endregion
@@ -45,6 +48,7 @@ namespace Index.Domain.Assets.Textures
 
     protected virtual IEnumerable<(string, string)> GetTextureInformation()
     {
+      yield return ("Type", TextureType.ToString());
       yield return ("Images", Images.Count.ToString());
       yield return ("Dimensions", $"{Width}x{Height}");
     }

@@ -8,7 +8,7 @@ namespace Index.Domain.Assets.Textures.Dxgi
 
     #region Properties
 
-    int Depth { get; set; }
+    int Depth { get; }
     int MipMapCount { get; }
     int FaceCount { get; }
     DxgiTextureFormat Format { get; }
