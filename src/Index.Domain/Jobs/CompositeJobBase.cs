@@ -45,6 +45,7 @@ namespace Index.Jobs
 
     protected override async Task OnExecuting()
     {
+      SetIndeterminate();
       foreach ( (int jobKey, IJob job) in _jobs )
       {
         if ( IsCancellationRequested )
@@ -110,7 +111,7 @@ namespace Index.Jobs
             if ( currentJobProgress.IsIndeterminate )
               return;
 
-            Progress.CompletedUnits = _completedJobs + currentJobProgress.PercentCompleted;
+            SetCompletedUnits( _completedJobs + currentJobProgress.PercentCompleted );
             return;
           }
 

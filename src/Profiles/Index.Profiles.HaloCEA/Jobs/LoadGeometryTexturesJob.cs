@@ -25,6 +25,7 @@ namespace Index.Profiles.HaloCEA.Jobs
     {
       SetStatus( "Loading Textures" );
       SetIndeterminate();
+      SetIncludeUnitsInStatus();
 
       var toLoadSet = GatherTextures();
       var textures = await LoadTextures( toLoadSet );

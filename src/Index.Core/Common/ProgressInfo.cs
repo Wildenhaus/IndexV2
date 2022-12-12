@@ -13,6 +13,7 @@ namespace Index.Common
 
     string Status { get; set; }
     string SubStatus { get; set; }
+    bool IncludeUnitsInStatus { get; set; }
 
     double CompletedUnits { get; set; }
     double TotalUnits { get; set; }
@@ -39,6 +40,7 @@ namespace Index.Common
 
     private string _status;
     private string _subStatus;
+    private bool _includeUnitsInStatus;
 
     private double _completedUnits;
     private double _totalUnits;
@@ -60,7 +62,13 @@ namespace Index.Common
 
     public string Status
     {
-      get => _status;
+      get
+      {
+        if ( _includeUnitsInStatus && !_isIndeterminate )
+          return $"{_status} ({_completedUnits} of {_totalUnits})";
+
+        return _status;
+      }
       set => SetProperty( ref _status, value );
     }
 
@@ -70,6 +78,17 @@ namespace Index.Common
       set => SetProperty( ref _subStatus, value );
     }
 
+    public bool IncludeUnitsInStatus
+    {
+      get => _includeUnitsInStatus;
+      set
+      {
+        SetProperty( ref _includeUnitsInStatus, value );
+        RaisePropertyChanged( nameof( IncludeUnitsInStatus ) );
+        RaisePropertyChanged( nameof( Status ) );
+      }
+    }
+
     public double CompletedUnits
     {
       get => _completedUnits;
@@ -77,6 +96,8 @@ namespace Index.Common
       {
         SetProperty( ref _completedUnits, value );
         RaisePropertyChanged( nameof( PercentCompleted ) );
+        if ( _includeUnitsInStatus && !_isIndeterminate )
+          RaisePropertyChanged( nameof( Status ) );
       }
     }
 

@@ -132,6 +132,8 @@ namespace Index.Jobs
 
     public async Task Execute()
     {
+      SetIndeterminate();
+
       await Initialize();
 
       if ( State != JobState.Initialized )
@@ -148,6 +150,9 @@ namespace Index.Jobs
           HandleCancellation();
           return;
         }
+
+        SetIndeterminate();
+        SetStatus( "Finishing Up" );
 
         await OnCompleted();
         State = JobState.Completed;
@@ -223,8 +228,14 @@ namespace Index.Jobs
     protected void SetIndeterminate( bool indeterminate = true )
       => Progress.IsIndeterminate = indeterminate;
 
+    protected void SetIncludeUnitsInStatus( bool includeUnitsInStatus = true )
+      => Progress.IncludeUnitsInStatus = includeUnitsInStatus;
+
     protected void SetCompletedUnits( double completedUnits )
-      => Progress.CompletedUnits = completedUnits;
+    {
+      Progress.CompletedUnits = completedUnits;
+      Progress.IsIndeterminate = false;
+    }
 
     protected void SetTotalUnits( double totalUnits )
       => Progress.TotalUnits = totalUnits;
@@ -233,7 +244,7 @@ namespace Index.Jobs
       => Progress.UnitName = unitName;
 
     protected void IncreaseCompletedUnits( double increase )
-      => Progress.CompletedUnits += increase;
+      => SetCompletedUnits( Progress.CompletedUnits + increase );
 
     protected void HandleException( Exception exception )
     {

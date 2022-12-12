@@ -22,6 +22,8 @@ namespace Index.Profiles.HaloCEA.Jobs
 
     protected override async Task OnInitializing()
     {
+      SetIncludeUnitsInStatus();
+
       Context = Parameters.Get<SceneContext>();
       Textures = Parameters.Get<Dictionary<string, ITextureAsset>>( "Textures" );
     }

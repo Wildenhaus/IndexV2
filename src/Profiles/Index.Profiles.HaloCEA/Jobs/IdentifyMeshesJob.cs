@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Assimp;
-using Index.Domain.Assets;
-using Index.Domain.Assets.Meshes;
+﻿using Assimp;
 using Index.Jobs;
 using Index.Profiles.HaloCEA.Common;
 using Index.Profiles.HaloCEA.Meshes;
@@ -49,6 +41,7 @@ namespace Index.Profiles.HaloCEA.Jobs
 
     protected override async Task OnExecuting()
     {
+      SetIncludeUnitsInStatus();
       SetStatus( "Identifying Meshes" );
       SetCompletedUnits( 0 );
       SetTotalUnits( 2 );

@@ -31,6 +31,8 @@ namespace Index.Profiles.HaloCEA.Jobs
 
     protected override async Task OnInitializing()
     {
+      SetIncludeUnitsInStatus();
+
       AssetReference = Parameters.Get<IAssetReference>();
       AssetLoadContext = Parameters.Get<IAssetLoadContext>();
 

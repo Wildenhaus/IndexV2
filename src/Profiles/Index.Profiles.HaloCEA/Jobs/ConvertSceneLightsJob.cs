@@ -21,6 +21,8 @@ namespace Index.Profiles.HaloCEA.Jobs
 
     protected override async Task OnInitializing()
     {
+      SetIncludeUnitsInStatus();
+
       Scene = Parameters.Get<SaberScene>();
       Context = Parameters.Get<SceneContext>();
     }
