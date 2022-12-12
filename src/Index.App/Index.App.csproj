@@ -31,7 +31,6 @@
     <ProjectReference Include="..\Modules\Index.Modules.Logging\Index.Modules.Logging.csproj" />
     <ProjectReference Include="..\Modules\Index.Modules.MeshEditor\Index.Modules.MeshEditor.csproj" />
     <ProjectReference Include="..\Modules\Index.Modules.TextureEditor\Index.Modules.TextureEditor.csproj" />
-    <ProjectReference Include="..\Profiles\Index.Profiles.HaloCEA\Index.Profiles.HaloCEA.csproj" />
   </ItemGroup>
 
   <ItemGroup>
