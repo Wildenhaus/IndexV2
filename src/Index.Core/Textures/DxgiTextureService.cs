@@ -13,36 +13,9 @@ namespace Index.Textures
 
     #endregion
 
-    public DxgiImageStream CreateDDSStream( byte[] textureData, DxgiTextureInfo textureInfo )
-    {
-      var dds = CreateDDSFromRawTextureData( textureData, textureInfo );
-      var ddsStream = dds.SaveToDDSMemory( DDS_FLAGS.NONE );
+    #region Public Methods
 
-      dds.Dispose();
-      return new DxgiImageStream( ddsStream, textureInfo );
-    }
-
-    public Stream[] CreateHDRImageStreams( byte[] textureData, DxgiTextureInfo textureInfo, bool includeMips = false )
-      => CreateRgbImageStreams( textureData, textureInfo, includeMips, ( dds, index ) => dds.SaveToHDRMemory( index ) );
-
-    public Stream CreateSingleHDRImageStream( byte[] textureData, DxgiTextureInfo textureInfo, int imageIndex = 0 )
-      => CreateSingleRgbImageStream( textureData, textureInfo, imageIndex, ( dds, index ) => dds.SaveToHDRMemory( index ) );
-
-    public Stream[] CreateJpegImageStreams( byte[] textureData, DxgiTextureInfo textureInfo, float quality = 1f, bool includeMips = false )
-      => CreateRgbImageStreams( textureData, textureInfo, includeMips, ( dds, index ) => dds.SaveToJPGMemory( index, quality ) );
-
-    public Stream CreateSingleJpegImageStream( byte[] textureData, DxgiTextureInfo textureInfo, int imageIndex = 0, float quality = 1f )
-      => CreateSingleRgbImageStream( textureData, textureInfo, imageIndex, ( dds, index ) => dds.SaveToJPGMemory( index, quality ) );
-
-    public Stream[] CreateTgaImageStreams( byte[] textureData, DxgiTextureInfo textureInfo, bool includeMips = false )
-      => CreateRgbImageStreams( textureData, textureInfo, includeMips, ( dds, index ) => dds.SaveToTGAMemory( index ) );
-
-    public Stream CreateSingleTgaImageStream( byte[] textureData, DxgiTextureInfo textureInfo, int imageIndex = 0 )
-      => CreateSingleRgbImageStream( textureData, textureInfo, imageIndex, ( dds, index ) => dds.SaveToTGAMemory( index ) );
-
-    #region Private Methods
-
-    private ScratchImage CreateDDSFromRawTextureData( byte[] textureData, DxgiTextureInfo info )
+    public ScratchImage CreateDxgiImageFromRawTextureData( byte[] textureData, DxgiTextureInfo info )
     {
       var format = ( DXGI_FORMAT ) info.Format;
 
@@ -66,41 +39,79 @@ namespace Index.Textures
       return img;
     }
 
-    private ScratchImage CreateRgbDDSFromRawTextureFormat( byte[] textureData, DxgiTextureInfo info )
-    {
-      var dds = CreateDDSFromRawTextureData( textureData, info );
-      if ( CoerceDDSImageToRgbColorspace( dds, out var rgbImage ) )
-        dds?.Dispose();
+    public ScratchImage CreateDxgiImageFromRawTextureData( Stream textureData, DxgiTextureInfo info )
+      => CreateDxgiImageFromRawTextureData( textureData.CopyToArray(), info );
 
-      return rgbImage;
-    }
-
-    private Stream CreateSingleRgbImageStream( byte[] textureData, DxgiTextureInfo info, int imageIndex, Func<ScratchImage, int, Stream> createStreamFunc )
+    public DxgiImageStream CreateDDSStream( byte[] textureData, DxgiTextureInfo textureInfo )
     {
-      var dds = CreateRgbDDSFromRawTextureFormat( textureData, info );
-      var stream = createStreamFunc( dds, 0 );
+      var dds = CreateDxgiImageFromRawTextureData( textureData, textureInfo );
+      var ddsStream = dds.SaveToDDSMemory( DDS_FLAGS.NONE );
 
       dds.Dispose();
+      return new DxgiImageStream( ddsStream, textureInfo );
+    }
+
+    public DxgiImageStream CreateDDSStream( ScratchImage dxgiImage, DxgiTextureInfo textureInfo )
+    {
+      var ddsStream = dxgiImage.SaveToDDSMemory( DDS_FLAGS.NONE );
+      return new DxgiImageStream( ddsStream, textureInfo );
+    }
+
+    public Stream[] CreateHDRImageStreams( ScratchImage dxgiImage, bool includeMips = false )
+      => CreateRgbImageStreams( dxgiImage, includeMips, ( dds, index ) => dds.SaveToHDRMemory( index ) );
+
+    public Stream CreateSingleHDRImageStream( ScratchImage dxgiImage, int imageIndex = 0 )
+      => CreateSingleRgbImageStream( dxgiImage, imageIndex, ( dds, index ) => dds.SaveToHDRMemory( index ) );
+
+    public Stream[] CreateJpegImageStreams( ScratchImage dxgiImage, float quality = 1f, bool includeMips = false )
+      => CreateRgbImageStreams( dxgiImage, includeMips, ( dds, index ) => dds.SaveToJPGMemory( index, quality ) );
+
+    public Stream CreateSingleJpegImageStream( ScratchImage dxgiImage, int imageIndex = 0, float quality = 1f )
+      => CreateSingleRgbImageStream( dxgiImage, imageIndex, ( dds, index ) => dds.SaveToJPGMemory( index, quality ) );
+
+    public Stream[] CreateTgaImageStreams( ScratchImage dxgiImage, bool includeMips = false )
+      => CreateRgbImageStreams( dxgiImage, includeMips, ( dds, index ) => dds.SaveToTGAMemory( index ) );
+
+    public Stream CreateSingleTgaImageStream( ScratchImage dxgiImage, int imageIndex = 0 )
+      => CreateSingleRgbImageStream( dxgiImage, imageIndex, ( dds, index ) => dds.SaveToTGAMemory( index ) );
+
+    #endregion
+
+    #region Private Methods
+
+    private Stream CreateSingleRgbImageStream( ScratchImage dxgiImage, int imageIndex, Func<ScratchImage, int, Stream> createStreamFunc )
+    {
+      var conversionRequired = CoerceDDSImageToRgbColorspace( dxgiImage, out var argbImage );
+
+      var stream = createStreamFunc( argbImage, imageIndex );
+
+      if ( conversionRequired )
+        argbImage.Dispose();
+
       return stream;
     }
 
-    private Stream[] CreateRgbImageStreams( byte[] textureData, DxgiTextureInfo info, bool includeMips, Func<ScratchImage, int, Stream> createStreamFunc )
+    private Stream[] CreateRgbImageStreams( ScratchImage dxgiImage, bool includeMips, Func<ScratchImage, int, Stream> createStreamFunc )
     {
-      var dds = CreateRgbDDSFromRawTextureFormat( textureData, info );
-      var imageCount = dds.GetImageCount();
+      var imageCount = dxgiImage.GetImageCount();
+      var mipLevels = dxgiImage.GetMetadata().MipLevels;
+
+      var conversionRequired = CoerceDDSImageToRgbColorspace( dxgiImage, out var argbImage );
 
       var streams = new List<Stream>();
       for ( var imageIdx = 0; imageIdx < imageCount; imageIdx++ )
       {
-        var isMipMap = imageIdx % info.MipCount != 0;
+        var isMipMap = imageIdx % mipLevels != 0;
         if ( isMipMap && !includeMips )
           continue;
 
-        var stream = createStreamFunc( dds, imageIdx );
+        var stream = createStreamFunc( argbImage, imageIdx );
         streams.Add( stream );
       }
 
-      dds.Dispose();
+      if ( conversionRequired )
+        argbImage.Dispose();
+
       return streams.ToArray();
     }
 

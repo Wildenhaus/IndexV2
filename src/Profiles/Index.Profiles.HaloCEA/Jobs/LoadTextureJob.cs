@@ -57,13 +57,11 @@ namespace Index.Profiles.HaloCEA.Jobs
         var stream = _pictureData.DataStream;
         var textureInfo = CreateTextureInfo( _pictureData );
 
-        // TODO: Optimize this. This is creating the DDS twice.
-
         SetStatus( "Preparing DXGI Texture" );
-        var textureStream = _dxgiTextureService.CreateDDSStream( stream, textureInfo );
+        var dxgiImage = _dxgiTextureService.CreateDxgiImageFromRawTextureData( stream, textureInfo );
 
         SetStatus( "Generating Previews" );
-        var previewStreams = _dxgiTextureService.CreateJpegImageStreams( stream, textureInfo, includeMips: false );
+        var previewStreams = _dxgiTextureService.CreateJpegImageStreams( dxgiImage, includeMips: false );
 
         var images = new List<ITextureAssetImage>();
         for ( var i = 0; i < previewStreams.Length; i++ )
@@ -74,7 +72,7 @@ namespace Index.Profiles.HaloCEA.Jobs
         }
 
         var textureType = GetTextureType( _assetReference );
-        var asset = new DxgiTextureAsset( _assetReference, textureType, images, textureStream );
+        var asset = new DxgiTextureAsset( _assetReference, textureType, images, dxgiImage );
 
         SetResult( asset );
       } );

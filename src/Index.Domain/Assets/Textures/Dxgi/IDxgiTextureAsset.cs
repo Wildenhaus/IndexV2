@@ -1,4 +1,5 @@
-﻿using Index.Textures;
+﻿using DirectXTexNet;
+using Index.Textures;
 
 namespace Index.Domain.Assets.Textures.Dxgi
 {
@@ -8,10 +9,13 @@ namespace Index.Domain.Assets.Textures.Dxgi
 
     #region Properties
 
+    ScratchImage DxgiImage { get; }
+
     int Depth { get; }
     int MipMapCount { get; }
     int FaceCount { get; }
     DxgiTextureFormat Format { get; }
+
 
     #endregion
 

@@ -1,4 +1,5 @@
-﻿using Index.Textures;
+﻿using DirectXTexNet;
+using Index.Textures;
 
 namespace Index.Domain.Assets.Textures.Dxgi
 {
@@ -8,15 +9,14 @@ namespace Index.Domain.Assets.Textures.Dxgi
 
     #region Properties
 
-    public DxgiImageStream DxgiStream { get; }
-    public DxgiTextureInfo DxgiInfo => DxgiStream.TextureInfo;
+    public ScratchImage DxgiImage { get; }
 
-    public override int Width => DxgiInfo.Width;
-    public override int Height => DxgiInfo.Height;
-    public int Depth => DxgiInfo.Depth;
-    public int MipMapCount => DxgiInfo.MipCount;
-    public int FaceCount => DxgiInfo.FaceCount;
-    public DxgiTextureFormat Format => DxgiInfo.Format;
+    public override int Width { get; }
+    public override int Height { get; }
+    public int Depth { get; }
+    public int MipMapCount { get; }
+    public int FaceCount { get; }
+    public DxgiTextureFormat Format { get; }
 
     #endregion
 
@@ -26,10 +26,18 @@ namespace Index.Domain.Assets.Textures.Dxgi
       IAssetReference assetReference,
       TextureType textureType,
       IReadOnlyList<ITextureAssetImage> images,
-      DxgiImageStream dxgiStream )
+      ScratchImage dxgiImage )
       : base( assetReference, textureType, images )
     {
-      DxgiStream = dxgiStream;
+      DxgiImage = dxgiImage;
+
+      var metadata = dxgiImage.GetMetadata();
+      Width = metadata.Width;
+      Height = metadata.Height;
+      Depth = metadata.Depth;
+      MipMapCount = metadata.MipLevels;
+      FaceCount = metadata.IsCubemap() ? metadata.ArraySize / 6 : 1;
+      Format = ( DxgiTextureFormat ) metadata.Format;
     }
 
     #endregion
@@ -39,7 +47,7 @@ namespace Index.Domain.Assets.Textures.Dxgi
     protected override void OnDisposing()
     {
       base.OnDisposing();
-      DxgiStream?.Dispose();
+      DxgiImage?.Dispose();
     }
 
     protected override IEnumerable<(string, string)> GetTextureInformation()
