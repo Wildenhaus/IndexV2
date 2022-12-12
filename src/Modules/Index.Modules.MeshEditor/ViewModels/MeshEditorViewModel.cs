@@ -60,8 +60,8 @@ namespace Index.Modules.MeshEditor.ViewModels
     protected override void OnDisposing()
     {
       base.OnDisposing();
+      EffectsManager?.ForceDispose();
       Scene?.Dispose();
-      EffectsManager?.Dispose();
     }
 
     #endregion

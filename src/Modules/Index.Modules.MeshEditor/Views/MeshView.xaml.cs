@@ -430,6 +430,7 @@ namespace Index.Modules.MeshEditor.Views
       DisposeEventHandlers();
 
       _moveSpeedThrottler?.Dispose();
+      Viewport?.RenderHost?.Dispose();
       Viewport?.Dispose();
 
       Camera = null;

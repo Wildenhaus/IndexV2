@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using Index.UI.Extensions;
+using Index.Utilities;
 using Microsoft.Xaml.Behaviors;
 using Prism.Regions;
 
@@ -45,6 +47,18 @@ namespace Index.UI.Commands
 
       InvokeOnNavigatedFrom( item, navigationContext );
       region.Remove( item );
+
+      var view = item as FrameworkElement;
+      if ( view is null )
+        return;
+
+      if ( view.DataContext is IDisposable disposableViewModel )
+        disposableViewModel?.Dispose();
+
+      if ( item is IDisposable disposableTab )
+        disposableTab?.Dispose();
+
+      GCHelper.ForceCollect();
     }
 
     private bool CanRemove( object item, NavigationContext navigationContext )

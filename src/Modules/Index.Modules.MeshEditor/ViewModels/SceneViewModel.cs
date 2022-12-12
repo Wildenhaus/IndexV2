@@ -72,8 +72,6 @@ namespace Index.Modules.MeshEditor.ViewModels
         new System.Windows.Media.Media3D.Vector3D( 0, 1, 0 ), -90 );
       transformGroup.Children.Add( rotTransform );
 
-      var m = transformGroup.ToMatrix();
-
       GroupModel.Transform = transformGroup;
     }
 
@@ -104,8 +102,12 @@ namespace Index.Modules.MeshEditor.ViewModels
     {
       base.OnDisposing();
 
+      GroupModel.GroupNode?.ForceDispose();
+      GroupModel.SceneNode?.ForceDispose();
       GroupModel.Clear();
-      GroupModel?.Dispose();
+      GroupModel.Dispose();
+
+      GroupModel = null;
     }
 
     #endregion
