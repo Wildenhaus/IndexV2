@@ -9,7 +9,9 @@ namespace Index.Domain.Database
 
     protected override void OnConfiguring( DbContextOptionsBuilder optionsBuilder )
     {
-      optionsBuilder.UseSqlite( "Data Source=index.db" );
+      var launchPath = Path.GetDirectoryName( Environment.ProcessPath );
+      var dbPath = $"Data Source={Path.Combine( launchPath, "index.db" )}";
+      optionsBuilder.UseSqlite( dbPath );
     }
 
     protected override void OnModelCreating( ModelBuilder modelBuilder )

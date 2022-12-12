@@ -88,7 +88,7 @@ namespace Index.Domain.GameProfiles
 
     private static string ResolveProfilePath()
     {
-      var appPath = AppDomain.CurrentDomain.BaseDirectory;
+      var appPath = Path.GetDirectoryName( Environment.ProcessPath );
       return Path.Combine( appPath, PROFILE_DIRECTORY_NAME );
     }
 
