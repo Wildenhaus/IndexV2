@@ -19,6 +19,8 @@ namespace Index.Profiles.HaloCEA.Jobs
     protected IAssetReference AssetReference { get; set; }
     protected IAssetLoadContext AssetLoadContext { get; set; }
 
+    protected IJobManager JobManager { get; set; }
+
     protected SaberScene Scene { get; set; }
     protected SceneContext Context { get; set; }
     protected Dictionary<string, ITextureAsset> Textures { get; set; }
@@ -27,6 +29,7 @@ namespace Index.Profiles.HaloCEA.Jobs
       : base( container, parameters )
     {
       AssetManager = container.Resolve<IAssetManager>();
+      JobManager = container.Resolve<IJobManager>();
     }
 
     protected override async Task OnInitializing()
@@ -76,18 +79,49 @@ namespace Index.Profiles.HaloCEA.Jobs
       {
         if ( !AssetManager.TryGetAssetReference( typeof( IMeshAsset ), templateName, out var templateAssetRef ) )
         {
-          Log.Logger.Error( "Could not find prop: {propName}", templateName );
-          continue;
+          if ( !TryLoadEmbeddedPropTemplate( templateName, out var loadEmbeddedPropJob ) )
+          {
+            Log.Logger.Error( "Could not find prop: {propName}", templateName );
+            continue;
+          }
+
+          await loadEmbeddedPropJob.Completion;
+          loadedProps.Add( templateName, loadEmbeddedPropJob.Result );
+          IncreaseCompletedUnits( 1 );
         }
+        else
+        {
+          var job = AssetManager.LoadAsset<IMeshAsset>( templateAssetRef, AssetLoadContext );
+          await job.Completion;
 
-        var job = AssetManager.LoadAsset<IMeshAsset>( templateAssetRef, AssetLoadContext );
-        await job.Completion;
-
-        loadedProps.Add( templateName, job.Result );
-        IncreaseCompletedUnits( 1 );
+          loadedProps.Add( templateName, job.Result );
+          IncreaseCompletedUnits( 1 );
+        }
       }
 
       return loadedProps;
+    }
+
+    private bool TryLoadEmbeddedPropTemplate( string templateName, out IJob<IMeshAsset> loadEmbeddedPropJob )
+    {
+      loadEmbeddedPropJob = default;
+
+      var tplName = templateName.Substring( templateName.IndexOf( '/' ) + 1 );
+      var tplData = Scene.TemplateList.FirstOrDefault( x => x.TemplateInfo.Value.Name == tplName );
+      if ( tplData is null )
+        return false;
+
+      var embeddedPropContext = SceneContext.Create( tplData.Objects );
+
+      var parameters = new ParameterCollection();
+      parameters.Set( AssetLoadContext );
+      parameters.Set( embeddedPropContext );
+      parameters.Set( tplData );
+      parameters.Set( tplData.TextureList ?? new TextureList() );
+      parameters.Set( "Textures", Textures );
+
+      loadEmbeddedPropJob = JobManager.StartJob<LoadEmbeddedTemplateJob>( parameters );
+      return true;
     }
 
     private void AddProps( Dictionary<string, IMeshAsset> loadedProps )
@@ -124,6 +158,8 @@ namespace Index.Profiles.HaloCEA.Jobs
 
           if ( materialLookup.TryGetValue( mesh.MaterialIndex, out var newMaterialIndex ) )
             mesh.MaterialIndex = newMaterialIndex;
+          else if ( Textures.Count >= mesh.MaterialIndex )
+            mesh.MaterialIndex = mesh.MaterialIndex; // Should assert that this is an embedded template
           else
             System.Diagnostics.Debugger.Break();
         }
