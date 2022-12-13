@@ -11,9 +11,9 @@ namespace Index.Textures
 
     private const DXGI_FORMAT DEFAULT_COLORSPACE = DXGI_FORMAT.R16G16B16A16_UNORM;
 
-    public static readonly Guid WIC_CODEC_BMP = TexHelper.Instance.GetWICCodec( WICCodecs.BMP );
-    public static readonly Guid WIC_CODEC_PNG = TexHelper.Instance.GetWICCodec( WICCodecs.PNG );
-    public static readonly Guid WIC_CODEC_TIF = TexHelper.Instance.GetWICCodec( WICCodecs.TIFF );
+    private static readonly Guid WIC_CODEC_BMP = TexHelper.Instance.GetWICCodec( WICCodecs.BMP );
+    private static readonly Guid WIC_CODEC_PNG = TexHelper.Instance.GetWICCodec( WICCodecs.PNG );
+    private static readonly Guid WIC_CODEC_TIF = TexHelper.Instance.GetWICCodec( WICCodecs.TIFF );
 
     #endregion
 
