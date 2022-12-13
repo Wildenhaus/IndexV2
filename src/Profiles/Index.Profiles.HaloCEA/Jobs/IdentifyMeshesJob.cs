@@ -66,7 +66,11 @@ namespace Index.Profiles.HaloCEA.Jobs
     private HashSet<string> CreateVolumeMeshSet( Scene scene )
     {
       var set = new HashSet<string>();
-      EvaluateMesh( set, scene.RootNode, IsVolumeMesh );
+      foreach ( var obj in Context.Objects.Values )
+      {
+        if ( obj.ObjectInfo.Flags[ 6 ] || obj.ObjectInfo.Flags[ 7 ] || obj.ObjectInfo.Flags[ 9 ] )
+          set.Add( obj.ObjectInfo.Name );
+      }
 
       return set;
     }
