@@ -23,6 +23,8 @@ namespace Index.Modules.TextureEditor.ViewModels
     public IEnumerable<(string, string)> TextureInformation { get; set; }
 
     public ObservableCollection<TextureImageViewModel> Images { get; set; }
+    public int ImageCount { get; private set; }
+
     public TextureImageViewModel SelectedImage { get; set; }
 
     #endregion
@@ -45,7 +47,10 @@ namespace Index.Modules.TextureEditor.ViewModels
     internal void AddImage( TextureImageViewModel image )
     {
       lock ( _lock )
+      {
         Images.Add( image );
+        ImageCount++;
+      }
     }
 
     #endregion

@@ -50,7 +50,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="100">
+            <ColumnDefinition Width="Auto">
                 <ColumnDefinition.Style>
                     <Style TargetType="ColumnDefinition">
                         <Style.Triggers>
@@ -95,8 +95,10 @@
                                       VerticalAlignment="Bottom"
                                       TextureInformation="{Binding Texture.TextureInformation}" />
 
-        <DockPanel Grid.Row="1"
-                   Grid.Column="1">
+        <DockPanel x:Name="ImagePicker" 
+                   Grid.Row="1"
+                   Grid.Column="1"
+                   Width="100">
             <Border DockPanel.Dock="Top"
                     BorderThickness="1"
                     BorderBrush="{DynamicResource Brushes.Quarternary.Border.Static}"
@@ -118,6 +120,19 @@
                     </GridView>
                 </ListView.View>
             </ListView>
+
+            <DockPanel.Style>
+                <Style TargetType="{x:Type DockPanel}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Texture.ImageCount}" Value="0">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Texture.ImageCount}" Value="1">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DockPanel.Style>
         </DockPanel>
     </Grid>
 </views:EditorView>
