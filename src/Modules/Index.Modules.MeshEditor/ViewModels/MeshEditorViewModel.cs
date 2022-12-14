@@ -85,8 +85,6 @@ namespace Index.Modules.MeshEditor.ViewModels
       MinMoveSpeed = BASELINE_MIN_SPEED * coef;
       MoveSpeed = BASELINE_DEFAULT_SPEED * coef;
       MaxMoveSpeed = BASELINE_MAX_SPEED * coef;
-      Serilog.Log.Information( "Bounds {min} {def} {max}", bound.Width, bound.Height, bound.Depth );
-      Serilog.Log.Information( "MoveSpeed {min} {def} {max}", MinMoveSpeed, MoveSpeed, MaxMoveSpeed );
     }
 
     private void ZoomExtents()
@@ -94,7 +92,6 @@ namespace Index.Modules.MeshEditor.ViewModels
       if ( !Scene.GroupModel.SceneNode.TryGetBound( out var bound ) )
         return;
 
-      Log.Logger.Information( "{bound}", bound );
       var maxWidth = Math.Max( Math.Max( bound.Width, bound.Height ), bound.Depth );
       var pos = bound.Center + new Vector3( 0, 0, maxWidth * 2 );
 
