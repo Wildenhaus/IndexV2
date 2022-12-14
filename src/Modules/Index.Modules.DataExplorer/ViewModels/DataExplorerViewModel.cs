@@ -85,12 +85,8 @@ namespace Index.Modules.DataExplorer.ViewModels
     private void ApplySearchTerm()
     {
       var searchTerm = SearchTerm.ToLower();
-      var searchTask = Task.Factory.StartNew( () =>
-      {
-        foreach ( var node in AssetNodes )
-          node.ApplySearchCriteria( searchTerm );
-      }, TaskCreationOptions.LongRunning );
-      searchTask.Wait();
+      foreach ( var node in AssetNodes )
+        node.ApplySearchCriteria( searchTerm );
     }
 
     #endregion
