@@ -28,19 +28,37 @@ namespace Index.Modules.DataExplorer.Services
 
     public List<AssetNodeViewModel> CreateNodes()
     {
-      var categories = new List<AssetNodeViewModel>();
+      var rootCategories = new List<AssetNodeViewModel>();
 
       foreach ( var referenceCollection in _assetManager.ReferenceCollections )
       {
         var categoryNode = new AssetNodeViewModel( referenceCollection.AssetTypeName );
-        categories.Add( categoryNode );
+        rootCategories.Add( categoryNode );
 
+        var subDirectoryLookup = new Dictionary<string, AssetNodeViewModel>();
         foreach ( var assetReference in referenceCollection.OrderBy( x => x.AssetName ) )
-          categoryNode.Children.Add( new AssetNodeViewModel( assetReference ) );
+        {
+          var assetName = assetReference.AssetName;
+          var subDirectoryIndex = assetName.IndexOf( '/' );
+          if ( subDirectoryIndex != -1 )
+          {
+            var subDirectoryName = assetName.Substring( 0, subDirectoryIndex );
+            if ( !subDirectoryLookup.TryGetValue( subDirectoryName, out var subDirectoryNode ) )
+            {
+              subDirectoryNode = new AssetNodeViewModel( subDirectoryName );
+              categoryNode.Children.Add( subDirectoryNode );
+              subDirectoryLookup.Add( subDirectoryName, subDirectoryNode );
+            }
+            subDirectoryNode.Children.Add( new AssetNodeViewModel( assetReference ) );
+          }
+          else
+            categoryNode.Children.Add( new AssetNodeViewModel( assetReference ) );
+
+        }
       }
 
-      categories.Sort( ( a, b ) => a.Name.CompareTo( b.Name ) );
-      return categories;
+      rootCategories.Sort( ( a, b ) => a.Name.CompareTo( b.Name ) );
+      return rootCategories;
     }
 
     #endregion
