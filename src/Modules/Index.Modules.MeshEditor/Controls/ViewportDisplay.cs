@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media.Media3D;
 using HelixToolkit.Wpf.SharpDX.Elements2D;
 using SharpDX.Direct2D1;
 using Orientation = System.Windows.Controls.Orientation;
@@ -34,13 +35,26 @@ namespace Index.Modules.MeshEditor.Controls
       set => SetValue( FramesPerSecondProperty, value );
     }
 
+    public static readonly DependencyProperty PositionProperty = DependencyProperty.Register(
+      nameof( Position ),
+      typeof( Point3D ),
+      typeof( ViewportDisplay ) );
+
+    public Point3D Position
+    {
+      get => ( Point3D ) GetValue( PositionProperty );
+      set => SetValue( PositionProperty, value );
+    }
+
     #endregion
 
     #region Constructor
 
     public ViewportDisplay()
     {
+      IsHitTestVisible = false;
       Orientation = Orientation.Vertical;
+      VerticalAlignment = VerticalAlignment.Stretch;
       InitializeElements();
     }
 
@@ -49,9 +63,13 @@ namespace Index.Modules.MeshEditor.Controls
     private void InitializeElements()
     {
       AddBoundChild( FramesPerSecondProperty, "FPS: ", "{0:0.0}" );
+      AddBoundChild( PositionProperty, "POS: ", "{0:0.00}" );
     }
 
-    private void AddBoundChild( DependencyProperty boundProperty, string label = null, string formatString = null )
+    private void AddBoundChild(
+      DependencyProperty boundProperty,
+      string label = null,
+      string formatString = null )
     {
       var childPanel = new StackPanel2D
       {
