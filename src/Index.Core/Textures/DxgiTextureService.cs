@@ -9,8 +9,6 @@ namespace Index.Textures
 
     #region Constants
 
-    private const DXGI_FORMAT DEFAULT_COLORSPACE = DXGI_FORMAT.R16G16B16A16_UNORM;
-
     private static readonly Guid WIC_CODEC_BMP = TexHelper.Instance.GetWICCodec( WICCodecs.BMP );
     private static readonly Guid WIC_CODEC_PNG = TexHelper.Instance.GetWICCodec( WICCodecs.PNG );
     private static readonly Guid WIC_CODEC_TIF = TexHelper.Instance.GetWICCodec( WICCodecs.TIFF );
@@ -73,40 +71,40 @@ namespace Index.Textures
     }
 
     public Stream CreateHDRImageStream( ScratchImage dxgiImage, int imageIndex = 0 )
-      => CreateSingleRgbImageStream( dxgiImage, DEFAULT_COLORSPACE, imageIndex, ( dds, index ) => dds.SaveToHDRMemory( index ) );
+      => CreateSingleRgbImageStream( dxgiImage, DxgiConversionInfo.HDR, imageIndex, ( dds, index ) => dds.SaveToHDRMemory( index ) );
 
     public Stream[] CreateHDRImageStreams( ScratchImage dxgiImage, bool includeMips = false )
-      => CreateRgbImageStreams( dxgiImage, DEFAULT_COLORSPACE, includeMips, ( dds, index ) => dds.SaveToHDRMemory( index ) );
+      => CreateRgbImageStreams( dxgiImage, DxgiConversionInfo.HDR, includeMips, ( dds, index ) => dds.SaveToHDRMemory( index ) );
 
     public Stream CreateJpegImageStream( ScratchImage dxgiImage, int imageIndex = 0, float quality = 1f )
-      => CreateSingleRgbImageStream( dxgiImage, DEFAULT_COLORSPACE, imageIndex, ( dds, index ) => dds.SaveToJPGMemory( index, quality ) );
+      => CreateSingleRgbImageStream( dxgiImage, DxgiConversionInfo.JPEG, imageIndex, ( dds, index ) => dds.SaveToJPGMemory( index, quality ) );
 
     public Stream[] CreateJpegImageStreams( ScratchImage dxgiImage, float quality = 1f, bool includeMips = false )
-      => CreateRgbImageStreams( dxgiImage, DEFAULT_COLORSPACE, includeMips, ( dds, index ) => dds.SaveToJPGMemory( index, quality ) );
+      => CreateRgbImageStreams( dxgiImage, DxgiConversionInfo.JPEG, includeMips, ( dds, index ) => dds.SaveToJPGMemory( index, quality ) );
 
     public Stream CreateTgaImageStream( ScratchImage dxgiImage, int imageIndex = 0 )
-      => CreateSingleRgbImageStream( dxgiImage, DEFAULT_COLORSPACE, imageIndex, ( dds, index ) => dds.SaveToTGAMemory( index ) );
+      => CreateSingleRgbImageStream( dxgiImage, DxgiConversionInfo.TGA, imageIndex, ( dds, index ) => dds.SaveToTGAMemory( index ) );
 
     public Stream[] CreateTgaImageStreams( ScratchImage dxgiImage, bool includeMips = false )
-      => CreateRgbImageStreams( dxgiImage, DEFAULT_COLORSPACE, includeMips, ( dds, index ) => dds.SaveToTGAMemory( index ) );
+      => CreateRgbImageStreams( dxgiImage, DxgiConversionInfo.TGA, includeMips, ( dds, index ) => dds.SaveToTGAMemory( index ) );
 
     public Stream CreateBmpImageStream( ScratchImage dxgiImage, int imageIndex = 0 )
-      => CreateSingleRgbImageStream( dxgiImage, DEFAULT_COLORSPACE, imageIndex, ( dds, index ) => dds.SaveToWICMemory( index, WIC_FLAGS.NONE, WIC_CODEC_BMP ) );
+      => CreateSingleRgbImageStream( dxgiImage, DxgiConversionInfo.BMP, imageIndex, ( dds, index ) => dds.SaveToWICMemory( index, WIC_FLAGS.NONE, WIC_CODEC_BMP ) );
 
     public Stream[] CreateBmpImageStreams( ScratchImage dxgiImage, bool includeMips = false )
-      => CreateRgbImageStreams( dxgiImage, DEFAULT_COLORSPACE, includeMips, ( dds, index ) => dds.SaveToWICMemory( index, WIC_FLAGS.NONE, WIC_CODEC_BMP ) );
+      => CreateRgbImageStreams( dxgiImage, DxgiConversionInfo.BMP, includeMips, ( dds, index ) => dds.SaveToWICMemory( index, WIC_FLAGS.NONE, WIC_CODEC_BMP ) );
 
     public Stream CreatePngImageStream( ScratchImage dxgiImage, int imageIndex = 0 )
-      => CreateSingleRgbImageStream( dxgiImage, DEFAULT_COLORSPACE, imageIndex, ( dds, index ) => dds.SaveToWICMemory( index, WIC_FLAGS.NONE, WIC_CODEC_PNG ) );
+      => CreateSingleRgbImageStream( dxgiImage, DxgiConversionInfo.PNG, imageIndex, ( dds, index ) => dds.SaveToWICMemory( index, WIC_FLAGS.NONE, WIC_CODEC_PNG ) );
 
     public Stream[] CreatePngImageStreams( ScratchImage dxgiImage, bool includeMips = false )
-     => CreateRgbImageStreams( dxgiImage, DEFAULT_COLORSPACE, includeMips, ( dds, index ) => dds.SaveToWICMemory( index, WIC_FLAGS.NONE, WIC_CODEC_PNG ) );
+      => CreateRgbImageStreams( dxgiImage, DxgiConversionInfo.PNG, includeMips, ( dds, index ) => dds.SaveToWICMemory( index, WIC_FLAGS.NONE, WIC_CODEC_PNG ) );
 
     public Stream CreateTiffImageStream( ScratchImage dxgiImage, int imageIndex = 0 )
-      => CreateSingleRgbImageStream( dxgiImage, DEFAULT_COLORSPACE, imageIndex, ( dds, index ) => dds.SaveToWICMemory( index, WIC_FLAGS.NONE, WIC_CODEC_TIF ) );
+      => CreateSingleRgbImageStream( dxgiImage, DxgiConversionInfo.TIFF, imageIndex, ( dds, index ) => dds.SaveToWICMemory( index, WIC_FLAGS.NONE, WIC_CODEC_TIF ) );
 
     public Stream[] CreateTiffImageStreams( ScratchImage dxgiImage, bool includeMips = false )
-     => CreateRgbImageStreams( dxgiImage, DEFAULT_COLORSPACE, includeMips, ( dds, index ) => dds.SaveToWICMemory( index, WIC_FLAGS.NONE, WIC_CODEC_TIF ) );
+      => CreateRgbImageStreams( dxgiImage, DxgiConversionInfo.TIFF, includeMips, ( dds, index ) => dds.SaveToWICMemory( index, WIC_FLAGS.NONE, WIC_CODEC_TIF ) );
 
     #endregion
 
@@ -114,12 +112,12 @@ namespace Index.Textures
 
     private TStream CreateSingleRgbImageStream<TStream>(
       ScratchImage dxgiImage,
-      DXGI_FORMAT destFormat,
+      DxgiConversionInfo conversionInfo,
       int imageIndex,
       Func<ScratchImage, int, TStream> createStreamFunc )
       where TStream : Stream
     {
-      var conversionRequired = CoerceDDSImageToRgbColorspace( dxgiImage, destFormat, out var argbImage );
+      var conversionRequired = CoerceDDSImageToRgbColorspace( dxgiImage, conversionInfo, out var argbImage );
 
       var stream = createStreamFunc( argbImage, imageIndex );
 
@@ -131,7 +129,7 @@ namespace Index.Textures
 
     private TStream[] CreateRgbImageStreams<TStream>(
       ScratchImage dxgiImage,
-      DXGI_FORMAT destFormat,
+      DxgiConversionInfo conversionInfo,
       bool includeMips,
       Func<ScratchImage, int, TStream> createStreamFunc )
       where TStream : Stream
@@ -139,7 +137,7 @@ namespace Index.Textures
       var imageCount = dxgiImage.GetImageCount();
       var mipLevels = dxgiImage.GetMetadata().MipLevels;
 
-      var conversionRequired = CoerceDDSImageToRgbColorspace( dxgiImage, destFormat, out var argbImage );
+      var conversionRequired = CoerceDDSImageToRgbColorspace( dxgiImage, conversionInfo, out var argbImage );
 
       var streams = new List<TStream>();
       for ( var imageIdx = 0; imageIdx < imageCount; imageIdx++ )
@@ -171,19 +169,19 @@ namespace Index.Textures
     /// <returns>
     ///   A bool denoting whether or not the source DDS image required any conversion or decompression.
     /// </returns>
-    private bool CoerceDDSImageToRgbColorspace( ScratchImage sourceImage, DXGI_FORMAT destFormat, out ScratchImage rgbImage )
+    private bool CoerceDDSImageToRgbColorspace( ScratchImage sourceImage, DxgiConversionInfo conversionInfo, out ScratchImage rgbImage )
     {
       rgbImage = sourceImage;
       var format = sourceImage.GetMetadata().Format;
 
-      if ( format == destFormat )
+      if ( conversionInfo.SupportsFormat( format ) )
         return false;
 
       // If compressed with BCx compression
       if ( format.ToString().StartsWith( "BC" ) )
-        rgbImage = sourceImage.Decompress( destFormat );
+        rgbImage = sourceImage.Decompress( conversionInfo.DefaultFormat );
       else
-        rgbImage = sourceImage.Convert( destFormat, TEX_FILTER_FLAGS.DEFAULT, 0 );
+        rgbImage = sourceImage.Convert( conversionInfo.DefaultFormat, TEX_FILTER_FLAGS.DEFAULT, 0 );
 
       return true;
     }
