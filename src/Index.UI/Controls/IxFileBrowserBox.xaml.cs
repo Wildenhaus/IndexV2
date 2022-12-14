@@ -59,10 +59,10 @@ namespace Index.UI.Controls
       typeof( string ),
       typeof( IxFileBrowserBox ) );
 
-    public bool IsValidPath
+    public string Path
     {
-      get => ( bool ) GetValue( IsValidPathProperty );
-      set => SetValue( IsValidPathProperty, value );
+      get => ( string ) GetValue( PathProperty );
+      set => SetValue( PathProperty, value );
     }
 
     public static readonly DependencyProperty IsValidPathProperty = DependencyProperty.Register(
@@ -70,10 +70,10 @@ namespace Index.UI.Controls
       typeof( bool ),
       typeof( IxFileBrowserBox ) );
 
-    public string Path
+    public bool IsValidPath
     {
-      get => ( string ) GetValue( PathProperty );
-      set => SetValue( PathProperty, value );
+      get => ( bool ) GetValue( IsValidPathProperty );
+      set => SetValue( IsValidPathProperty, value );
     }
 
     #endregion

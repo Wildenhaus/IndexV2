@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Index.UI.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="22" d:DesignWidth="500"
-             Height="22">
+             Height="20">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
