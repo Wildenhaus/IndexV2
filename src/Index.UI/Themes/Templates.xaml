@@ -4,6 +4,7 @@
     <ResourceDictionary.MergedDictionaries>
 
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/Button.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/CheckBox.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/GridView.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/GridSplitter.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/GroupBox.xaml" />
