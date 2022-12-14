@@ -228,11 +228,6 @@ namespace Index.Domain.Assets.Textures.Dxgi
 
     private async Task WriteFile( string exportPath, Stream exportStream )
     {
-      // Ensure path exists
-      var exportDir = Path.GetDirectoryName( exportPath );
-      if ( !Directory.Exists( exportDir ) )
-        Directory.CreateDirectory( exportDir );
-
       using ( var exportFileStream = File.Create( exportPath ) )
       {
         exportStream.Position = 0;
