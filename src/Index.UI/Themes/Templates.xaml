@@ -5,6 +5,7 @@
 
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/Button.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/CheckBox.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/ComboBox.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/GridView.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/GridSplitter.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/GroupBox.xaml" />
@@ -27,7 +28,8 @@
 
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxWindow.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxDialogWindow.xaml" />
-        
+
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Views/AssetExportOptionsViewBase.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Views/EditorView.xaml" />
 
     </ResourceDictionary.MergedDictionaries>
