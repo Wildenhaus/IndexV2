@@ -12,7 +12,7 @@ namespace Index.Textures
     ScratchImage CreateDxgiImageFromRawTextureData( Stream textureData, DxgiTextureInfo info );
 
     DxgiImageStream CreateDDSStream( byte[] textureData, DxgiTextureInfo textureInfo );
-    DxgiImageStream CreateDDSStream( ScratchImage dxgiImage, DxgiTextureInfo textureInfo );
+    DxgiImageStream CreateDDSStream( ScratchImage dxgiImage );
 
     Stream CreateHDRImageStream( ScratchImage dxgiImage, int imageIndex = 0 );
     Stream[] CreateHDRImageStreams( ScratchImage dxgiImage, bool includeMips = false );

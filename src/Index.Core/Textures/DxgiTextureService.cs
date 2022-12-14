@@ -55,9 +55,20 @@ namespace Index.Textures
       return new DxgiImageStream( ddsStream, textureInfo );
     }
 
-    public DxgiImageStream CreateDDSStream( ScratchImage dxgiImage, DxgiTextureInfo textureInfo )
+    public DxgiImageStream CreateDDSStream( ScratchImage dxgiImage )
     {
       var ddsStream = dxgiImage.SaveToDDSMemory( DDS_FLAGS.NONE );
+      var metadata = dxgiImage.GetMetadata();
+      var textureInfo = new DxgiTextureInfo
+      {
+        Width = metadata.Width,
+        Height = metadata.Height,
+        Depth = metadata.Depth,
+        FaceCount = metadata.IsCubemap() ? 6 : 1,
+        MipCount = metadata.MipLevels,
+        Format = ( DxgiTextureFormat ) metadata.Format
+      };
+
       return new DxgiImageStream( ddsStream, textureInfo );
     }
 
