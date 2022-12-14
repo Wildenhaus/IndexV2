@@ -35,7 +35,6 @@ namespace Index.Profiles.HaloCEA.Meshes
     {
       Scene = new Scene();
       RootNode = new Node( "ROOT" );
-      RootNode.Transform = AssimpHelper.GetSceneRootTransform();
 
       Nodes = new Dictionary<short, Node>();
     }
