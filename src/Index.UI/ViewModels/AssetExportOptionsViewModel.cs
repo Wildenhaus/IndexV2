@@ -1,5 +1,7 @@
-﻿using System.Windows.Input;
+﻿using System.Text.Json;
+using System.Windows.Input;
 using Index.Domain.Assets;
+using Index.Domain.Database.Repositories;
 using Index.UI.Controls.Buttons;
 using Prism.Commands;
 using Prism.Ioc;
@@ -11,6 +13,12 @@ namespace Index.UI.ViewModels
   public class AssetExportOptionsViewModel<TOptions> : DialogWindowViewModel
     where TOptions : AssetExportOptions, new()
   {
+
+    #region Data Members
+
+    private readonly ISavedSettingsRepository _settingsRepository;
+
+    #endregion
 
     #region Properties
 
@@ -24,7 +32,9 @@ namespace Index.UI.ViewModels
     public AssetExportOptionsViewModel( IContainerProvider container )
       : base( container )
     {
-      Options = new TOptions();
+      _settingsRepository = container.Resolve<ISavedSettingsRepository>();
+
+      Options = GetOptions();
       ExportCommand = new DelegateCommand( Export, () => Options.IsValid );
 
       Options.PropertyChanged += OnOptionsPropertyChanged;
@@ -50,6 +60,7 @@ namespace Index.UI.ViewModels
     public override void OnDialogClosed()
     {
       Options.PropertyChanged -= OnOptionsPropertyChanged;
+      SaveOptions();
     }
 
     #endregion
@@ -60,6 +71,30 @@ namespace Index.UI.ViewModels
     {
       Parameters.Add( "Options", Options );
       CloseDialog( Parameters );
+    }
+
+    private TOptions GetOptions()
+    {
+      var key = typeof( TOptions ).Name;
+      var savedOptions = _settingsRepository.GetByKey( key );
+      if ( savedOptions is null )
+        return new TOptions();
+
+      var options = JsonSerializer.Deserialize<TOptions>( savedOptions.Data );
+      return options;
+    }
+
+    private void SaveOptions()
+    {
+      var key = typeof( TOptions ).Name;
+      var savedOptions = _settingsRepository.GetByKey( key );
+
+      if ( savedOptions is null )
+        savedOptions = _settingsRepository.New( key );
+
+      savedOptions.Data = JsonSerializer.Serialize( Options );
+      _settingsRepository.Update( savedOptions );
+      _settingsRepository.SaveChanges();
     }
 
     #endregion

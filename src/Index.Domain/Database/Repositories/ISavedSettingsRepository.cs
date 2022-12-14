@@ -7,6 +7,8 @@ namespace Index.Domain.Database.Repositories
   {
 
     SavedSettings GetByKey( string key );
+    void AddOrUpdate( SavedSettings savedSettings );
+    SavedSettings New( string key );
 
   }
 
