@@ -23,8 +23,8 @@ namespace Index.UI.ViewModels
     public string TabName { get; set; }
     public ICommand CloseCommand { get; set; }
 
-    [DoNotNotify] public TAsset Asset { get; protected set; }
-    [DoNotNotify] public IAssetReference AssetReference { get; protected set; }
+    public TAsset Asset { get; protected set; }
+    public IAssetReference AssetReference { get; protected set; }
 
     [DoNotNotify] protected IContainerProvider Container { get; }
     [DoNotNotify] protected IAssetManager AssetManager { get; }
@@ -48,7 +48,7 @@ namespace Index.UI.ViewModels
     protected override IJob CreateInitializationJob( IContainerProvider container )
       => AssetManager.LoadAsset<TAsset>( AssetReference );
 
-    protected override void OnInitializationJobCompleted( IJob job )
+    protected sealed override void OnInitializationJobCompleted( IJob job )
     {
       var assetJob = job as IJob<TAsset>;
       Asset = assetJob.Result;

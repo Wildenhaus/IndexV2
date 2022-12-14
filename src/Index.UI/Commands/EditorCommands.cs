@@ -4,11 +4,13 @@ using System.Windows;
 using System.Windows.Input;
 using Index.Domain;
 using Index.Domain.Assets;
+using Index.Jobs;
 using Index.UI.ViewModels;
 using Index.Utilities;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 
 namespace Index.UI.Commands
 {
@@ -29,6 +31,9 @@ namespace Index.UI.Commands
     public static ICommand CloseAllTabsCommand { get; private set; }
     public static ICommand CloseAllTabsButThisCommand { get; private set; }
 
+    public static ICommand ExportAssetCommand { get; private set; }
+    public static ICommand ExportAssetReferenceCommand { get; private set; }
+
     #endregion
 
     #region Public Methods
@@ -41,6 +46,8 @@ namespace Index.UI.Commands
       CloseTabCommand = new DelegateCommand<IAssetReference>( CloseTab );
       CloseAllTabsCommand = new DelegateCommand( CloseAllTabs );
       CloseAllTabsButThisCommand = new DelegateCommand<IAssetReference>( CloseAllTabsButThis );
+
+      ExportAssetCommand = new DelegateCommand<IExportableAsset>( ExportAsset );
     }
 
     #endregion
@@ -100,7 +107,7 @@ namespace Index.UI.Commands
 
     #endregion
 
-    #region Private Methods
+    #region Tab Methods
 
     private static object FindEditorTab( IRegion region, IAssetReference assetReference )
     {
@@ -179,6 +186,39 @@ namespace Index.UI.Commands
 
       if ( navigationAware is not null )
         navigationAware.OnNavigatedFrom( navigationContext );
+    }
+
+    #endregion
+
+    #region Export Methods
+
+    private static void ExportAsset( IExportableAsset asset )
+    {
+      var optionsType = asset.ExportOptionsType;
+      var jobType = asset.ExportJobType;
+
+      var parameters = new DialogParameters();
+      parameters.Add( "OptionsType", optionsType );
+      parameters.Add( "JobType", jobType );
+
+      var dialogService = _container.Resolve<IDialogService>();
+      dialogService.ShowDialog( optionsType.Name, parameters, result =>
+      {
+        if ( result is null || result.Result != ButtonResult.OK )
+          return;
+
+        var options = result.Parameters.GetValue<object>( "Options" );
+
+        var jobParams = new ParameterCollection();
+        jobParams.Set<IAsset>( "Asset", asset );
+        jobParams.Set( asset.AssetReference );
+        jobParams.Set( "Options", options );
+
+        var jobManager = _container.Resolve<IJobManager>();
+        var job = jobManager.CreateJob( jobType, jobParams );
+        jobManager.StartJob( job );
+      } );
+
     }
 
     #endregion

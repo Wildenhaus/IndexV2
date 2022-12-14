@@ -4,6 +4,7 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:local="clr-namespace:Index.Modules.TextureEditor.Views"
+                  xmlns:commands="clr-namespace:Index.UI.Commands;assembly=Index.UI"
                   xmlns:controls="clr-namespace:Index.UI.Controls;assembly=Index.UI"
                   xmlns:views="clr-namespace:Index.UI.Views;assembly=Index.UI"
                   xmlns:vm="clr-namespace:Index.Modules.TextureEditor.ViewModels"
@@ -67,7 +68,7 @@
         <Menu Grid.Row="0"
               Grid.ColumnSpan="2">
             <MenuItem Header="File">
-                <MenuItem Header="Export" />
+                <MenuItem Header="Export" Command="{x:Static commands:EditorCommands.ExportAssetCommand}" CommandParameter="{Binding Asset}" />
             </MenuItem>
         </Menu>
 

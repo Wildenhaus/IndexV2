@@ -4,7 +4,7 @@ using Index.Domain.Editors;
 namespace Index.Domain.Assets.Meshes
 {
 
-  public interface IMeshAsset : IAsset
+  public interface IMeshAsset : IAsset, IExportableAsset
   {
 
     #region Properties

@@ -4,7 +4,7 @@ using Index.Textures;
 namespace Index.Domain.Assets.Textures.Dxgi
 {
 
-  public interface IDxgiTextureAsset : ITextureAsset
+  public interface IDxgiTextureAsset : ITextureAsset, IExportableAsset
   {
 
     #region Properties
@@ -15,7 +15,6 @@ namespace Index.Domain.Assets.Textures.Dxgi
     int MipMapCount { get; }
     int FaceCount { get; }
     DxgiTextureFormat Format { get; }
-
 
     #endregion
 

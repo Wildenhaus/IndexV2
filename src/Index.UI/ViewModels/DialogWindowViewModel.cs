@@ -75,8 +75,11 @@ namespace Index.UI.ViewModels
 
     #region Private Methods
 
-    private void CloseDialog()
+    protected void CloseDialog()
       => RaiseRequestClose( new DialogResult() );
+
+    protected void CloseDialog( IDialogParameters parameters )
+      => RaiseRequestClose( new DialogResult( ButtonResult.OK, parameters ) );
 
     private void RaiseRequestClose( IDialogResult dialogResult )
       => RequestClose?.Invoke( dialogResult );

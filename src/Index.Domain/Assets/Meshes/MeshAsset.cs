@@ -13,6 +13,9 @@ namespace Index.Domain.Assets.Meshes
     public override string TypeName => "Mesh";
     public override string EditorKey => DefaultEditorKeys.MeshEditorKey;
 
+    Type IExportableAsset.ExportJobType => typeof( MeshAssetExportJob );
+    Type IExportableAsset.ExportOptionsType => typeof( MeshAssetExportOptions );
+
     public Scene AssimpScene { get; set; }
     public IReadOnlyDictionary<string, ITextureAsset> Textures { get; set; }
 

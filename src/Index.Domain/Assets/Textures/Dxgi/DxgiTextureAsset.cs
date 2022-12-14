@@ -9,6 +9,10 @@ namespace Index.Domain.Assets.Textures.Dxgi
 
     #region Properties
 
+    Type IExportableAsset.ExportOptionsType => typeof( DxgiTextureExportOptions );
+    Type IExportableAsset.ExportJobType => typeof( DxgiTextureAssetExportJob );
+
+
     public ScratchImage DxgiImage { get; }
 
     public override int Width { get; }
