@@ -109,7 +109,7 @@
                           Grid.Column="1"
                           SelectedValuePath="Value"
                           DisplayMemberPath="Description"
-                          SelectedValue="{Binding Options.NormalMapFormat}"
+                          SelectedValue="{Binding Options.TextureOptions.NormalMapFormat}"
                           ItemsSource="{Binding Source={ext:Enum {x:Type tex:NormalMapFormat}}}" />
 
                 <TextBlock Grid.Row="4"
@@ -117,7 +117,7 @@
                            Text="Recalculate Z Channel" />
                 <CheckBox Grid.Row="4"
                           Grid.Column="1"
-                          IsChecked="{Binding Options.RecalculateZChannel}" />
+                          IsChecked="{Binding Options.TextureOptions.RecalculateZChannel}" />
 
             </Grid>
         </GroupBox>
