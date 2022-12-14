@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Index.Domain.Entities
 {
 
-  public class EntityBase
+  public class EntityBase : IEntity
   {
 
     [Key]
