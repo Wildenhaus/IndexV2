@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Index.Domain.Assets;
 using Index.Modules.DataExplorer.ViewModels;
@@ -31,37 +32,42 @@ namespace Index.Modules.DataExplorer.Services
       var rootCategories = new List<AssetNodeViewModel>();
 
       foreach ( var referenceCollection in _assetManager.ReferenceCollections )
-      {
-        var categoryNode = new AssetNodeViewModel( referenceCollection.AssetTypeName );
-        rootCategories.Add( categoryNode );
-
-        var subDirectoryLookup = new Dictionary<string, AssetNodeViewModel>();
-        foreach ( var assetReference in referenceCollection.OrderBy( x => x.AssetName ) )
-        {
-          var assetName = assetReference.AssetName;
-          var subDirectoryIndex = assetName.IndexOf( '/' );
-          if ( subDirectoryIndex != -1 )
-          {
-            var subDirectoryName = assetName.Substring( 0, subDirectoryIndex );
-            if ( !subDirectoryLookup.TryGetValue( subDirectoryName, out var subDirectoryNode ) )
-            {
-              subDirectoryNode = new AssetNodeViewModel( subDirectoryName );
-              categoryNode.Children.Add( subDirectoryNode );
-              subDirectoryLookup.Add( subDirectoryName, subDirectoryNode );
-            }
-            subDirectoryNode.Children.Add( new AssetNodeViewModel( assetReference ) );
-          }
-          else
-            categoryNode.Children.Add( new AssetNodeViewModel( assetReference ) );
-
-        }
-      }
+        rootCategories.Add( CreateCategoryNode( referenceCollection ) );
 
       rootCategories.Sort( ( a, b ) => a.Name.CompareTo( b.Name ) );
       return rootCategories;
     }
 
     #endregion
+
+    private AssetNodeViewModel CreateCategoryNode( IAssetReferenceCollection assetReferenceCollection )
+    {
+      var categoryNode = new AssetNodeViewModel( assetReferenceCollection.AssetTypeName );
+
+      var groups = assetReferenceCollection.GroupBy( x => GetAssetSubDirectory( x ) );
+      foreach ( var group in groups )
+      {
+        if ( group.Count() == 1 )
+        {
+          categoryNode.Children.Add( new AssetNodeViewModel( group.Single() ) );
+          continue;
+        }
+
+        var groupNode = new AssetNodeViewModel( group.Key );
+        foreach ( var asset in group )
+          groupNode.Children.Add( new AssetNodeViewModel( asset ) );
+
+        categoryNode.Children.Add( groupNode );
+      }
+
+      return categoryNode;
+    }
+
+    private string GetAssetSubDirectory( IAssetReference assetReference )
+    {
+      var assetName = assetReference.AssetName;
+      return Path.GetDirectoryName( assetName ) ?? string.Empty;
+    }
 
   }
 
