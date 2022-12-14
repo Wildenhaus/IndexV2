@@ -167,8 +167,13 @@ namespace Index.Textures
           {
             var x = row[ w + 0 ] / 65535.0f;
             var y = row[ w + 1 ] / 65535.0f;
-            var z = MathF.Sqrt( 1 - ( x * x ) + ( y * y ) );
-            z = MathF.Max( 0, MathF.Min( 1, z ) );
+
+            x = ( x * 2 ) - 1;
+            y = ( y * 2 ) - 1;
+
+            var z = ( float ) Math.Clamp( ( x * x ) + ( y * y ), 0, 1 );
+            z = MathF.Sqrt( 1 - z );
+            z = ( z + 1 ) / 2;
 
             row[ w + 2 ] = z * 65535.0f;
           }
