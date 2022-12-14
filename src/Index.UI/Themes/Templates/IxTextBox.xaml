@@ -30,7 +30,7 @@
                 <ScrollViewer x:Name="PART_ContentHost"
                                           Grid.Column="1"
                                           Focusable="False"
-                                          Padding="2,1"
+                                          Padding="4,1"
                                           HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
                                           VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}"
                                           VerticalContentAlignment="Bottom" />
