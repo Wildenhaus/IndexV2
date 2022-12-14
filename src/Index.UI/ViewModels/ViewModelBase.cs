@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using Index.UI.Controls.Menus;
@@ -75,6 +76,17 @@ namespace Index.UI.ViewModels
     }
 
     protected virtual void OnConfigureContextMenu( MenuViewModelBuilder builder )
+    {
+    }
+
+    protected void OnPropertyChanged( [CallerMemberName] string? propertyName = null )
+    {
+      var eventArgs = new PropertyChangedEventArgs( propertyName );
+      HandlePropertyChanged( eventArgs );
+      PropertyChanged?.Invoke( this, eventArgs );
+    }
+
+    protected virtual void HandlePropertyChanged( PropertyChangedEventArgs eventArgs )
     {
     }
 
