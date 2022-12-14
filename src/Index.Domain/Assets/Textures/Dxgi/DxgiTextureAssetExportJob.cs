@@ -226,10 +226,8 @@ namespace Index.Domain.Assets.Textures.Dxgi
         Directory.CreateDirectory( exportDir );
     }
 
-    private async Task WriteFile( string filePath, Stream exportStream )
+    private async Task WriteFile( string exportPath, Stream exportStream )
     {
-      var exportPath = GetExportFilePath();
-
       // Ensure path exists
       var exportDir = Path.GetDirectoryName( exportPath );
       if ( !Directory.Exists( exportDir ) )
