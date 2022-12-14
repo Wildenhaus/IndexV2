@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Index.Domain.Entities
+namespace Index.Domain.Database.Entities
 {
 
   public class EntityBase : IEntity

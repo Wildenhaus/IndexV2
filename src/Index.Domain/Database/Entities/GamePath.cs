@@ -1,4 +1,4 @@
-﻿namespace Index.Domain.Entities
+﻿namespace Index.Domain.Database.Entities
 {
 
   public class GamePath : EntityBase

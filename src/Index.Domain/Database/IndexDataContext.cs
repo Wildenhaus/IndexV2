@@ -1,4 +1,4 @@
-﻿using Index.Domain.Entities;
+﻿using Index.Domain.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Index.Domain.Database
@@ -17,6 +17,7 @@ namespace Index.Domain.Database
     protected override void OnModelCreating( ModelBuilder modelBuilder )
     {
       modelBuilder.Entity<GamePath>();
+      modelBuilder.Entity<SavedSettings>();
     }
 
   }

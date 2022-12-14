@@ -87,6 +87,7 @@ namespace Index.App
     {
       Container.Register<IndexDataContext>( Reuse.Transient );
       Container.Register<IGamePathRepository, GamePathRepository>( Reuse.Transient );
+      Container.Register<ISavedSettingsRepository, SavedSettingsRepository>( Reuse.Transient );
     }
 
     private void RegisterEditorServices()

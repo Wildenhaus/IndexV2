@@ -1,4 +1,4 @@
-﻿using Index.Domain.Entities;
+﻿using Index.Domain.Database.Entities;
 
 namespace Index.Domain.Database.Repositories
 {
