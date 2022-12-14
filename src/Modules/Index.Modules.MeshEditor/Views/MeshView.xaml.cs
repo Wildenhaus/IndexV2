@@ -57,6 +57,17 @@ namespace Index.Modules.MeshEditor.Views
       set => SetValue( CameraProperty, value );
     }
 
+    public static readonly DependencyProperty EffectsManagerProperty = DependencyProperty.Register(
+      nameof( EffectsManager ),
+      typeof( EffectsManager ),
+      typeof( MeshView ) );
+
+    public EffectsManager EffectsManager
+    {
+      get => ( EffectsManager ) GetValue( EffectsManagerProperty );
+      set => SetValue( EffectsManagerProperty, value );
+    }
+
     public static readonly DependencyProperty IsFlycamEnabledProperty = DependencyProperty.Register(
       nameof( IsFlycamEnabled ),
       typeof( bool ),
@@ -193,6 +204,9 @@ namespace Index.Modules.MeshEditor.Views
         if ( cancellationToken.IsCancellationRequested )
           return;
 
+        if ( !_isFrameRendered )
+          continue;
+
         HandleKeyboard();
         HandleMouse();
       }
@@ -200,9 +214,6 @@ namespace Index.Modules.MeshEditor.Views
 
     private void HandleKeyboard()
     {
-      if ( !_isFrameRendered )
-        return;
-
       var wPressed = Win32.IsKeyPressed( WinKeys.W );
       var aPressed = Win32.IsKeyPressed( WinKeys.A );
       var sPressed = Win32.IsKeyPressed( WinKeys.S );

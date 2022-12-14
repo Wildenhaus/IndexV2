@@ -120,6 +120,7 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         Camera="{Binding Camera}"
+                        EffectsManager="{Binding EffectsManager}"
                         Model="{Binding Scene.GroupModel}"
                         IsFlycamEnabled="{Binding IsFlycamEnabled}"
                         MinMoveSpeed="{Binding MinMoveSpeed}"

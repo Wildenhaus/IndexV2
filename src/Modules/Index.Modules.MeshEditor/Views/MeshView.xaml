@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:Index.Modules.MeshEditor.Views"
              xmlns:controls="clr-namespace:Index.Modules.MeshEditor.Controls"
              xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
-             x:Name="self"
              d:DesignHeight="450"
              d:DesignWidth="800"
              Focusable="True"
@@ -25,20 +24,20 @@
                         TextBrush="{DynamicResource Brushes.Foreground.Static}"
                         Background="{DynamicResource Brushes.Background.Deeper}"
                         BackgroundColor="{DynamicResource Colors.Background.Deeper}"
-                        Camera="{Binding Camera, ElementName=self}"
+                        Camera="{Binding Camera, RelativeSource={RelativeSource AncestorType={x:Type local:MeshView}}}"
                         CameraInertiaFactor="0.7"
                         CameraMode="Inspect"
                         CameraRotationMode="Turntable"
-                        EffectsManager="{Binding EffectsManager}"
+                        EffectsManager="{Binding EffectsManager, RelativeSource={RelativeSource AncestorType={x:Type local:MeshView}}}"
                         EnableSwapChainRendering="{Binding IsInitialized}"
                         FXAALevel="High"
                         IsMoveEnabled="True"
                         IsZoomEnabled="True"
                         ZoomDistanceLimitNear="0"
                         EnableRenderFrustum="True"
-                        Focusable="{Binding IsFlycamEnabled, ElementName=self, Converter={StaticResource InverseBoolConverter}}"
-                        IsHitTestVisible="{Binding IsFlycamEnabled, ElementName=self, Converter={StaticResource InverseBoolConverter}}"
-                        ShowViewCube="{Binding IsFlycamEnabled, ElementName=self, Converter={StaticResource InverseBoolConverter}}">
+                        Focusable="{Binding IsFlycamEnabled, RelativeSource={RelativeSource AncestorType={x:Type local:MeshView}}, Converter={StaticResource InverseBoolConverter}}"
+                        IsHitTestVisible="{Binding IsFlycamEnabled, RelativeSource={RelativeSource AncestorType={x:Type local:MeshView}}, Converter={StaticResource InverseBoolConverter}}"
+                        ShowViewCube="{Binding IsFlycamEnabled, RelativeSource={RelativeSource AncestorType={x:Type local:MeshView}}, Converter={StaticResource InverseBoolConverter}}">
 
             <hx:Viewport3DX.InputBindings>
                 <MouseBinding Command="hx:ViewportCommands.Rotate"
@@ -49,8 +48,8 @@
                               Gesture="MiddleClick" />
             </hx:Viewport3DX.InputBindings>
 
-            <hx:Element3DPresenter Content="{Binding Model, ElementName=self}" />
-            <hx:DirectionalLight3D Direction="{Binding Camera.LookDirection}"
+            <hx:Element3DPresenter Content="{Binding Model, RelativeSource={RelativeSource AncestorType={x:Type local:MeshView}}}" />
+            <hx:DirectionalLight3D Direction="{Binding Camera.LookDirection, RelativeSource={RelativeSource AncestorType={x:Type local:MeshView}}}"
                                    Color="#FFF" />
 
             <hx:Viewport3DX.Content2D>
