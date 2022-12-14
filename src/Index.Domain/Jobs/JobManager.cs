@@ -48,6 +48,12 @@ namespace Index.Jobs
 
     #region Public Methods
 
+    public IJob CreateJob( Type jobType, IParameterCollection parameters = null )
+    {
+      return ( IJob ) Activator.CreateInstance( jobType,
+        new object[] { _container, parameters } );
+    }
+
     public TJob CreateJob<TJob>( IParameterCollection parameters = null )
       where TJob : class, IJob
     {

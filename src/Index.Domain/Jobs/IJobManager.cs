@@ -21,6 +21,7 @@ namespace Index.Jobs
 
     #region Public Methods
 
+    IJob CreateJob( Type jobType, IParameterCollection parameters = null );
     TJob CreateJob<TJob>( IParameterCollection parameters = null ) where TJob : class, IJob;
 
     TJob StartJob<TJob>( Action<IJob> onCompletion = null ) where TJob : class, IJob;
