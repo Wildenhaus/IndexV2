@@ -30,7 +30,7 @@
                                 BorderThickness="0,0,0,1"
                                 Height="{Binding Height}"
                                 Width="{Binding Width}">
-                            <ContentPresenter Content="{Binding Content}" />
+                            <ContentPresenter Content="{TemplateBinding Content}" />
 
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="20"
