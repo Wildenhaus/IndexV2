@@ -1,0 +1,98 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--#region Colors-->
+    <SolidColorBrush x:Key="GroupBox.Static.Background" Color="Transparent" />
+    <SolidColorBrush x:Key="GroupBox.Static.Border" Color="{DynamicResource Colors.Tertiary.Border.Static}" />
+    <SolidColorBrush x:Key="GroupBox.Header.Static.Background" Color="{DynamicResource Colors.Secondary.Background.Static}" />
+    <SolidColorBrush x:Key="GroupBox.Header.Static.Border" Color="{DynamicResource Colors.Tertiary.Border.Static}" />
+    <SolidColorBrush x:Key="GroupBox.Header.Foreground" Color="{DynamicResource Colors.Foreground.Static}" />
+    <SolidColorBrush x:Key="GroupBox.Header.Background.Disabled" Color="{DynamicResource Colors.Secondary.Background.Disabled}" />
+    <SolidColorBrush x:Key="GroupBox.Header.Static.Border.Disabled" Color="{DynamicResource Colors.Tertiary.Border.Disabled}" />
+    <SolidColorBrush x:Key="GroupBox.Header.Foreground.Disabled" Color="{DynamicResource Colors.Foreground.Disabled}" />
+    <!--#endregion-->
+
+    <!--#region Converters-->
+    <BorderGapMaskConverter x:Key="BorderGapMaskConverter" />
+    <!--#endregion-->
+
+    <!--#region Template: GroupBoxTemplate-->
+    <ControlTemplate x:Key="GroupBoxTemplate"
+                     TargetType="{x:Type GroupBox}">
+        <Grid SnapsToDevicePixels="true">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="5" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="32"
+                               MinHeight="32" />
+                <RowDefinition />
+                <RowDefinition Height="6" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="1"
+                    Grid.RowSpan="3"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="4"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="0" />
+            <Border Grid.Row="1"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="4"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="0">
+                <Border.OpacityMask>
+                    <MultiBinding ConverterParameter="7"
+                                  Converter="{StaticResource BorderGapMaskConverter}">
+                        <Binding ElementName="Header"
+                                 Path="ActualWidth" />
+                        <Binding Path="ActualWidth"
+                                 RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="ActualHeight"
+                                 RelativeSource="{RelativeSource Self}" />
+                    </MultiBinding>
+                </Border.OpacityMask>
+            </Border>
+            <Border Grid.RowSpan="2"
+                    Grid.ColumnSpan="4"
+                    Background="{StaticResource GroupBox.Header.Static.Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}" />
+            <Border x:Name="Header"
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Padding="3,1,3,0">
+                <ContentPresenter VerticalAlignment="Center"
+                                  ContentSource="Header"
+                                  RecognizesAccessKey="True"
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+            </Border>
+            <ContentPresenter x:Name="Contents"
+                              Grid.Row="2"
+                              Grid.Column="1"
+                              Grid.ColumnSpan="2"
+                              Margin="0,3,0,0"
+                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+        </Grid>
+    </ControlTemplate>
+    <!--#endregion-->
+
+    <!--#region Style: GroupBox -->
+    <Style TargetType="{x:Type GroupBox}">
+        <Setter Property="Background" Value="{DynamicResource GroupBox.Static.Background}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource GroupBox.Static.Border}" />
+        <Setter Property="Foreground" Value="{DynamicResource Brushes.Foreground.Static}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Template" Value="{StaticResource GroupBoxTemplate}" />
+    </Style>
+    <!--#endregion-->
+
+</ResourceDictionary>
