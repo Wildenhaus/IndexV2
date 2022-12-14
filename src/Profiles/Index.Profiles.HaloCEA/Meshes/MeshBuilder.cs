@@ -260,7 +260,7 @@ namespace Index.Profiles.HaloCEA.Meshes
       var vertexOffset = sharingInfo.VertexOffset;
       var vertexCount = SubmeshInfo.VertexInfo.Value.VertexCount;
 
-      if ( Object.InterleavedDataBuffer is null )
+      if ( SharingObject.InterleavedDataBuffer is null )
         return;
 
       var interleavedData = SharingObject.InterleavedDataBuffer.ElementData.AsSpan( vertexOffset, vertexCount );
