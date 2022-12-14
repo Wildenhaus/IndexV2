@@ -123,7 +123,6 @@ namespace Index.App
     private void InitializeDatabase()
     {
       var context = Container.Resolve<IndexDataContext>();
-      context.Database.EnsureCreated();
       context.Database.Migrate();
     }
 
