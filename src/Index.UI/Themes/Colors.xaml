@@ -17,8 +17,8 @@
     <Color x:Key="Colors.Accent.Disabled"                          R="050" G="085" B="095" A="255" />
     <Color x:Key="Colors.Accent.Hover"                             R="025" G="140" B="165" A="255" />
     <Color x:Key="Colors.Accent.Pressed"                           R="015" G="140" B="175" A="255" />
-    <Color x:Key="Colors.Accent.Selected"                          R="030" G="040" B="215" A="255" />
-    <Color x:Key="Colors.Accent.Selected.Inactive"                 R="030" G="030" B="210" A="255" />
+    <Color x:Key="Colors.Accent.Selected"                          R="030" G="160" B="200" A="255" />
+    <Color x:Key="Colors.Accent.Selected.Inactive"                 R="030" G="160" B="200" A="255" />
     <Color x:Key="Colors.Accent.Static"                            R="020" G="115" B="140" A="255" />
     <Color x:Key="Colors.Accent.Static.Opaque"                     R="020" G="115" B="140" A="128" />
 

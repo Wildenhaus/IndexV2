@@ -6,6 +6,7 @@
         <ResourceDictionary Source="/Index.UI;component/Themes/Converters.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+
     <!--#region Template: IxProgressOverlayTemplate-->
     <ControlTemplate x:Key="IxProgressOverlayTemplate"
                      TargetType="{x:Type controls:IxProgressOverlay}">
@@ -35,7 +36,8 @@
                     <Border x:Name="PART_Border"
                             Grid.Row="1"
                             Grid.Column="1"
-                            Background="{TemplateBinding Background}">
+                            Background="{TemplateBinding Background}"
+                            UseLayoutRounding="True">
                         <Grid Margin="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition />
@@ -60,20 +62,42 @@
                                        HorizontalAlignment="Center"
                                        FontSize="24"
                                        FontWeight="SemiBold"
-                                       Text="{Binding Path=ProgressInfo.Status, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
+                                       Text="{Binding Path=ProgressInfo.Status, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect ShadowDepth="1"
+                                                      BlurRadius="20"
+                                                      Opacity="1"
+                                                      Color="#000" />
+                                </TextBlock.Effect>
+                            </TextBlock>
+
                             <TextBlock x:Name="PART_SubStatus"
                                        Grid.Row="2"
                                        Margin="5"
                                        HorizontalAlignment="Center"
                                        FontSize="16"
-                                       Text="{Binding Path=ProgressInfo.SubStatus, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
+                                       Text="{Binding Path=ProgressInfo.SubStatus, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect ShadowDepth="1"
+                                                      BlurRadius="20"
+                                                      Opacity="1"
+                                                      Color="#000" />
+                                </TextBlock.Effect>
+                            </TextBlock>
 
-                            <ProgressBar x:Name="PART_ProgressBar"
+                            <ProgressBar x:Name="PART_ProgressBar" 
                                          Grid.Row="3"
                                          Margin="5"
                                          Maximum="1"
                                          IsIndeterminate="{Binding Path=ProgressInfo.IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
-                                         Value="{Binding Path=ProgressInfo.PercentCompleted, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" />
+                                         Value="{Binding Path=ProgressInfo.PercentCompleted, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}">
+                                <ProgressBar.Effect>
+                                    <DropShadowEffect ShadowDepth="1"
+                                                      BlurRadius="20"
+                                                      Opacity=".7"
+                                                      Color="#000" />
+                                </ProgressBar.Effect>
+                            </ProgressBar>
 
                             <TextBlock x:Name="PART_PercentCompleted"
                                        Grid.Row="3"
@@ -81,13 +105,14 @@
                                        VerticalAlignment="Center"
                                        FontWeight="SemiBold"
                                        SnapsToDevicePixels="True"
+                                       TextOptions.TextFormattingMode="Display"
                                        FontSize="12"
                                        Text="{Binding Path=ProgressInfo.PercentCompleted, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay, StringFormat='0.00%'}"
                                        Visibility="{Binding Path=ProgressInfo.IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay, Converter={StaticResource InverseVisibilityConverter}}"
                                        TextAlignment="Center">
                                 <TextBlock.Effect>
                                     <DropShadowEffect ShadowDepth="0"
-                                                      BlurRadius="1"
+                                                      BlurRadius="8"
                                                       Opacity="1"
                                                       Color="#000" />
                                 </TextBlock.Effect>
