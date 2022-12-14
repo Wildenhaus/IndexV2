@@ -177,6 +177,14 @@ namespace Index.Textures
         DXGI_FORMAT.B8G8R8X8_UNORM_SRGB,
       } );
 
+    public static readonly DxgiConversionInfo POST_PROCESS = DxgiConversionInfo.Define(
+      formatId: "HDR",
+      defaultFormat: DXGI_FORMAT.R16G16B16A16_FLOAT,
+      supportedFormats: new DXGI_FORMAT[]
+      {
+        DXGI_FORMAT.R16G16B16A16_FLOAT,
+      } );
+
     #endregion
 
   }

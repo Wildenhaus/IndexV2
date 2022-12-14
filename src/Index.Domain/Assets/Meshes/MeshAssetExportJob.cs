@@ -1,6 +1,7 @@
 ﻿using Assimp;
 using Index.Domain.Assets.Textures;
 using Index.Jobs;
+using Index.Textures;
 using Prism.Ioc;
 
 namespace Index.Domain.Assets.Meshes

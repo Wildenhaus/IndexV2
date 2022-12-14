@@ -106,6 +106,12 @@ namespace Index.Textures
     public Stream[] CreateTiffImageStreams( ScratchImage dxgiImage, bool includeMips = false )
       => CreateRgbImageStreams( dxgiImage, DxgiConversionInfo.TIFF, includeMips, ( dds, index ) => dds.SaveToWICMemory( index, WIC_FLAGS.NONE, WIC_CODEC_TIF ) );
 
+    public ImagePostProcessor CreatePostProcessor( ScratchImage dxgiImage )
+    {
+      var streams = CreateTiffImageStreams( dxgiImage );
+      return ImagePostProcessor.Create( streams );
+    }
+
     #endregion
 
     #region Private Methods
@@ -182,6 +188,20 @@ namespace Index.Textures
         rgbImage = sourceImage.Decompress( conversionInfo.DefaultFormat );
       else
         rgbImage = sourceImage.Convert( conversionInfo.DefaultFormat, TEX_FILTER_FLAGS.DEFAULT, 0 );
+
+      return true;
+    }
+
+    private bool CoerceDDSImageToRgbColorspace( ScratchImage sourceImage, DXGI_FORMAT cformat, out ScratchImage rgbImage )
+    {
+      rgbImage = sourceImage;
+      var format = sourceImage.GetMetadata().Format;
+
+      // If compressed with BCx compression
+      if ( format.ToString().StartsWith( "BC" ) )
+        rgbImage = sourceImage.Decompress( cformat );
+      else
+        rgbImage = sourceImage.Convert( cformat, TEX_FILTER_FLAGS.DEFAULT, 0 );
 
       return true;
     }

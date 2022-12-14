@@ -1,4 +1,4 @@
-﻿namespace Index.Domain.Assets.Textures
+﻿namespace Index.Textures
 {
 
   public enum NormalMapFormat

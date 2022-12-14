@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="DirectXTexNet" Version="1.0.3" />
+    <PackageReference Include="Magick.NET-Q16-HDRI-x64" Version="12.2.1" />
   </ItemGroup>
 
 </Project>

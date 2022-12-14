@@ -7,7 +7,7 @@
                                   xmlns:views="clr-namespace:Index.UI.Views;assembly=Index.UI"
                                   xmlns:ext="clr-namespace:Index.UI.Extensions;assembly=Index.UI"
                                   xmlns:mesh="clr-namespace:Index.Domain.Assets.Meshes;assembly=Index.Domain"
-                                  xmlns:tex="clr-namespace:Index.Domain.Assets.Textures;assembly=Index.Domain"
+                                  xmlns:tex="clr-namespace:Index.Textures;assembly=Index.Core"
                                   d:DesignHeight="450"
                                   d:DesignWidth="800"
                                   mc:Ignorable="d">
@@ -88,6 +88,8 @@
                     <RowDefinition Height="3" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="3" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="3" />
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0"
@@ -98,7 +100,24 @@
                           SelectedValuePath="Value"
                           DisplayMemberPath="Description"
                           SelectedValue="{Binding Options.TextureOptions.ExportFormat}"
-                          ItemsSource="{Binding Source={ext:Enum {x:Type tex:TextureExportFormat}}}" />
+                          ItemsSource="{Binding Source={ext:Enum {x:Type tex:ImageFormat}}}" />
+
+                <TextBlock Grid.Row="2"
+                           Grid.Column="0"
+                           Text="Normal Map Format" />
+                <ComboBox Grid.Row="2"
+                          Grid.Column="1"
+                          SelectedValuePath="Value"
+                          DisplayMemberPath="Description"
+                          SelectedValue="{Binding Options.NormalMapFormat}"
+                          ItemsSource="{Binding Source={ext:Enum {x:Type tex:NormalMapFormat}}}" />
+
+                <TextBlock Grid.Row="4"
+                           Grid.Column="0"
+                           Text="Recalculate Z Channel" />
+                <CheckBox Grid.Row="4"
+                          Grid.Column="1"
+                          IsChecked="{Binding Options.RecalculateZChannel}" />
 
             </Grid>
         </GroupBox>

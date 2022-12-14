@@ -5,7 +5,7 @@
                                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                                   xmlns:local="clr-namespace:Index.Modules.TextureEditor.Views"
                                   xmlns:ext="clr-namespace:Index.UI.Extensions;assembly=Index.UI"
-                                  xmlns:tex="clr-namespace:Index.Domain.Assets.Textures;assembly=Index.Domain"
+                                  xmlns:tex="clr-namespace:Index.Textures;assembly=Index.Core"
                                   xmlns:views="clr-namespace:Index.UI.Views;assembly=Index.UI"
                                   d:DesignHeight="450"
                                   d:DesignWidth="800"
@@ -40,7 +40,7 @@
                           SelectedValuePath="Value"
                           DisplayMemberPath="Description"
                           SelectedValue="{Binding Options.ExportFormat}"
-                          ItemsSource="{Binding Source={ext:Enum {x:Type tex:TextureExportFormat}}}" />
+                          ItemsSource="{Binding Source={ext:Enum {x:Type tex:ImageFormat}}}" />
 
             </Grid>
 

@@ -3,6 +3,7 @@ using Index.Domain.Assets;
 using Index.UI.Controls.Buttons;
 using Prism.Commands;
 using Prism.Ioc;
+using Prism.Services.Dialogs;
 
 namespace Index.UI.ViewModels
 {
@@ -36,6 +37,14 @@ namespace Index.UI.ViewModels
     protected override void OnConfigureButtons( DialogButtonBuilder builder )
     {
       builder.AddButton().Content( "Export" ).Command( ExportCommand );
+    }
+
+    public override void OnDialogOpened( IDialogParameters parameters )
+    {
+      base.OnDialogOpened( parameters );
+
+      var assetReference = Parameters.GetValue<IAssetReference>( "AssetReference" );
+      Title = $"Export Options | {assetReference.AssetName}";
     }
 
     public override void OnDialogClosed()

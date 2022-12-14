@@ -32,6 +32,8 @@ namespace Index.Textures
     Stream CreateTiffImageStream( ScratchImage dxgiImage, int imageIndex = 0 );
     Stream[] CreateTiffImageStreams( ScratchImage dxgiImage, bool includeMips = false );
 
+    ImagePostProcessor CreatePostProcessor( ScratchImage dxgiImage );
+
     #endregion
 
   }

@@ -198,6 +198,8 @@ namespace Index.UI.Commands
       var jobType = asset.ExportJobType;
 
       var parameters = new DialogParameters();
+      parameters.Add( "Asset", asset );
+      parameters.Add( "AssetReference", asset.AssetReference );
       parameters.Add( "OptionsType", optionsType );
       parameters.Add( "JobType", jobType );
 

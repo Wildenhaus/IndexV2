@@ -223,7 +223,13 @@ namespace Index.Jobs
     protected void RaiseFaultedEvent() => Faulted?.Invoke( this, EventArgs.Empty );
 
     protected void SetStatus( string message, params object[] formatArgs )
-      => Progress.Status = string.Format( message, formatArgs );
+    {
+      Progress.Status = string.Format( message, formatArgs );
+      Progress.SubStatus = string.Empty;
+    }
+
+    protected void SetSubStatus( string message, params object[] formatArgs )
+     => Progress.SubStatus = string.Format( message, formatArgs );
 
     protected void SetIndeterminate( bool indeterminate = true )
       => Progress.IsIndeterminate = indeterminate;
