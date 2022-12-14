@@ -51,11 +51,11 @@ namespace Index.Modules.MeshEditor.ViewModels
           meshNode.Visible = false;
       }
 
-      helixScene.Root.ForceUpdateTransformsAndBounds();
-
       GroupModel.Dispatcher.Invoke( () =>
       {
         GroupModel.AddNode( helixScene.Root );
+        GroupModel.SceneNode.ForceUpdateTransformsAndBounds();
+        GroupModel.GroupNode.ForceUpdateTransformsAndBounds();
       } );
     }
 
