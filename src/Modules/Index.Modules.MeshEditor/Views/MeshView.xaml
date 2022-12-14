@@ -49,8 +49,13 @@
             </hx:Viewport3DX.InputBindings>
 
             <hx:Element3DPresenter Content="{Binding Model, RelativeSource={RelativeSource AncestorType={x:Type local:MeshView}}}" />
-            <hx:DirectionalLight3D Direction="{Binding Camera.LookDirection, RelativeSource={RelativeSource AncestorType={x:Type local:MeshView}}}"
-                                   Color="#FFF" />
+            <!--<hx:DirectionalLight3D Direction="{Binding Camera.LookDirection, RelativeSource={RelativeSource AncestorType={x:Type local:MeshView}}}"
+                                   Color="#FFF" />-->
+
+            <hx:PointLight3D Position="{Binding Camera.Position, RelativeSource={RelativeSource AncestorType={x:Type local:MeshView}}}"
+                             Range="5000"
+                             Attenuation="1,0,0"
+                             Color="#FFF"  />
 
             <hx:Viewport3DX.Content2D>
                 <controls:ViewportDisplay Foreground="{DynamicResource Brushes.Foreground.Static}"
