@@ -5,6 +5,7 @@ using Index.Profiles.HaloCEA.Common;
 using Index.Profiles.HaloCEA.Meshes;
 using LibSaber.HaloCEA.Structures;
 using Prism.Ioc;
+using M4 = System.Numerics.Matrix4x4;
 
 namespace Index.Profiles.HaloCEA.Jobs
 {
@@ -69,7 +70,7 @@ namespace Index.Profiles.HaloCEA.Jobs
       parent.Children.Add( node );
       Context.Nodes[ obj.ObjectInfo.Id ] = node;
 
-      var transform = GetTransform( obj );
+      var transform = CalculateWorldTransform( obj );
       node.Transform = transform;
 
       foreach ( var child in Context.EnumerateObjectChildren( obj ) )
@@ -115,18 +116,24 @@ namespace Index.Profiles.HaloCEA.Jobs
 
     private void AddSubMesh( SaberObject obj, SubmeshInfo submeshInfo )
     {
-      var mesh = MeshBuilder.Build( Context, obj, submeshInfo );
+      var meshBuilder = MeshBuilder.Build( Context, obj, submeshInfo );
 
       var meshNodeParent = Context.Nodes[ obj.ObjectInfo.Id ];
       var meshNode = new Node( obj.ObjectInfo.Name, meshNodeParent );
       meshNodeParent.Children.Add( meshNode );
 
       var meshIndex = Context.Scene.MeshCount;
-      Context.Scene.Meshes.Add( mesh );
+      Context.Scene.Meshes.Add( meshBuilder.Mesh );
       meshNode.MeshIndices.Add( meshIndex );
 
-      var t = meshNodeParent.Transform;
-      t.Inverse();
+      if ( meshBuilder.SkinCompoundObject is not null )
+      {
+        var worldTransform = Context.WorldTransforms[ obj.ObjectInfo.Id ];
+        var localTransform = obj.Matrix.Value.ToAssimp();
+        localTransform.Transpose();
+
+        meshNodeParent.Transform = localTransform * worldTransform;
+      }
     }
 
     private void AddMaterials( IList<TextureListEntry> textures )
@@ -145,15 +152,45 @@ namespace Index.Profiles.HaloCEA.Jobs
       IncreaseCompletedUnits( 1 );
     }
 
-    protected Assimp.Matrix4x4 GetTransform( SaberObject obj, SubmeshInfo submeshInfo = null )
+    protected Matrix4x4 CalculateWorldTransform( SaberObject obj )
     {
-      var transform = System.Numerics.Matrix4x4.Identity;
+      // I have no idea why the f#!% this works
+      // I literally just tried a bunch of combinations.
+      var transform = M4.Transpose( obj.Matrix.Value );
 
-      var parent = obj;
-      transform *= System.Numerics.Matrix4x4.Transpose( parent.Matrix.Value );
+      var objectId = obj.ObjectInfo.Id;
+      var inverseMatrices = Context.InverseMatrices;
+      var worldTransforms = Context.WorldTransforms;
+      if ( inverseMatrices is not null )
+      {
+        if ( objectId < inverseMatrices.Length )
+        {
+          var parentId = obj.ParentId;
+          var parentTransform = M4.Identity;
+          if ( parentId.HasValue )
+            parentTransform = worldTransforms[ ( short ) parentId.Value ].ToNumerics();
 
-      var m = transform.ToAssimp();
-      return m;
+          var invMatrix = M4.Transpose( inverseMatrices[ objectId ] );
+          M4.Invert( invMatrix, out invMatrix );
+
+          M4.Invert( parentTransform, out var invParent );
+          transform = invParent * invMatrix;
+        }
+      }
+
+      // Compute the world transform from the inverse matrix
+      {
+        var parentId = obj.ParentId;
+        var parentTransform = M4.Identity;
+        if ( parentId.HasValue )
+          parentTransform = worldTransforms[ ( short ) parentId.Value ].ToNumerics();
+
+        var nodeTransform = transform;
+        var worldTransform = parentTransform * nodeTransform;
+        worldTransforms.Add( objectId, worldTransform.ToAssimp() );
+      }
+
+      return transform.ToAssimp();
     }
 
     #endregion

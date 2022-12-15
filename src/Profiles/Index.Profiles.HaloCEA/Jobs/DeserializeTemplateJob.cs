@@ -31,6 +31,10 @@ namespace Index.Profiles.HaloCEA.Jobs
         var template = Template.Deserialize( reader, new SerializationContext() );
         var context = SceneContext.Create( template.Data_02E4.Objects );
 
+        var inverseMatrixData = template.Data_02E4.Sentinel_0305;
+        if ( inverseMatrixData.HasValue )
+          context.InverseMatrices = inverseMatrixData.Value.Sentinel_030D_02;
+
         Parameters.Set( context );
         Parameters.Set( template );
         Parameters.Set( template.Data_02E4.TextureList );

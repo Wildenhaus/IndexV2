@@ -21,6 +21,9 @@ namespace Index.Profiles.HaloCEA.Meshes
     public HashSet<short> SkinCompoundIds { get; private set; }
     public HashSet<short> SharingObjectIds { get; private set; }
 
+    public System.Numerics.Matrix4x4[] InverseMatrices { get; set; }
+    public Dictionary<short, Matrix4x4> WorldTransforms { get; private set; }
+
     public Node RootNode
     {
       get => Scene.RootNode;
@@ -37,6 +40,7 @@ namespace Index.Profiles.HaloCEA.Meshes
       RootNode = new Node( "ROOT" );
 
       Nodes = new Dictionary<short, Node>();
+      WorldTransforms = new Dictionary<short, Matrix4x4>();
     }
 
     public static SceneContext Create( IList<SaberObject> objects )

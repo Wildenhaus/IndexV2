@@ -3,7 +3,6 @@ using System.Runtime.InteropServices;
 using Assimp;
 using Index.Profiles.HaloCEA.Common;
 using LibSaber.HaloCEA.Structures;
-using LibSaber.Shared.Structures;
 
 namespace Index.Profiles.HaloCEA.Meshes
 {
@@ -24,9 +23,9 @@ namespace Index.Profiles.HaloCEA.Meshes
 
     protected SceneContext Context { get; }
 
-    protected SaberObject Object { get; }
-    protected SaberObject SkinCompoundObject { get; }
-    protected SaberObject SharingObject { get; }
+    public SaberObject Object { get; }
+    public SaberObject SkinCompoundObject { get; }
+    public SaberObject SharingObject { get; }
 
     protected SubmeshInfo SubmeshInfo { get; }
 
@@ -52,7 +51,7 @@ namespace Index.Profiles.HaloCEA.Meshes
       _vertexLookup = new Dictionary<int, int>();
     }
 
-    public static Mesh Build( SceneContext context, SaberObject obj, SubmeshInfo submeshInfo )
+    public static MeshBuilder Build( SceneContext context, SaberObject obj, SubmeshInfo submeshInfo )
     {
       var builder = new MeshBuilder( context, obj, submeshInfo );
       builder.Build();
@@ -64,7 +63,7 @@ namespace Index.Profiles.HaloCEA.Meshes
           System.Diagnostics.Debugger.Break();
       }
 
-      return builder.Mesh;
+      return builder;
     }
 
     #endregion
