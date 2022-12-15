@@ -39,15 +39,6 @@ namespace Index.UI.Windows
 
     #endregion
 
-    #region Overrides
-
-    protected override void OnPreviewMouseDown( MouseButtonEventArgs e )
-    {
-      Keyboard.ClearFocus();
-    }
-
-    #endregion
-
     #region Private Methods
 
     private IntPtr WindowProc( IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled )
