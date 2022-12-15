@@ -126,7 +126,7 @@ namespace Index.Profiles.HaloCEA.Jobs
       Context.Scene.Meshes.Add( meshBuilder.Mesh );
       meshNode.MeshIndices.Add( meshIndex );
 
-      if ( meshBuilder.SkinCompoundObject is not null )
+      if ( meshBuilder.SkinCompoundObject is not null && Context.InverseMatrices is not null )
       {
         var worldTransform = Context.WorldTransforms[ obj.ObjectInfo.Id ];
         var localTransform = obj.Matrix.Value.ToAssimp();
