@@ -20,10 +20,12 @@ namespace Index.UI.ViewModels
 
     #region Properties
 
+    public bool ShowProgressOverlay { get; protected set; }
+    public IProgressInfo Progress { get; protected set; }
+
     public bool IsInitializing { get; private set; }
     public bool IsInitialized { get; private set; }
     public DelegateCommand CancelInitializationCommand { get; private set; }
-    public IProgressInfo InitializationProgress { get; private set; }
 
     #endregion
 
@@ -47,12 +49,13 @@ namespace Index.UI.ViewModels
       _initializationJob = CreateInitializationJob( _container );
       ASSERT_NOT_NULL( _initializationJob );
 
-      InitializationProgress = _initializationJob.Progress;
+      Progress = _initializationJob.Progress;
       CancelInitializationCommand = new DelegateCommand( CancelInitialization,
         () => !_initializationJob?.IsCancellationRequested ?? false );
 
       _jobManager.StartJob( _initializationJob, InitializationJobCompleted );
       IsInitializing = true;
+      ShowProgressOverlay = true;
     }
 
     public void CancelInitialization()
@@ -84,6 +87,8 @@ namespace Index.UI.ViewModels
       OnInitializationJobCompleted( job );
       IsInitializing = false;
       IsInitialized = true;
+      ShowProgressOverlay = false;
+      Progress = null;
       _initializationJob = null;
 
       ConfigureContextMenu();

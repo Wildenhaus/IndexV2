@@ -4,14 +4,15 @@ using Prism.Commands;
 namespace Index.UI.ViewModels
 {
 
-  public interface IInitializableViewModel : IViewModel
+  public interface IInitializableViewModel : IProgressOverlayViewModel
   {
 
     #region Properties
 
     public bool IsInitializing { get; }
+    public bool IsInitialized { get; }
     public DelegateCommand CancelInitializationCommand { get; }
-    public IProgressInfo InitializationProgress { get; }
+    public IProgressInfo Progress { get; }
 
     #endregion
 

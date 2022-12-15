@@ -90,6 +90,9 @@ namespace Index.UI.ViewModels
     {
     }
 
+    public virtual void ConfirmNavigationRequest( NavigationContext navigationContext, Action<bool> continuationCallback )
+      => continuationCallback( true );
+
     #endregion
 
     #region INavigationAware Methods

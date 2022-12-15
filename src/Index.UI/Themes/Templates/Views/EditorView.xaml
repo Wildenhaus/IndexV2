@@ -23,18 +23,18 @@
                        Fill="Black"
                        Opacity="0"
                        Panel.ZIndex="999998"
-                       Visibility="{Binding IsInitializing, Converter={StaticResource VisibilityConverter}}" />
+                       Visibility="{Binding ShowProgressOverlay, Converter={StaticResource VisibilityConverter}}" />
 
             <controls:IxProgressOverlay x:Name="PART_ProgressOverlay"
                                         Panel.ZIndex="999999"
                                         CancelCommand="{Binding CancelInitializationCommand}"
-                                        ProgressInfo="{Binding InitializationProgress}" 
-                                        Visibility="{Binding IsInitializing, Converter={StaticResource VisibilityConverter}}"/>
+                                        ProgressInfo="{Binding Progress}" 
+                                        Visibility="{Binding ShowProgressOverlay, Converter={StaticResource VisibilityConverter}}"/>
 
         </Grid>
 
         <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding IsInitializing}" Value="True">
+            <DataTrigger Binding="{Binding ShowProgressOverlay}" Value="True">
                 <DataTrigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>

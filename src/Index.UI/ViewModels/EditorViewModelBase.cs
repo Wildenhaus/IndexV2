@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Index.Domain.Assets;
 using Index.Domain.Jobs;
@@ -9,6 +10,7 @@ using Index.Utilities;
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 using PropertyChanged;
 
 namespace Index.UI.ViewModels
@@ -21,10 +23,14 @@ namespace Index.UI.ViewModels
     #region Properties
 
     public string TabName { get; set; }
+
     public ICommand CloseCommand { get; set; }
+    public ICommand ExportAssetCommand { get; protected set; }
 
     public TAsset Asset { get; protected set; }
     public IAssetReference AssetReference { get; protected set; }
+
+    public bool IsExporting { get; protected set; }
 
     [DoNotNotify] protected IContainerProvider Container { get; }
     [DoNotNotify] protected IAssetManager AssetManager { get; }
@@ -39,6 +45,9 @@ namespace Index.UI.ViewModels
       Container = container;
       AssetManager = container.Resolve<IAssetManager>();
       CloseCommand = new DelegateCommand( Close );
+
+      if ( typeof( TAsset ).IsAssignableTo( typeof( IExportableAsset ) ) )
+        ExportAssetCommand = new DelegateCommand( ExportAsset );
     }
 
     #endregion
@@ -69,6 +78,11 @@ namespace Index.UI.ViewModels
         TabName = AssetReference.AssetName;
         Initialize();
       }
+    }
+
+    public override void ConfirmNavigationRequest( NavigationContext navigationContext, Action<bool> continuationCallback )
+    {
+      continuationCallback( !IsExporting );
     }
 
     protected override void OnConfigureContextMenu( MenuViewModelBuilder builder )
@@ -113,6 +127,49 @@ namespace Index.UI.ViewModels
 
     private void Close()
       => EditorCommands.CloseTabCommand.Execute( AssetReference );
+
+    private void ExportAsset()
+    {
+      ASSERT( Asset is IExportableAsset );
+
+      var exportableAsset = Asset as IExportableAsset;
+      var optionsType = exportableAsset.ExportOptionsType;
+      var jobType = exportableAsset.ExportJobType;
+
+      var parameters = new DialogParameters();
+      parameters.Add( "Asset", Asset );
+      parameters.Add( "AssetReference", Asset.AssetReference );
+      parameters.Add( "OptionsType", optionsType );
+      parameters.Add( "JobType", jobType );
+
+      var dialogService = Container.Resolve<IDialogService>();
+      dialogService.ShowDialog( optionsType.Name, parameters, result =>
+      {
+        if ( result is null || result.Result != ButtonResult.OK )
+          return;
+
+        var options = result.Parameters.GetValue<object>( "Options" );
+
+        var jobParams = new ParameterCollection();
+        jobParams.Set<IAsset>( "Asset", Asset );
+        jobParams.Set( Asset.AssetReference );
+        jobParams.Set( "Options", options );
+
+        var jobManager = Container.Resolve<IJobManager>();
+        var job = jobManager.CreateJob( jobType, jobParams );
+
+        IsExporting = true;
+        Progress = job.Progress;
+        ShowProgressOverlay = true;
+
+        jobManager.StartJob( job, ( j ) =>
+        {
+          IsExporting = false;
+          ShowProgressOverlay = false;
+          Progress = null;
+        } );
+      } );
+    }
 
     #endregion
 

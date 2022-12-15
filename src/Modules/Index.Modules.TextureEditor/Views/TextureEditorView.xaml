@@ -68,7 +68,7 @@
         <Menu Grid.Row="0"
               Grid.ColumnSpan="2">
             <MenuItem Header="File">
-                <MenuItem Header="Export" Command="{x:Static commands:EditorCommands.ExportAssetCommand}" CommandParameter="{Binding Asset}" />
+                <MenuItem Header="Export" Command="{Binding ExportAssetCommand}" />
             </MenuItem>
         </Menu>
 

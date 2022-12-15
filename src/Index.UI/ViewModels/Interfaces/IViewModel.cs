@@ -7,7 +7,7 @@ using Prism.Regions;
 namespace Index.UI.ViewModels
 {
 
-  public interface IViewModel : IDisposable, INotifyPropertyChanged, INavigationAware
+  public interface IViewModel : IDisposable, INotifyPropertyChanged, INavigationAware, IConfirmNavigationRequest
   {
 
     #region Properties

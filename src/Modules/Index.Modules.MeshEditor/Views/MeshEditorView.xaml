@@ -38,7 +38,7 @@
               Grid.ColumnSpan="2"
               VerticalAlignment="Bottom">
             <MenuItem Header="File">
-                <MenuItem Header="Export" Command="{x:Static commands:EditorCommands.ExportAssetCommand}" CommandParameter="{Binding Asset}" />
+                <MenuItem Header="Export" Command="{Binding ExportAssetCommand}" />
             </MenuItem>
             <MenuItem Header="View">
                 <MenuItem Header="Enable Flycam"
