@@ -53,6 +53,14 @@ namespace Index.Modules.DataExplorer.Services
           continue;
         }
 
+        if ( string.IsNullOrEmpty( group.Key ) )
+        {
+          foreach ( var asset in group )
+            categoryNode.Children.Add( new AssetNodeViewModel( asset ) );
+
+          continue;
+        }
+
         var groupNode = new AssetNodeViewModel( group.Key );
         foreach ( var asset in group )
           groupNode.Children.Add( new AssetNodeViewModel( asset ) );
