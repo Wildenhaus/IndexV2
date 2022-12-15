@@ -24,7 +24,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
+            <RowDefinition Height="22" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -34,8 +34,8 @@
                 Panel.ZIndex="2"
                 BorderThickness="0,0,0,0"
                 BorderBrush="{DynamicResource Brushes.Quarternary.Border.Static}"
-                Background="{DynamicResource Brushes.Secondary.Border.Static}">
-            <TextBlock Margin="0,0,0,2"
+                Background="{DynamicResource Brushes.Secondary.Background.Hover}">
+            <TextBlock Margin="5,0,0,1"
                        VerticalAlignment="Center"
                        Text="Data Explorer"
                        Foreground="{DynamicResource Brushes.Foreground.Static}" />
