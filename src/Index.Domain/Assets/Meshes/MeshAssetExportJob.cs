@@ -3,6 +3,7 @@ using Index.Domain.Assets.Textures;
 using Index.Jobs;
 using Index.Textures;
 using Prism.Ioc;
+using Serilog;
 
 namespace Index.Domain.Assets.Meshes
 {
@@ -96,9 +97,11 @@ namespace Index.Domain.Assets.Meshes
       var textures = Asset.Textures.Values;
       foreach ( var texture in textures )
       {
+        SetSubStatus( "Exporting {textureName} ({completed} of {total})", texture.AssetName, Progress.CompletedUnits, Progress.TotalUnits );
+
         if ( !( texture is IExportableAsset exportableTexture ) )
         {
-          StatusList.AddWarning( "Texture", "Texture {0} is not marked as exportable and will be skipped.", texture.AssetName );
+          Log.Logger.Warning( "Texture", "Texture {0} is not marked as exportable and will be skipped.", texture.AssetName );
           continue;
         }
 
