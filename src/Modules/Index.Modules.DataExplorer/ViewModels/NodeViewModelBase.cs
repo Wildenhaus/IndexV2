@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -78,7 +80,7 @@ namespace Index.Modules.DataExplorer.ViewModels
 
     public bool ApplySearchCriteria( string searchTerm )
     {
-      var isEmpty = string.IsNullOrWhiteSpace( searchTerm );
+      var isEmpty = string.IsNullOrEmpty( searchTerm );
 
       if ( IsLeaf )
       {
@@ -91,17 +93,8 @@ namespace Index.Modules.DataExplorer.ViewModels
       {
         var childrenVisible = false;
 
-        Parallel.ForEach( Children,
-          localInit: () => false,
-          body: ( child, state, idx, localChildrenVisible ) =>
-          {
-            childrenVisible |= child.ApplySearchCriteria( searchTerm );
-            return childrenVisible;
-          },
-          localFinally: ( localChildrenVisible ) =>
-          {
-            childrenVisible |= localChildrenVisible;
-          } );
+        foreach ( var child in _children )
+          childrenVisible |= child.ApplySearchCriteria( searchTerm );
 
         if ( isEmpty )
           childrenVisible = true;
@@ -134,8 +127,9 @@ namespace Index.Modules.DataExplorer.ViewModels
     {
     }
 
+    [MethodImpl( MethodImplOptions.AggressiveInlining )]
     protected virtual bool IsMatchForSearchTerm( string searchTerm )
-      => Name.ToLower().Contains( searchTerm );
+      => Name.Contains( searchTerm, StringComparison.OrdinalIgnoreCase );
 
     #endregion
 

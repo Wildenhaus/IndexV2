@@ -5,6 +5,7 @@ using Index.Domain.Assets;
 using Index.Domain.FileSystem;
 using Index.Domain.Models;
 using Index.Modules.DataExplorer.Services;
+using Index.UI.ViewModels;
 using Index.Utilities;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -14,7 +15,7 @@ using PropertyChanged;
 namespace Index.Modules.DataExplorer.ViewModels
 {
 
-  public class DataExplorerViewModel : BindableBase
+  public class DataExplorerViewModel : ViewModelBase
   {
 
     #region Data Members
@@ -23,7 +24,7 @@ namespace Index.Modules.DataExplorer.ViewModels
     private readonly IFileSystem _fileSystem;
     private readonly IRegionManager _regionManager;
 
-    private readonly ActionDebouncer _searchDebouncer;
+    private readonly ActionThrottler _searchDebouncer;
 
     #endregion
 
@@ -52,10 +53,16 @@ namespace Index.Modules.DataExplorer.ViewModels
 
       NavigateToAssetCommand = new DelegateCommand<IAssetReference>( NavigateToAsset );
 
-      _searchDebouncer = new ActionDebouncer( 1000, ApplySearchTerm );
+      _searchDebouncer = new ActionThrottler( ApplySearchTerm, 500 );
     }
 
     #endregion
+
+    protected override void OnDisposing()
+    {
+      base.OnDisposing();
+      _searchDebouncer.Dispose();
+    }
 
     #region Private Methods
 
@@ -80,11 +87,11 @@ namespace Index.Modules.DataExplorer.ViewModels
     }
 
     private void OnSearchTermChanged()
-      => _searchDebouncer.Invoke();
+      => _searchDebouncer.Execute();
 
     private void ApplySearchTerm()
     {
-      var searchTerm = SearchTerm.ToLower();
+      var searchTerm = SearchTerm;
       foreach ( var node in AssetNodes )
         node.ApplySearchCriteria( searchTerm );
     }

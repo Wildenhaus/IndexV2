@@ -80,7 +80,8 @@
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                     <TextBlock Text="{Binding Name}"
-                               ContextMenu="{Binding ContextMenu}">
+                               VirtualizingPanel.IsVirtualizing="True"
+                               VirtualizingPanel.VirtualizationMode="Recycling">
                         <TextBlock.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick"
                                           Command="{Binding DoubleClickCommand}" />
