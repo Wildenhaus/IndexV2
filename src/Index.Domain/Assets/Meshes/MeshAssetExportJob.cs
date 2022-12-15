@@ -97,11 +97,11 @@ namespace Index.Domain.Assets.Meshes
       var textures = Asset.Textures.Values;
       foreach ( var texture in textures )
       {
-        SetSubStatus( "Exporting {textureName} ({completed} of {total})", texture.AssetName, Progress.CompletedUnits, Progress.TotalUnits );
+        SetSubStatus( "Exporting {0} ({1} of {2})", texture.AssetName, Progress.CompletedUnits, Progress.TotalUnits );
 
         if ( !( texture is IExportableAsset exportableTexture ) )
         {
-          Log.Logger.Warning( "Texture", "Texture {0} is not marked as exportable and will be skipped.", texture.AssetName );
+          Log.Logger.Warning( "Texture", "Texture {assetName} is not marked as exportable and will be skipped.", texture.AssetName );
           continue;
         }
 
