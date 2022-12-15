@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Shapes;
 using Index.UI.Common;
@@ -34,6 +35,15 @@ namespace Index.UI.Windows
       DefaultStyleKeyProperty.OverrideMetadata(
         typeof( IxWindow ),
         new FrameworkPropertyMetadata( typeof( IxWindow ) ) );
+    }
+
+    #endregion
+
+    #region Overrides
+
+    protected override void OnPreviewMouseDown( MouseButtonEventArgs e )
+    {
+      Keyboard.ClearFocus();
     }
 
     #endregion

@@ -57,7 +57,8 @@
                 <Style TargetType="{x:Type controls:IxTextBox}"
                        BasedOn="{StaticResource {x:Type controls:IxTextBox}}">
                     <Style.Triggers>
-                        <Trigger Property="IsFocused" Value="True">
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Setter Property="BorderThickness" Value="0,1,0,1" />
                             <Setter Property="Effect">
                                 <Setter.Value>
                                     <DropShadowEffect x:Name="DropShadow"
