@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using Index.Common;
 using Prism.Ioc;
+using Serilog;
 
 namespace Index.Jobs
 {
@@ -257,6 +258,7 @@ namespace Index.Jobs
       Exception = exception;
       State = JobState.Faulted;
       StatusList.AddError( "Job", exception );
+      Log.Error( exception, "Job `{jobName}` failed: {message}", Name, exception.Message );
 
       _initializationCompletionSource.TrySetResult();
       _executeCompletionSource.TrySetResult();
