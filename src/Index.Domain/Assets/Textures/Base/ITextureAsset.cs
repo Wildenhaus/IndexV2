@@ -3,7 +3,7 @@
 namespace Index.Domain.Assets.Textures
 {
 
-  public interface ITextureAsset : IAsset
+  public interface ITextureAsset : IAsset, IExportableAsset
   {
 
     #region Properties

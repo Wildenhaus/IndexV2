@@ -8,6 +8,9 @@ namespace Index.Domain.Assets.Textures
 
     #region Properties
 
+    public abstract Type ExportOptionsType { get; }
+    public abstract Type ExportJobType { get; }
+
     public override string TypeName => "Texture";
     public override string EditorKey => DefaultEditorKeys.TextureEditor;
 
