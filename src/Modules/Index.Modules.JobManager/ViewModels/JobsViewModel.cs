@@ -34,6 +34,9 @@ namespace Index.Modules.JobManager.ViewModels
 
     private void OnJobStarted( object? sender, IJob job )
     {
+      if ( job.State > JobState.Executing )
+        return;
+
       var model = new JobViewModel( job );
       lock ( _collectionLock )
       {
