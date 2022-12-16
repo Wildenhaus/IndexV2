@@ -201,10 +201,8 @@ namespace Index.Profiles.HaloCEA.Jobs
       if ( textureDefinitionAssetReference is null )
         return null;
 
-      var loadJob = _assetManager.LoadAsset<CEATextureDefinitionAsset>( textureDefinitionAssetReference );
-      await loadJob.Completion;
-
-      return loadJob.Result;
+      var textureDefinition = await _assetManager.LoadAssetAsync<CEATextureDefinitionAsset>( textureDefinitionAssetReference );
+      return textureDefinition;
     }
 
     #endregion

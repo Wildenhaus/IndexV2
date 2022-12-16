@@ -19,6 +19,8 @@ namespace Index.Domain.Assets
 
     IJob<TAsset> LoadAsset<TAsset>( IAssetReference assetReference, IAssetLoadContext loadContext = null )
       where TAsset : class, IAsset;
+    Task<TAsset> LoadAssetAsync<TAsset>( IAssetReference assetReference, IAssetLoadContext loadContext = null )
+      where TAsset : class, IAsset;
 
     void AddAssetReference( IAssetReference assetReference );
     bool TryGetAssetReference( Type assetType, string assetName, out IAssetReference assetReference );

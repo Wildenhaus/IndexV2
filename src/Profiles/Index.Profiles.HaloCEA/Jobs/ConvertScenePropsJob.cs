@@ -79,22 +79,21 @@ namespace Index.Profiles.HaloCEA.Jobs
       {
         if ( !AssetManager.TryGetAssetReference( typeof( IMeshAsset ), templateName, out var templateAssetRef ) )
         {
-          if ( !TryLoadEmbeddedPropTemplate( templateName, out var loadEmbeddedPropJob ) )
+          var embeddedPropTemplate = await TryLoadEmbeddedPropTemplate( templateName );
+          if ( embeddedPropTemplate is null )
           {
             Log.Logger.Error( "Could not find prop: {propName}", templateName );
             continue;
           }
 
-          await loadEmbeddedPropJob.Completion;
-          loadedProps.Add( templateName, loadEmbeddedPropJob.Result );
+          loadedProps.Add( templateName, embeddedPropTemplate );
           IncreaseCompletedUnits( 1 );
         }
         else
         {
-          var job = AssetManager.LoadAsset<IMeshAsset>( templateAssetRef, AssetLoadContext );
-          await job.Completion;
+          var propTemplateAsset = await AssetManager.LoadAssetAsync<IMeshAsset>( templateAssetRef, AssetLoadContext );
 
-          loadedProps.Add( templateName, job.Result );
+          loadedProps.Add( templateName, propTemplateAsset );
           IncreaseCompletedUnits( 1 );
         }
       }
@@ -102,14 +101,12 @@ namespace Index.Profiles.HaloCEA.Jobs
       return loadedProps;
     }
 
-    private bool TryLoadEmbeddedPropTemplate( string templateName, out IJob<IMeshAsset> loadEmbeddedPropJob )
+    private async Task<IMeshAsset> TryLoadEmbeddedPropTemplate( string templateName )
     {
-      loadEmbeddedPropJob = default;
-
       var tplName = templateName.Substring( templateName.IndexOf( '/' ) + 1 );
       var tplData = Scene.TemplateList.FirstOrDefault( x => x.TemplateInfo.Value.Name == tplName );
       if ( tplData is null )
-        return false;
+        return null;
 
       var embeddedPropContext = SceneContext.Create( tplData.Objects );
 
@@ -120,8 +117,10 @@ namespace Index.Profiles.HaloCEA.Jobs
       parameters.Set( tplData.TextureList ?? new TextureList() );
       parameters.Set( "Textures", Textures );
 
-      loadEmbeddedPropJob = JobManager.StartJob<LoadEmbeddedTemplateJob>( parameters );
-      return true;
+      var job = JobManager.StartJob<LoadEmbeddedTemplateJob>( parameters );
+      await job.Completion;
+
+      return job.Result;
     }
 
     private void AddProps( Dictionary<string, IMeshAsset> loadedProps )

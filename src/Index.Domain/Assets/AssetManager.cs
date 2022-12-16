@@ -88,6 +88,15 @@ namespace Index.Domain.Assets
       return loadAssetJob;
     }
 
+    public async Task<TAsset> LoadAssetAsync<TAsset>( IAssetReference assetReference, IAssetLoadContext loadContext = null )
+      where TAsset : class, IAsset
+    {
+      var loadJob = LoadAsset<TAsset>( assetReference, loadContext );
+      await loadJob.Completion;
+
+      return loadJob.Result;
+    }
+
     public void AddAssetReference( IAssetReference assetReference )
     {
       var assetType = assetReference.AssetType;
