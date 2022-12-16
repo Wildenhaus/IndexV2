@@ -18,35 +18,35 @@ namespace LibSaber.HaloCEA.Structures
 
     [Sentinel( SentinelIds.ObjectAnim_IniTranslation )]
     [SaberInternalName( "iniTranslation" )]
-    public Vector3 TranslationInitial;
+    public Vector3? TranslationInitial;
 
     [Sentinel( SentinelIds.ObjectAnim_PTranslation )]
     [SaberInternalName( "pTranslation" )]
-    public SplineData TranslationSpline;
+    public SplineData? TranslationSpline;
 
     [Sentinel( SentinelIds.ObjectAnim_IniRotation )]
     [SaberInternalName( "iniRotation" )]
-    public Vector4 RotationInitial;
+    public Vector4? RotationInitial;
 
     [Sentinel( SentinelIds.ObjectAnim_PRotation )]
     [SaberInternalName( "pRotation" )]
-    public SplineData RotationSpline;
+    public SplineData? RotationSpline;
 
     [Sentinel( SentinelIds.ObjectAnim_IniScale )]
     [SaberInternalName( "iniScale" )]
-    public Vector3 ScaleInitial;
+    public Vector3? ScaleInitial;
 
     [Sentinel( SentinelIds.ObjectAnim_PScale )]
     [SaberInternalName( "pScale" )]
-    public SplineData ScaleSpline;
+    public SplineData? ScaleSpline;
 
-    [Sentinel( SentinelIds.ObjectAnim_PVisibility )]
+    [Sentinel( SentinelIds.ObjectAnim_IniVisibility )]
     [SaberInternalName( "iniVisibility" )]
-    public float VisibilityInitial;
+    public float? VisibilityInitial;
 
     [Sentinel( SentinelIds.ObjectAnim_PVisibility )]
     [SaberInternalName( "pVisibility" )]
-    public SplineData VisibilitySpline;
+    public SplineData? VisibilitySpline;
 
     #endregion
 
