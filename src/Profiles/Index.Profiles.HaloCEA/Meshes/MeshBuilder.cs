@@ -407,7 +407,7 @@ namespace Index.Profiles.HaloCEA.Meshes
       var rootBoneObjectId = skinData.FirstObjectId;
 
       var boneIdBuffer = skinData.BoneIds.AsSpan( vertexOffset, vertexCount );
-      var boneWeightBuffer = skinData.BoneIds.AsSpan( vertexOffset, vertexCount );
+      var boneWeightBuffer = skinData.BoneWeights.AsSpan( vertexOffset, vertexCount );
       for ( var i = 0; i < vertexCount; i++ )
       {
         var boneIds = boneIdBuffer[ i ];
