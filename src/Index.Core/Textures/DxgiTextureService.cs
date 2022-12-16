@@ -108,7 +108,7 @@ namespace Index.Textures
 
     public ImagePostProcessor CreatePostProcessor( ScratchImage dxgiImage )
     {
-      var streams = CreateTiffImageStreams( dxgiImage );
+      var streams = CreateRgbImageStreams( dxgiImage, DxgiConversionInfo.POST_PROCESS, false, ( dds, index ) => dds.SaveToDDSMemory( index, DDS_FLAGS.NONE ) );
       return ImagePostProcessor.Create( streams );
     }
 

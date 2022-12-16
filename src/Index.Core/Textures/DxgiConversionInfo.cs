@@ -178,11 +178,11 @@ namespace Index.Textures
       } );
 
     public static readonly DxgiConversionInfo POST_PROCESS = DxgiConversionInfo.Define(
-      formatId: "HDR",
-      defaultFormat: DXGI_FORMAT.R16G16B16A16_FLOAT,
+      formatId: "POST_PROCESS",
+      defaultFormat: DXGI_FORMAT.R8G8B8A8_UNORM,
       supportedFormats: new DXGI_FORMAT[]
       {
-        DXGI_FORMAT.R16G16B16A16_FLOAT,
+        DXGI_FORMAT.R8G8B8A8_UNORM,
       } );
 
     #endregion
