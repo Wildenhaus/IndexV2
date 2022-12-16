@@ -158,6 +158,9 @@ namespace Index.UI.ViewModels
         var jobManager = Container.Resolve<IJobManager>();
         var job = jobManager.CreateJob( jobType, jobParams );
 
+        if ( job.State == JobState.Completed )
+          return;
+
         IsExporting = true;
         Progress = job.Progress;
         ShowProgressOverlay = true;
