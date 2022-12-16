@@ -30,8 +30,12 @@ namespace Index.Domain.Assets.Text
       var exportStream = Asset.TextStream;
       exportStream.Position = 0;
 
-      var exportFileName = Asset.AssetName;
+      var exportFileName = Path.GetFileName( Asset.AssetName );
       var exportFilePath = Path.Combine( Options.ExportPath, exportFileName );
+
+      var exportDir = Path.GetDirectoryName( exportFilePath );
+      if ( !Directory.Exists( exportDir ) )
+        Directory.CreateDirectory( exportDir );
 
       using ( var fs = File.Create( exportFilePath ) )
       {
