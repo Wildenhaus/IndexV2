@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Index.UI.Extensions;
 using Index.Utilities;
 using Microsoft.Xaml.Behaviors;
 using Prism.Regions;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Index.UI.Commands
 {
@@ -52,13 +54,17 @@ namespace Index.UI.Commands
       if ( view is null )
         return;
 
-      if ( view.DataContext is IDisposable disposableViewModel )
-        disposableViewModel?.Dispose();
+      var disposeTasks = new Task[ 2 ];
+      disposeTasks[ 0 ] = Task.CompletedTask;
+      disposeTasks[ 1 ] = Task.CompletedTask;
 
       if ( item is IDisposable disposableTab )
-        disposableTab?.Dispose();
+        disposeTasks[ 0 ] = Task.Run( () => disposableTab?.Dispose() );
 
-      GCHelper.ForceCollect();
+      if ( view.DataContext is IDisposable disposableViewModel )
+        disposeTasks[ 1 ] = Task.Run( () => disposableViewModel.Dispose() );
+
+      Task.WhenAll( disposeTasks ).ContinueWith( t => { GCHelper.ForceCollect(); } );
     }
 
     private bool CanRemove( object item, NavigationContext navigationContext )

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using Index.Domain;
 using Index.Domain.Assets;
@@ -143,13 +145,17 @@ namespace Index.UI.Commands
       if ( view is null )
         return;
 
-      if ( view.DataContext is IDisposable disposableViewModel )
-        disposableViewModel?.Dispose();
+      var disposeTasks = new Task[ 2 ];
+      disposeTasks[ 0 ] = Task.CompletedTask;
+      disposeTasks[ 1 ] = Task.CompletedTask;
 
       if ( tab is IDisposable disposableTab )
-        disposableTab?.Dispose();
+        disposeTasks[ 0 ] = Task.Run( () => disposableTab?.Dispose() );
 
-      GCHelper.ForceCollect();
+      if ( view.DataContext is IDisposable disposableViewModel )
+        disposeTasks[ 1 ] = Task.Run( () => disposableViewModel.Dispose() );
+
+      Task.WhenAll( disposeTasks ).ContinueWith( t => { GCHelper.ForceCollect(); } );
     }
 
     private static bool CanRemoveTabFromRegion( object item, NavigationContext navigationContext )
