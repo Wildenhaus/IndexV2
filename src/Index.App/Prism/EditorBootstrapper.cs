@@ -6,6 +6,7 @@ using Index.Modules.DataExplorer;
 using Index.Modules.JobManager;
 using Index.Modules.Logging;
 using Index.Modules.MeshEditor;
+using Index.Modules.TextEditor;
 using Index.Modules.TextureEditor;
 using Index.UI.Commands;
 using Index.UI.Windows;
@@ -40,6 +41,7 @@ namespace Index.App.Prism
       moduleCatalog.AddModule<JobManagerModule>();
       moduleCatalog.AddModule<DataExplorerModule>();
 
+      moduleCatalog.AddModule<TextEditorModule>();
       moduleCatalog.AddModule<TextureEditorModule>();
       moduleCatalog.AddModule<MeshEditorModule>();
     }

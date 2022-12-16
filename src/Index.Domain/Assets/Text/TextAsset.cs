@@ -24,6 +24,16 @@ namespace Index.Domain.Assets.Text
 
     #endregion
 
+    #region Overrides
+
+    protected override void OnDisposing()
+    {
+      base.OnDisposing();
+      TextStream?.Dispose();
+    }
+
+    #endregion
+
   }
 
 }
