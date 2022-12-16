@@ -12,6 +12,9 @@ namespace Index.Domain.Jobs
       InternalSetAsCompleted();
     }
 
+    public static CompletedJob<T> FromResult<T>( T result )
+      => new CompletedJob<T>( result );
+
   }
 
   public class CompletedJob<T> : JobBase<T>

@@ -17,6 +17,15 @@ namespace Index.Profiles.HaloCEA.FileSystem.Files
 
     #region Properties
 
+    public override string DisplayName
+    {
+      get => $"{Device.Root.Name}/{Name}";
+    }
+
+    #endregion
+
+    #region Properties
+
     public long StartOffset
     {
       get => GetMetadata<long>( META_START_OFFSET );

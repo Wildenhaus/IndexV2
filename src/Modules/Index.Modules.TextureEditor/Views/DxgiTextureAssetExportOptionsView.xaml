@@ -28,12 +28,15 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="22" />
+                    <RowDefinition Height="3" />
+                    <RowDefinition Height="22" />
                     <RowDefinition Height="3" />
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0"
                            Grid.Column="0"
+                           VerticalAlignment="Center"
                            Text="Export Format" />
                 <ComboBox Grid.Row="0"
                           Grid.Column="1"
@@ -42,6 +45,14 @@
                           SelectedValue="{Binding Options.ExportFormat}"
                           ItemsSource="{Binding Source={ext:Enum {x:Type tex:ImageFormat}}}" />
 
+                <TextBlock Grid.Row="2"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Text="Export Additional Data" />
+                <CheckBox Grid.Row="2"
+                          Grid.Column="1"
+                          IsChecked="{Binding Options.ExportAdditionalData}" />
+                
             </Grid>
 
         </GroupBox>
@@ -58,14 +69,15 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="22" />
                     <RowDefinition Height="3" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="22" />
                     <RowDefinition Height="3" />
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0"
                            Grid.Column="0"
+                           VerticalAlignment="Center"
                            Text="Normal Map Format" />
                 <ComboBox Grid.Row="0"
                           Grid.Column="1"
@@ -76,6 +88,7 @@
 
                 <TextBlock Grid.Row="2"
                            Grid.Column="0"
+                           VerticalAlignment="Center"
                            Text="Recalculate Z Channel" />
                 <CheckBox Grid.Row="2"
                           Grid.Column="1"

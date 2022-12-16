@@ -1,4 +1,5 @@
 ﻿using Index.Domain.FileSystem;
+using Index.Domain.Models;
 
 namespace Index.Domain.GameProfiles
 {
@@ -22,6 +23,7 @@ namespace Index.Domain.GameProfiles
     #region Public Methods
 
     Stream? LoadGameIcon();
+    Task Initialize( IEditorEnvironment environment );
 
     #endregion
 

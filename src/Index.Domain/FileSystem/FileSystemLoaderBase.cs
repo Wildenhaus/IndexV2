@@ -12,6 +12,12 @@
 
     #endregion
 
+    #region Properties
+
+    protected IReadOnlyList<IFileSystemDevice> Devices => _loadedDevices;
+
+    #endregion
+
     #region Constructor
 
     protected FileSystemLoaderBase()
@@ -45,6 +51,14 @@
     #region Private Methods
 
     protected abstract Task OnLoadDevices();
+
+    protected async Task AddDevice( IFileSystemDevice device )
+    {
+      var result = await device.InitializeAsync();
+
+      if ( result.IsSuccessful )
+        _loadedDevices.Add( device );
+    }
 
     protected async Task LoadDevice( string path, Func<string, IFileSystemDevice> deviceFactory )
     {

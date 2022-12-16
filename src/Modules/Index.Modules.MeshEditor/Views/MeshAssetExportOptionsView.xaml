@@ -28,18 +28,19 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="22" />
                     <RowDefinition Height="3" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="22" />
                     <RowDefinition Height="3" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="22" />
                     <RowDefinition Height="3" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="22" />
                     <RowDefinition Height="3" />
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0"
                            Grid.Column="0"
+                           VerticalAlignment="Center"
                            Text="Export Format" />
                 <ComboBox Grid.Row="0"
                           Grid.Column="1"
@@ -50,6 +51,7 @@
 
                 <TextBlock Grid.Row="2"
                            Grid.Column="0"
+                           VerticalAlignment="Center"
                            Text="Remove LODs" />
                 <CheckBox Grid.Row="2"
                           Grid.Column="1"
@@ -57,6 +59,7 @@
 
                 <TextBlock Grid.Row="4"
                            Grid.Column="0"
+                           VerticalAlignment="Center"
                            Text="Remove Volumes" />
                 <CheckBox Grid.Row="4"
                           Grid.Column="1"
@@ -64,6 +67,7 @@
 
                 <TextBlock Grid.Row="6"
                            Grid.Column="0"
+                           VerticalAlignment="Center"
                            Text="Export Textures" />
                 <CheckBox Grid.Row="6"
                           Grid.Column="1"
@@ -84,16 +88,19 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="22" />
                     <RowDefinition Height="3" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="22" />
                     <RowDefinition Height="3" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="22" />
+                    <RowDefinition Height="3" />
+                    <RowDefinition Height="22" />
                     <RowDefinition Height="3" />
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0"
                            Grid.Column="0"
+                           VerticalAlignment="Center"
                            Text="Export Format" />
                 <ComboBox Grid.Row="0"
                           Grid.Column="1"
@@ -104,18 +111,28 @@
 
                 <TextBlock Grid.Row="2"
                            Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Text="Export Additional Data" />
+                <CheckBox Grid.Row="2"
+                          Grid.Column="1"
+                          IsChecked="{Binding Options.TextureOptions.ExportAdditionalData}" />
+                
+                <TextBlock Grid.Row="4"
+                           Grid.Column="0"
+                           VerticalAlignment="Center"
                            Text="Normal Map Format" />
-                <ComboBox Grid.Row="2"
+                <ComboBox Grid.Row="4"
                           Grid.Column="1"
                           SelectedValuePath="Value"
                           DisplayMemberPath="Description"
                           SelectedValue="{Binding Options.TextureOptions.NormalMapFormat}"
                           ItemsSource="{Binding Source={ext:Enum {x:Type tex:NormalMapFormat}}}" />
 
-                <TextBlock Grid.Row="4"
+                <TextBlock Grid.Row="6"
                            Grid.Column="0"
+                           VerticalAlignment="Center"
                            Text="Recalculate Z Channel" />
-                <CheckBox Grid.Row="4"
+                <CheckBox Grid.Row="6"
                           Grid.Column="1"
                           IsChecked="{Binding Options.TextureOptions.RecalculateZChannel}" />
 

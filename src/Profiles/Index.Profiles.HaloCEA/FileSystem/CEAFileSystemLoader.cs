@@ -41,6 +41,7 @@ namespace Index.Profiles.HaloCEA.FileSystem
     {
       await LoadFilesWithExtension( ".s3dpak", path => new S3DPakDevice( path ), EXCLUDED_FILES );
       await LoadFilesWithExtension( ".ipak", path => new IPakDevice( path ), EXCLUDED_FILES );
+      await AddDevice( new CacheBlockDevice( Devices ) );
     }
 
     #endregion

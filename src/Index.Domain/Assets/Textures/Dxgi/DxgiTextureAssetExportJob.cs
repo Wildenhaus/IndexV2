@@ -32,14 +32,16 @@ namespace Index.Domain.Assets.Textures.Dxgi
 
     #region Overrides
 
-    protected override Task ExportAsset()
+    protected override async Task ExportAsset()
     {
       EnsureExportDirectoryExists();
 
       if ( RequiresPostProcessing() )
-        return ExportAssetWithPostProcessing();
+        await ExportAssetWithPostProcessing();
       else
-        return ExportAssetFromDxgi();
+        await ExportAssetFromDxgi();
+
+      await WriteAdditionalData();
     }
 
     #endregion
@@ -57,7 +59,7 @@ namespace Index.Domain.Assets.Textures.Dxgi
 
     private async Task WriteDDSFile()
     {
-      SetStatus( "Writing File" );
+      SetSubStatus( "Writing Texture File" );
       SetIndeterminate();
 
       using ( var ddsStream = _dxgiTextureService.CreateDDSStream( Asset.DxgiImage ) )
@@ -71,13 +73,13 @@ namespace Index.Domain.Assets.Textures.Dxgi
 
       if ( imageCount > 1 )
       {
-        SetStatus( "Writing Files" );
+        SetSubStatus( "Writing Texture Files" );
         SetTotalUnits( imageCount );
         SetCompletedUnits( 0 );
       }
       else
       {
-        SetStatus( "Writing File" );
+        SetSubStatus( "Writing Texture File" );
         SetIndeterminate();
       }
 
@@ -129,7 +131,7 @@ namespace Index.Domain.Assets.Textures.Dxgi
 
     private async Task<ImagePostProcessor> ApplyPostProcessing()
     {
-      SetStatus( "Post-Processing Texture" );
+      SetSubStatus( "Post-Processing Texture" );
       SetIndeterminate();
 
       var processor = _dxgiTextureService.CreatePostProcessor( Asset.DxgiImage );
@@ -160,13 +162,13 @@ namespace Index.Domain.Assets.Textures.Dxgi
       var imageCount = processor.ImageCount;
       if ( imageCount > 1 )
       {
-        SetStatus( "Writing Files" );
+        SetSubStatus( "Writing Texture Files" );
         SetTotalUnits( imageCount );
         SetCompletedUnits( 0 );
       }
       else
       {
-        SetStatus( "Writing File" );
+        SetSubStatus( "Writing Texture File" );
         SetIndeterminate();
       }
 
@@ -178,6 +180,33 @@ namespace Index.Domain.Assets.Textures.Dxgi
 
         if ( imageCount > 1 )
           IncreaseCompletedUnits( 1 );
+      }
+    }
+
+    #endregion
+
+    #region Additional Data
+
+    private async Task WriteAdditionalData()
+    {
+      var additionalData = Asset.AdditionalData;
+      if ( additionalData.Count == 0 )
+        return;
+
+      SetTotalUnits( additionalData.Count );
+      SetCompletedUnits( 0 );
+
+      if ( additionalData.Count > 1 )
+        SetSubStatus( "Writing Additional Data Files" );
+      else
+        SetSubStatus( "Writing Additional Data File" );
+
+      var exportDir = Path.GetDirectoryName( GetExportFilePath() );
+      foreach ( (string fileName, Stream fileStream) in additionalData )
+      {
+        var exportPath = Path.Combine( exportDir, fileName );
+        await WriteFile( exportPath, fileStream );
+        IncreaseCompletedUnits( 1 );
       }
     }
 

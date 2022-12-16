@@ -21,6 +21,8 @@ namespace Index.Domain.Assets.Textures
     public IReadOnlyList<ITextureAssetImage> Images { get; }
     public IEnumerable<(string, string)> TextureInformation => GetTextureInformation();
 
+    public Dictionary<string, Stream> AdditionalData { get; }
+
     #endregion
 
     #region Constructor
@@ -33,6 +35,7 @@ namespace Index.Domain.Assets.Textures
     {
       TextureType = textureType;
       Images = images;
+      AdditionalData = new Dictionary<string, Stream>();
     }
 
     #endregion

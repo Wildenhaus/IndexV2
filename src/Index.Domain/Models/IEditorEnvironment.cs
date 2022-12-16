@@ -16,6 +16,8 @@ namespace Index.Domain.Models
     public IAssetManager AssetManager { get; }
     public IFileSystem FileSystem { get; }
 
+    public IParameterCollection GlobalParameters { get; }
+
   }
 
 }

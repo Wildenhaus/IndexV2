@@ -1,4 +1,5 @@
 ﻿using Index.Domain.FileSystem;
+using Index.Domain.Models;
 
 namespace Index.Domain.GameProfiles
 {
@@ -41,6 +42,13 @@ namespace Index.Domain.GameProfiles
 
       return assembly.GetManifestResourceStream( gameIconResourceName );
     }
+
+    #endregion
+
+    #region Virtual Methods
+
+    public virtual Task Initialize( IEditorEnvironment environment )
+      => Task.CompletedTask;
 
     #endregion
 

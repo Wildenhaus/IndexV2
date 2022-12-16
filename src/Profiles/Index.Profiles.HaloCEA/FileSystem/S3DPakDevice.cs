@@ -103,6 +103,10 @@ namespace Index.Profiles.HaloCEA.FileSystem
           return new CEATemplateFileNode( this, fileName, parent );
         case CEAFileType.Scene:
           return new CEASceneFileNode( this, fileName, parent );
+        case CEAFileType.CacheBlock:
+          return new CEACacheBlockFileNode( this, fileName, parent );
+        case CEAFileType.Shader:
+          return new CEAShaderCodeFileNode( this, fileName, parent );
 
         default:
           return new CEAFileNode( this, fileName, parent );

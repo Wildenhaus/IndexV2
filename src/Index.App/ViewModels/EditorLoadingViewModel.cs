@@ -67,6 +67,7 @@ namespace Index.App.ViewModels
       {
         await RunTask( "Initializing FileSystem", InitializeFileSystem );
         await RunTask( "Initializing AssetManager", InitializeAssetManager );
+        await RunTask( "Initializing Profile", InitializeProfile );
 
         Complete?.Invoke( this, EventArgs.Empty );
 
@@ -92,6 +93,12 @@ namespace Index.App.ViewModels
       var fileSystem = _environment.FileSystem;
 
       assetManager.InitializeFromFileSystem( fileSystem );
+    }
+
+    private async Task InitializeProfile()
+    {
+      var profile = _environment.GameProfile;
+      await profile.Initialize( _environment );
     }
 
     private async Task RunTask( string status, Func<Task> taskFactory )

@@ -18,6 +18,7 @@ namespace Index.Domain.Assets.Textures
     IEnumerable<(string, string)> TextureInformation { get; }
 
     IReadOnlyList<ITextureAssetImage> Images { get; }
+    public Dictionary<string, Stream> AdditionalData { get; }
 
     #endregion
 

@@ -15,10 +15,14 @@ namespace Index.Domain.Models
     public IAssetManager AssetManager { get; }
     public IFileSystem FileSystem { get; }
 
+    public IParameterCollection GlobalParameters { get; }
+
     public EditorEnvironment( IAssetManager assetManager, IFileSystem fileSystem )
     {
       AssetManager = assetManager;
       FileSystem = fileSystem;
+
+      GlobalParameters = new ParameterCollection();
     }
 
   }
