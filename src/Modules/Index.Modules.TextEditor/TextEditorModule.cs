@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Index.Domain.Assets.Text;
 using Index.Domain.Editors;
 using Index.Modules.TextEditor.Views;
+using Index.UI.ViewModels;
+using Index.UI.Views;
 using Prism.Ioc;
 using Prism.Modularity;
 
@@ -21,6 +24,8 @@ namespace Index.Modules.TextEditor
     public void RegisterTypes( IContainerRegistry containerRegistry )
     {
       containerRegistry.RegisterForNavigation<TextEditorView>( DefaultEditorKeys.TextEditorKey );
+
+      containerRegistry.RegisterDialog<AssetExportOptionsViewBase, AssetExportOptionsViewModel<TextAssetExportOptions>>( nameof( TextAssetExportOptions ) );
     }
 
   }

@@ -31,7 +31,7 @@
         <Menu Grid.Row="0">
             <MenuItem Header="File">
                 <MenuItem Header="Export"
-                          Command="{Binding ExportCommand}" />
+                          Command="{Binding ExportAssetCommand}" />
             </MenuItem>
         </Menu>
 

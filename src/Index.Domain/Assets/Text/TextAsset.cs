@@ -8,6 +8,9 @@ namespace Index.Domain.Assets.Text
 
     #region Properties
 
+    public virtual Type ExportOptionsType => typeof( TextAssetExportOptions );
+    public virtual Type ExportJobType => typeof( TextAssetExportJob );
+
     public override string TypeName => "Text";
     public override string EditorKey => DefaultEditorKeys.TextEditorKey;
 
