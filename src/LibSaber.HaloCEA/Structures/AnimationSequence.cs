@@ -76,7 +76,6 @@ namespace LibSaber.HaloCEA.Structures
             animSeq.OffsetFrame = reader.ReadFloat32();
             break;
           case SentinelIds.AnimationSequence_BoundingBox:
-            _ = reader.ReadInt32(); // unk
             animSeq.BoundingBox = Box.Deserialize( reader, context );
             break;
           case SentinelIds.AnimationSequence_ActionFrames:

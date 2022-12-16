@@ -1,4 +1,5 @@
-﻿using LibSaber.Common;
+﻿using System.Numerics;
+using LibSaber.Common;
 using LibSaber.Extensions;
 using LibSaber.HaloCEA.Enumerations;
 using LibSaber.IO;
@@ -10,6 +11,13 @@ namespace LibSaber.HaloCEA.Structures
 
   public class VertexBuffer : List<Vertex>
   {
+
+    #region Properties
+
+    public Vector3 Scale { get; private set; }
+    public Vector3 Translation { get; private set; }
+
+    #endregion
 
     #region Constructor
 
@@ -50,18 +58,18 @@ namespace LibSaber.HaloCEA.Structures
       var parentObject = context.GetMostRecentObject<SaberObject>();
       var normInVert4 = parentObject.GeometryFlags.HasFlag( ObjectGeometryFlags.NormInVert4 );
 
-      var translationTransform = Vector3<short>.Deserialize( reader, context );
-      var scaleTransform = Vector3<short>.Deserialize( reader, context );
+      var translation = buffer.Translation = new Vector3( reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16() );
+      var scale = buffer.Scale = new Vector3( reader.ReadInt16(), reader.ReadInt16(), reader.ReadInt16() );
 
       for ( var i = 0; i < vertexCount; i++ )
       {
-        var position = new Vector3<float>(
-          ( reader.ReadInt16().SNormToFloat() * scaleTransform.X ) + translationTransform.X,
-          ( reader.ReadInt16().SNormToFloat() * scaleTransform.Y ) + translationTransform.Y,
-          ( reader.ReadInt16().SNormToFloat() * scaleTransform.Z ) + translationTransform.Z
+        var position = new Vector3(
+            ( reader.ReadInt16().SNormToFloat() * scale.X ) + translation.X,
+            ( reader.ReadInt16().SNormToFloat() * scale.Y ) + translation.Y,
+            ( reader.ReadInt16().SNormToFloat() * scale.Z ) + translation.Z
           );
 
-        Vector3<float> normal;
+        Vector3 normal;
         if ( normInVert4 )
         {
           var w = reader.ReadInt16();
@@ -70,7 +78,7 @@ namespace LibSaber.HaloCEA.Structures
         else
         {
           _ = reader.ReadInt16(); // TODO: This is tossing the W coord. Should we be doing something with it?
-          normal = new Vector3<float>( 1, 1, 1 ); // TODO: Is this correct?
+          normal = new Vector3( 1, 1, 1 ); // TODO: Is this correct?
         }
 
         var vertex = new Vertex( position, normal );
@@ -80,9 +88,12 @@ namespace LibSaber.HaloCEA.Structures
 
     private static void ReadUncompressedVertices( VertexBuffer buffer, int vertexCount, NativeReader reader, ISerializationContext context )
     {
+      buffer.Translation = new Vector3( 0 );
+      buffer.Scale = new Vector3( 1 );
+
       for ( var i = 0; i < vertexCount; i++ )
       {
-        var position = Vector3<float>.Deserialize( reader, context );
+        var position = reader.ReadVector3();
         var vertex = new Vertex { Position = position };
         buffer.Add( vertex );
       }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 using System.Text;
 using LibSaber.IO;
 using LibSaber.Serialization;
@@ -70,7 +71,7 @@ namespace LibSaber.HaloCEA.Structures
     public Vector4<byte>? MaterialColor;
 
     [Sentinel( SaberObjectSentinelIds.ObjectMatrix )]
-    public Matrix4<float>? Matrix;
+    public Matrix4x4? Matrix;
 
     [Sentinel( SaberObjectSentinelIds.Sentinel_00FA )]
     public int BoneId; // Bone ID?
@@ -105,7 +106,6 @@ namespace LibSaber.HaloCEA.Structures
           }
           case SentinelIds.ObjectBoundingBox:
           {
-            _ = reader.ReadInt32();
             obj.BoundingBox = Box.Deserialize( reader, context );
             break;
           }
@@ -192,7 +192,7 @@ namespace LibSaber.HaloCEA.Structures
           }
           case SaberObjectSentinelIds.ObjectMatrix:
           {
-            obj.Matrix = Matrix4<float>.Deserialize( reader, context );
+            obj.Matrix = reader.ReadMatrix4x4();
             break;
           }
           case SaberObjectSentinelIds.Sentinel_00FA:

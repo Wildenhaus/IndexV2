@@ -1,4 +1,5 @@
-﻿using LibSaber.IO;
+﻿using System.Numerics;
+using LibSaber.IO;
 using LibSaber.Serialization;
 using LibSaber.Shared.Attributes;
 using LibSaber.Shared.Structures;
@@ -19,7 +20,7 @@ namespace LibSaber.HaloCEA.Structures
 
     [Sentinel( SentinelIds.Sentinel_030D )] public int Sentinel_030D_00;
     [Sentinel( SentinelIds.Sentinel_030D )] public BitSet<short> Sentinel_030D_01;
-    [Sentinel( SentinelIds.Sentinel_030D )] public Matrix4<float>[] Sentinel_030D_02;
+    [Sentinel( SentinelIds.Sentinel_030D )] public Matrix4x4[] Sentinel_030D_02;
 
     #endregion
 
@@ -52,9 +53,9 @@ namespace LibSaber.HaloCEA.Structures
 
             if ( !flags[ 0 ] )
             {
-              var matrices = data.Sentinel_030D_02 = new Matrix4<float>[ count ];
+              var matrices = data.Sentinel_030D_02 = new Matrix4x4[ count ];
               for ( var i = 0; i < count; i++ )
-                matrices[ i ] = Matrix4<float>.Deserialize( reader, context );
+                matrices[ i ] = reader.ReadMatrix4x4();
             }
 
             break;

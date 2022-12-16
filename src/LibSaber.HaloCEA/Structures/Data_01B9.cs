@@ -1,4 +1,5 @@
-﻿using LibSaber.IO;
+﻿using System.Numerics;
+using LibSaber.IO;
 using LibSaber.Serialization;
 using LibSaber.Shared.Attributes;
 using LibSaber.Shared.Structures;
@@ -16,7 +17,7 @@ namespace LibSaber.HaloCEA.Structures
     public string TemplateName;
     public string Unk_02;
     public string Unk_03;
-    public Matrix4<float> Matrix;
+    public Matrix4x4 Matrix;
 
     [Sentinel( SentinelIds.Sentinel_01BC )]
     public int Data_01BC;
@@ -39,7 +40,7 @@ namespace LibSaber.HaloCEA.Structures
       data.TemplateName = reader.ReadNullTerminatedString();
       data.Unk_02 = reader.ReadNullTerminatedString();
       data.Unk_03 = reader.ReadNullTerminatedString();
-      data.Matrix = Matrix4<float>.Deserialize( reader, context );
+      data.Matrix = reader.ReadMatrix4x4();
 
       var sentinelReader = new SentinelReader( reader );
       sentinelReader.Next();
