@@ -25,6 +25,7 @@
            BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Padding" Value="5,0" />
         <Setter Property="Margin" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Height" Value="{StaticResource TitleBarHeight}" />
         <Setter Property="Width" Value="{StaticResource TitleBarHeight}" />
@@ -57,11 +58,13 @@
                           Margin="5,5,0,5"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
+                          Height="14"
+                          Width="14"
                           Stretch="Uniform"
-                          Stroke="{TemplateBinding Foreground}"
+                          Fill="{TemplateBinding Foreground}"
                           Data="{Binding RelativeSource={RelativeSource AncestorType={x:Type windows:IxWindow}}, Path=TitleBarIcon.Data}" />
 
-                    <TextBlock Margin="8,0,0,0"
+                    <TextBlock Margin="5,0,0,0"
                                VerticalAlignment="Center"
                                Text="{Binding Title}"
                                FontFamily="{TemplateBinding FontFamily}"
@@ -155,7 +158,6 @@
                 </Border>
 
             </Grid>
-
         </Border>
     </ControlTemplate>
     <!--#endregion-->
@@ -170,6 +172,7 @@
         <Setter Property="Foreground" Value="{StaticResource Window.Static.Foreground}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template" Value="{StaticResource DefaultWindowTemplate}" />
+        <Setter Property="Title" Value="{Binding Title}" />
         <Setter Property="WindowStyle" Value="None" />
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
