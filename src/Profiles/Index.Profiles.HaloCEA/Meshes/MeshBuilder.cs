@@ -241,6 +241,9 @@ namespace Index.Profiles.HaloCEA.Meshes
       var skinData = SkinCompoundObject.SkinningData;
       var skinObjectId = Object.ObjectInfo.Id - skinData.FirstObjectId;
 
+      if ( SkinCompoundObject.InterleavedDataBuffer is null )
+        return;
+
       var interleavedData = SkinCompoundObject.InterleavedDataBuffer.ElementData.AsSpan();
       for ( var i = 0; i < interleavedData.Length; i++ )
       {
