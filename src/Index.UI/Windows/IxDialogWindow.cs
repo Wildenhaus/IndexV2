@@ -16,6 +16,7 @@ namespace Index.UI.Windows
 
     public IxDialogWindow()
     {
+      WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
     }
 
     #endregion
