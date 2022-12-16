@@ -53,6 +53,7 @@ namespace Index.Domain.Assets
 
     protected sealed override async Task OnExecuting()
     {
+      SetStatus( "Exporting {0}", Asset.AssetName );
       await ExportAsset();
       await OnExportAdditionalData();
     }
