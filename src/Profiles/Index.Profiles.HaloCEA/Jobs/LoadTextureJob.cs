@@ -3,9 +3,11 @@ using Index.Domain.Assets;
 using Index.Domain.Assets.Textures;
 using Index.Domain.Assets.Textures.Dxgi;
 using Index.Jobs;
+using Index.Profiles.HaloCEA.Assets;
 using Index.Profiles.HaloCEA.FileSystem.Files;
 using Index.Textures;
 using Prism.Ioc;
+using Serilog;
 using SharpDX.Toolkit.Graphics;
 
 namespace Index.Profiles.HaloCEA.Jobs
@@ -16,6 +18,7 @@ namespace Index.Profiles.HaloCEA.Jobs
 
     #region Data Members
 
+    private readonly IAssetManager _assetManager;
     private readonly IDxgiTextureService _dxgiTextureService;
 
     private IAssetReference _assetReference;
@@ -28,6 +31,7 @@ namespace Index.Profiles.HaloCEA.Jobs
     public LoadTextureJob( IContainerProvider container, IParameterCollection parameters )
       : base( container, parameters )
     {
+      _assetManager = container.Resolve<IAssetManager>();
       _dxgiTextureService = container.Resolve<IDxgiTextureService>();
 
       _assetReference = Parameters.Get<IAssetReference>();
@@ -50,32 +54,35 @@ namespace Index.Profiles.HaloCEA.Jobs
       } );
     }
 
-    protected override Task OnExecuting()
+    protected override async Task OnExecuting()
     {
-      return Task.Run( () =>
+      var stream = _pictureData.DataStream;
+      var textureInfo = CreateTextureInfo( _pictureData );
+
+      SetStatus( "Preparing DXGI Texture" );
+      var dxgiImage = _dxgiTextureService.CreateDxgiImageFromRawTextureData( stream, textureInfo );
+
+      SetStatus( "Generating Previews" );
+      var previewStreams = _dxgiTextureService.CreateJpegImageStreams( dxgiImage, includeMips: false );
+
+      var images = new List<ITextureAssetImage>();
+      for ( var i = 0; i < previewStreams.Length; i++ )
       {
-        var stream = _pictureData.DataStream;
-        var textureInfo = CreateTextureInfo( _pictureData );
+        var previewStream = previewStreams[ i ];
+        var image = new TextureAssetImage( i, previewStream );
+        images.Add( image );
+      }
 
-        SetStatus( "Preparing DXGI Texture" );
-        var dxgiImage = _dxgiTextureService.CreateDxgiImageFromRawTextureData( stream, textureInfo );
+      var textureType = GetTextureType( _assetReference );
+      var asset = new DxgiTextureAsset( _assetReference, textureType, images, dxgiImage );
 
-        SetStatus( "Generating Previews" );
-        var previewStreams = _dxgiTextureService.CreateJpegImageStreams( dxgiImage, includeMips: false );
+      var textureDefinition = await GetTextureDefinitionAsset();
+      if ( textureDefinition is null )
+        Log.Warning( "Failed to find a texture definition for {textureName}.", asset.AssetName );
+      else
+        asset.AdditionalData.Add( textureDefinition.AssetName, textureDefinition.TextStream );
 
-        var images = new List<ITextureAssetImage>();
-        for ( var i = 0; i < previewStreams.Length; i++ )
-        {
-          var previewStream = previewStreams[ i ];
-          var image = new TextureAssetImage( i, previewStream );
-          images.Add( image );
-        }
-
-        var textureType = GetTextureType( _assetReference );
-        var asset = new DxgiTextureAsset( _assetReference, textureType, images, dxgiImage );
-
-        SetResult( asset );
-      } );
+      SetResult( asset );
     }
 
     #endregion
@@ -181,6 +188,23 @@ namespace Index.Profiles.HaloCEA.Jobs
           return TextureType.Diffuse;
       }
 
+    }
+
+    private async Task<CEATextureDefinitionAsset> GetTextureDefinitionAsset()
+    {
+      var textureDefinitionName = Path.ChangeExtension( _assetReference.AssetName, ".td" );
+      textureDefinitionName = Path.GetFileName( textureDefinitionName );
+
+      _assetManager.TryGetAssetReference( typeof( CEATextureDefinitionAsset ),
+          textureDefinitionName, out var textureDefinitionAssetReference );
+
+      if ( textureDefinitionAssetReference is null )
+        return null;
+
+      var loadJob = _assetManager.LoadAsset<CEATextureDefinitionAsset>( textureDefinitionAssetReference );
+      await loadJob.Completion;
+
+      return loadJob.Result;
     }
 
     #endregion
