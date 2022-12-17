@@ -30,9 +30,9 @@ namespace Index.Profiles.HaloCEA.Jobs
       AddJob<DeserializeSceneJob>();
       AddJob<LoadGeometryTexturesJob>();
       AddJob<ConvertGeometryJob>();
+      AddJob<IdentifyMeshesJob>();
       AddJob<ConvertScenePropsJob>();
       AddJob<ConvertSceneLightsJob>();
-      AddJob<IdentifyMeshesJob>();
     }
 
     protected override async Task OnCompleted()

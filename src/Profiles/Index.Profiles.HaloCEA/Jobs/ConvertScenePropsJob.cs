@@ -25,6 +25,9 @@ namespace Index.Profiles.HaloCEA.Jobs
     protected SceneContext Context { get; set; }
     protected Dictionary<string, ITextureAsset> Textures { get; set; }
 
+    protected ISet<string> LodMeshNames { get; set; }
+    protected ISet<string> VolumeMeshNames { get; set; }
+
     public ConvertScenePropsJob( IContainerProvider container, IParameterCollection parameters )
       : base( container, parameters )
     {
@@ -42,6 +45,9 @@ namespace Index.Profiles.HaloCEA.Jobs
       Scene = Parameters.Get<SaberScene>();
       Context = Parameters.Get<SceneContext>();
       Textures = Parameters.Get<Dictionary<string, ITextureAsset>>( "Textures" );
+
+      LodMeshNames = Parameters.Get<ISet<string>>( "LodMeshSet" );
+      VolumeMeshNames = Parameters.Get<ISet<string>>( "VolumeMeshSet" );
     }
 
     protected override async Task OnExecuting()
@@ -136,6 +142,11 @@ namespace Index.Profiles.HaloCEA.Jobs
 
         foreach ( var pair in propAsset.Textures )
           Textures.TryAdd( pair.Key, pair.Value );
+
+        foreach ( var lodName in propAsset.LodMeshNames )
+          LodMeshNames.Add( lodName );
+        foreach ( var volumeName in propAsset.VolumeMeshNames )
+          VolumeMeshNames.Add( volumeName );
 
         var propScene = propAsset.AssimpScene;
 
