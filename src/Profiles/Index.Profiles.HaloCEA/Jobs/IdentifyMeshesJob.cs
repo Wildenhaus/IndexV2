@@ -2,6 +2,7 @@
 using Index.Jobs;
 using Index.Profiles.HaloCEA.Common;
 using Index.Profiles.HaloCEA.Meshes;
+using LibSaber.HaloCEA.Structures;
 using Prism.Ioc;
 
 namespace Index.Profiles.HaloCEA.Jobs
@@ -9,19 +10,6 @@ namespace Index.Profiles.HaloCEA.Jobs
 
   public class IdentifyMeshesJob : JobBase
   {
-
-    private static readonly string[] VOLUME_NAME_HINTS = new string[]
-    {
-      ".sh_cast",
-      "sh_cast",
-      "cin_",
-      "start1",
-      ".pCube",
-      "path_",
-      "add_",
-      ".pPlane",
-
-    };
 
     protected SceneContext Context { get; set; }
 
@@ -46,7 +34,7 @@ namespace Index.Profiles.HaloCEA.Jobs
       SetCompletedUnits( 0 );
       SetTotalUnits( 2 );
 
-      var lodMeshSet = CreateLodMeshSet( Context.Scene );
+      var lodMeshSet = CreateLodMeshSet();
       Parameters.Set( "LodMeshSet", lodMeshSet );
       IncreaseCompletedUnits( 1 );
 
@@ -55,10 +43,34 @@ namespace Index.Profiles.HaloCEA.Jobs
       IncreaseCompletedUnits( 1 );
     }
 
-    private HashSet<string> CreateLodMeshSet( Scene scene )
+    private HashSet<string> CreateLodMeshSet()
     {
       var set = new HashSet<string>();
-      EvaluateMesh( set, scene.RootNode, IsLodMesh );
+
+      Data_02E4 templateData = null;
+      if ( Parameters.TryGet<Template>( out var template ) )
+        templateData = template.Data_02E4;
+      else
+        Parameters.TryGet<Data_02E4>( out templateData );
+
+      if ( templateData is null )
+        return set;
+
+      var lodDefinitions = templateData.LodDefinitions;
+      if ( lodDefinitions is null )
+        return set;
+
+      foreach ( var lodDefinition in lodDefinitions )
+      {
+        var lodObject = templateData.Objects.FirstOrDefault( x => x.ObjectInfo.Id == lodDefinition.ObjectId );
+        if ( lodObject is null )
+        {
+          System.Diagnostics.Debugger.Break();
+          continue;
+        }
+
+        set.Add( lodObject.ObjectInfo.Name );
+      }
 
       return set;
     }
@@ -67,34 +79,54 @@ namespace Index.Profiles.HaloCEA.Jobs
     {
       var set = new HashSet<string>();
       foreach ( var obj in Context.Objects.Values )
-      {
-        if ( obj.ObjectInfo.Flags[ 6 ] || obj.ObjectInfo.Flags[ 7 ] || obj.ObjectInfo.Flags[ 9 ] )
+        if ( obj.ObjectInfo.Flags[ 6 ] && ( obj.ObjectInfo.Flags[ 7 ] && obj.ObjectInfo.Flags[ 9 ] ) )
           set.Add( obj.ObjectInfo.Name );
-      }
+
+      //EvaluateMesh( set, scene, scene.RootNode, IsVolumeMesh );
 
       return set;
     }
 
-    private bool IsLodMesh( string meshName )
-      => meshName.Contains( ".lod." );
-
-    private bool IsVolumeMesh( string meshName )
+    private bool IsVolumeMesh( Scene scene, Node node )
     {
-      foreach ( var hint in VOLUME_NAME_HINTS )
-        if ( meshName.StartsWith( hint, StringComparison.InvariantCultureIgnoreCase ) )
-          return true;
+      if ( !node.HasMeshes )
+        return false;
+
+      if ( scene.MaterialCount == 1 && scene.Materials[ 0 ].Name == "DefaultMaterial" )
+        return true;
+
+      //var meshIndices = node.MeshIndices;
+      //foreach ( var meshIndex in meshIndices )
+      //{
+      //  var mesh = scene.Meshes[ meshIndex ];
+      //  var materialIndex = mesh.MaterialIndex;
+
+      //  // This should only happen for Scene-Embedded templates
+      //  //if ( materialIndex >= scene.MaterialCount )
+      //  //  continue;
+
+      //  if ( node.Name.Contains( "fog" ) )
+      //    1.ToString();
+
+      //  if ( materialIndex == 0 )
+      //    return true;
+
+      //  //var material = scene.Materials[ materialIndex ];
+      //  //if ( material.Name.StartsWith( "sc_" ) )
+      //  //  return true;
+      //}
 
       return false;
     }
 
-    private void EvaluateMesh( ISet<string> set, Node node, Func<string, bool> evaluatorFunc )
+    private void EvaluateMesh( ISet<string> set, Scene scene, Node node, Func<Scene, Node, bool> evaluatorFunc )
     {
       var name = node.Name;
-      if ( evaluatorFunc( name ) )
+      if ( evaluatorFunc( scene, node ) )
         set.Add( name );
 
       foreach ( var child in node.EnumerateChildren() )
-        EvaluateMesh( set, child, evaluatorFunc );
+        EvaluateMesh( set, scene, child, evaluatorFunc );
     }
 
 
