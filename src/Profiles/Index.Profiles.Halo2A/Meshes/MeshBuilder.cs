@@ -156,7 +156,7 @@ namespace Index.Profiles.Halo2A.Meshes
           Mesh.Normals.Add( vertex.Normal.Value.ToAssimpVector3D() );
 
         if ( vertex.HasSkinningData )
-          AddVertexSkiningData( vertex );
+          AddVertexSkinningData( vertex );
 
         VertexLookup.Add( offset++, VertexLookup.Count );
       }
