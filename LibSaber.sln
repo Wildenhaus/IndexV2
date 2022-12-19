@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSaber.HaloCEA.Tests", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibSaber.Tests", "test\LibSaber.Tests\LibSaber.Tests.csproj", "{6E707C45-7D9F-4289-B064-D23CF57037B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testbed", "test\Testbed\Testbed.csproj", "{01169C0F-9411-4E88-9C94-1BFDCF97861B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testbed", "test\Testbed\Testbed.csproj", "{01169C0F-9411-4E88-9C94-1BFDCF97861B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibSaber.Halo2A", "src\LibSaber.Halo2A\LibSaber.Halo2A.csproj", "{645FD96E-05F1-4320-8BC3-AD9A2A64A114}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{01169C0F-9411-4E88-9C94-1BFDCF97861B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01169C0F-9411-4E88-9C94-1BFDCF97861B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01169C0F-9411-4E88-9C94-1BFDCF97861B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{645FD96E-05F1-4320-8BC3-AD9A2A64A114}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{645FD96E-05F1-4320-8BC3-AD9A2A64A114}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{645FD96E-05F1-4320-8BC3-AD9A2A64A114}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{645FD96E-05F1-4320-8BC3-AD9A2A64A114}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{79F1F0FC-C57B-4F79-8618-27A7598A4AB0} = {FBD79F5E-BB22-4866-A091-C4A51508C781}
 		{6E707C45-7D9F-4289-B064-D23CF57037B8} = {FBD79F5E-BB22-4866-A091-C4A51508C781}
 		{01169C0F-9411-4E88-9C94-1BFDCF97861B} = {FBD79F5E-BB22-4866-A091-C4A51508C781}
+		{645FD96E-05F1-4320-8BC3-AD9A2A64A114} = {1F6EF75E-9814-42CC-A164-2AE2CF6A0F13}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2BE0D65A-E2FA-4FEC-950B-6A50762C030E}
