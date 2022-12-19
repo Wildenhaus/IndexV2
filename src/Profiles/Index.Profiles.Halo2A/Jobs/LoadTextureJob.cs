@@ -144,7 +144,7 @@ namespace Index.Profiles.Halo2A.Jobs
 
     private static TextureType GetTextureType( IAssetReference assetReference )
     {
-      var assetName = assetReference.AssetName;
+      var assetName = Path.GetFileNameWithoutExtension( assetReference.AssetName );
 
       var suffixIndex = assetName.LastIndexOf( '_' );
       if ( suffixIndex == -1 )
@@ -155,6 +155,8 @@ namespace Index.Profiles.Halo2A.Jobs
       {
         case "nm":
           return TextureType.Normals;
+        case "em":
+          return TextureType.Emission;
         case "spec":
           return TextureType.SpecularColor;
         case "cube":
