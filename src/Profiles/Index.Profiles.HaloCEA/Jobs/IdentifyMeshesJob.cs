@@ -62,14 +62,23 @@ namespace Index.Profiles.HaloCEA.Jobs
 
       foreach ( var lodDefinition in lodDefinitions )
       {
-        var lodObject = templateData.Objects.FirstOrDefault( x => x.ObjectInfo.Id == lodDefinition.ObjectId );
-        if ( lodObject is null )
-        {
-          System.Diagnostics.Debugger.Break();
+        if ( lodDefinition.Index == 0 )
           continue;
-        }
 
-        set.Add( lodObject.ObjectInfo.Name );
+        if ( Context.SkinCompoundIds.Contains( lodDefinition.ObjectId ) )
+        {
+          var lodDefinitionObjects = Context.Objects.Values
+            .Where( x => x.SubmeshData != null )
+            .Where( x => x.SubmeshData.SubmeshList.Any( y => y.SkinCompoundId == lodDefinition.ObjectId ) );
+
+          foreach ( var obj in lodDefinitionObjects )
+            set.Add( obj.ObjectInfo.Name );
+        }
+        else
+        {
+          var lodObject = templateData.Objects.FirstOrDefault( x => x.ObjectInfo.Id == lodDefinition.ObjectId );
+          set.Add( lodObject.ObjectInfo.Name );
+        }
       }
 
       return set;
