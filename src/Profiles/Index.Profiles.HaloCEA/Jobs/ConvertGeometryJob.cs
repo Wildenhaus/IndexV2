@@ -104,9 +104,6 @@ namespace Index.Profiles.HaloCEA.Jobs
 
     private void AddMesh( SaberObject obj )
     {
-      if ( obj.ObjectInfo.Name == "shield" )
-        return;
-
       if ( obj.SubmeshData.SubmeshList.Count == 0 )
         System.Diagnostics.Debugger.Break();
 
