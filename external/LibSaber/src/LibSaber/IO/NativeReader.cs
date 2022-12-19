@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Collections;
+using System.Numerics;
 using System.Text;
 
 namespace LibSaber.IO
@@ -144,6 +145,22 @@ namespace LibSaber.IO
         ReadFloat32(), ReadFloat32(), ReadFloat32(), ReadFloat32(),
         ReadFloat32(), ReadFloat32(), ReadFloat32(), ReadFloat32()
         );
+    }
+
+    public BitArray ReadBitArray( int bitCount )
+    {
+      var readLen = ( int ) Math.Ceiling( bitCount / 8f );
+      var buffer = new byte[ readLen ];
+      Read( buffer );
+
+      return new BitArray( buffer );
+    }
+
+    public byte PeekByte()
+    {
+      var b = ReadByte();
+      Position -= 1;
+      return b;
     }
 
     public void Seek( long offset, SeekOrigin origin = SeekOrigin.Begin )
