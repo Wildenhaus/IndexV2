@@ -77,7 +77,7 @@ namespace LibSaber.Halo2A.Serialization
       var formatValue = reader.ReadInt32();
       var format = ( PictureFormat ) formatValue;
 
-      ASSERT( Enum.IsDefined( typeof( Picture ), format ),
+      ASSERT( Enum.IsDefined( typeof( PictureFormat ), format ),
         $"Unknown DDS Format Value: {formatValue:X}" );
 
       pict.Format = format;
