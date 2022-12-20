@@ -139,23 +139,20 @@ namespace Index.UI.Commands
         return;
 
       InvokeOnNavigatedFrom( tab, navigationContext );
-      region.Remove( tab );
 
       var view = tab as FrameworkElement;
-      if ( view is null )
-        return;
+      if ( view != null )
+      {
+        if ( view.DataContext is IDisposable disposableViewModel )
+          disposableViewModel.Dispose();
 
-      var disposeTasks = new Task[ 2 ];
-      disposeTasks[ 0 ] = Task.CompletedTask;
-      disposeTasks[ 1 ] = Task.CompletedTask;
+        if ( tab is IDisposable disposableTab )
+          disposableTab?.Dispose();
+      }
 
-      if ( tab is IDisposable disposableTab )
-        disposeTasks[ 0 ] = Task.Run( () => disposableTab?.Dispose() );
+      region.Remove( tab );
 
-      if ( view.DataContext is IDisposable disposableViewModel )
-        disposeTasks[ 1 ] = Task.Run( () => disposableViewModel.Dispose() );
-
-      Task.WhenAll( disposeTasks ).ContinueWith( t => { GCHelper.ForceCollect(); } );
+      GCHelper.ForceCollect();
     }
 
     private static bool CanRemoveTabFromRegion( object item, NavigationContext navigationContext )

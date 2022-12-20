@@ -102,15 +102,11 @@ namespace Index.Modules.MeshEditor.ViewModels
     {
       base.OnDisposing();
 
-      GroupModel.Dispatcher.BeginInvoke( () =>
-      {
-        GroupModel.GroupNode?.ForceDispose();
-        GroupModel.SceneNode?.ForceDispose();
-        GroupModel.Clear();
-        GroupModel.Dispose();
-
-        GroupModel = null;
-      } );
+      GroupModel.Clear();
+      GroupModel.GroupNode?.ForceDispose();
+      GroupModel.SceneNode?.ForceDispose();
+      GroupModel.Dispose();
+      GroupModel = null;
     }
 
     #endregion

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
+using Index.Common;
 using Index.Domain.Assets.Meshes;
 using Index.Jobs;
 using Index.UI.ViewModels;
@@ -20,10 +21,10 @@ namespace Index.Modules.MeshEditor.ViewModels
     #region Properties
 
 
-    public Camera Camera { get; }
-    public EffectsManager EffectsManager { get; }
+    public Camera Camera { get; private set; }
+    public EffectsManager EffectsManager { get; private set; }
 
-    public SceneViewModel Scene { get; }
+    public SceneViewModel Scene { get; private set; }
     public bool IsFlycamEnabled { get; set; }
 
     public double MinMoveSpeed { get; set; }
@@ -59,9 +60,24 @@ namespace Index.Modules.MeshEditor.ViewModels
 
     protected override void OnDisposing()
     {
+      Progress = new ProgressInfo();
+      Progress.IsIndeterminate = true;
+      Progress.Status = "Cleaning Up";
+      ShowProgressOverlay = true;
+
       base.OnDisposing();
-      Dispatcher.BeginInvoke( () => { EffectsManager?.ForceDispose(); } );
+
       Scene?.Dispose();
+      Scene = null;
+
+      EffectsManager?.ForceDispose();
+
+      EffectsManager = null;
+      Camera = null;
+
+      GC.Collect( 2, GCCollectionMode.Forced );
+      GC.Collect( 2, GCCollectionMode.Forced );
+      GC.WaitForFullGCComplete();
     }
 
     #endregion

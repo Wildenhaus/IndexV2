@@ -442,14 +442,11 @@ namespace Index.Modules.MeshEditor.Views
 
       _moveSpeedThrottler?.Dispose();
 
-      Viewport.Dispatcher.BeginInvoke( () =>
-      {
-        Viewport?.RenderHost?.Dispose();
-        Viewport?.Dispose();
+      Viewport?.RenderHost?.Dispose();
+      Viewport?.Dispose();
 
-        Camera = null;
-        Model = null;
-      } );
+      Camera = null;
+      Model = null;
     }
 
     #endregion
