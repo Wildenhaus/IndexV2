@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using System.Reflection.PortableExecutable;
 using LibSaber.Common;
 using LibSaber.Extensions;
 using LibSaber.Halo2A.Enumerations;
@@ -22,8 +21,8 @@ namespace LibSaber.Halo2A.Serialization.Geometry
 
     #region Constructor
 
-    public VertexSerializer( NativeReader reader, GeometryBuffer buffer )
-      : base( reader, buffer )
+    public VertexSerializer( GeometryBuffer buffer )
+      : base( buffer )
     {
       ASSERT( buffer.Flags.HasFlag( GeometryBufferFlags._VERT ),
         "Buffer does not specify _VERT in its flags." );
@@ -36,18 +35,29 @@ namespace LibSaber.Halo2A.Serialization.Geometry
 
     #region Overrides
 
-    protected override Vertex ReadElement()
+    public override Vertex Deserialize( NativeReader reader )
     {
       var vertex = new Vertex();
 
-      ReadPosition( ref vertex );
+      ReadPosition( reader, ref vertex );
 
       if ( _hasNormal )
-        ReadNormal( ref vertex );
+        ReadNormal( reader, ref vertex );
       if ( _hasSkinningData )
-        ReadSkinningData( ref vertex );
+        ReadSkinningData( reader, ref vertex );
 
       return vertex;
+    }
+
+    public override IEnumerable<Vertex> DeserializeRange( NativeReader reader, int startIndex, int endIndex )
+    {
+      var startOffset = Buffer.StartOffset + ( startIndex * Buffer.ElementSize );
+      var length = endIndex - startIndex;
+
+      reader.Position = startOffset;
+
+      for ( var i = 0; i < length; i++ )
+        yield return Deserialize( reader );
     }
 
     #endregion
@@ -70,34 +80,34 @@ namespace LibSaber.Halo2A.Serialization.Geometry
           || Flags.HasFlag( GeometryBufferFlags._COMPRESSED_NORM );
     }
 
-    private void ReadPosition( ref Vertex vertex )
+    private void ReadPosition( NativeReader reader, ref Vertex vertex )
     {
       if ( Flags.HasFlag( GeometryBufferFlags._COMPRESSED_VERT ) )
       {
         vertex.Position = new Vector4(
-          x: Reader.ReadInt16().SNormToFloat(),
-          y: Reader.ReadInt16().SNormToFloat(),
-          z: Reader.ReadInt16().SNormToFloat(),
+          x: reader.ReadInt16().SNormToFloat(),
+          y: reader.ReadInt16().SNormToFloat(),
+          z: reader.ReadInt16().SNormToFloat(),
           w: 1 );
       }
       else
       {
         vertex.Position = new Vector4(
-          x: Reader.ReadFloat32(),
-          y: Reader.ReadFloat32(),
-          z: Reader.ReadFloat32(),
+          x: reader.ReadFloat32(),
+          y: reader.ReadFloat32(),
+          z: reader.ReadFloat32(),
           w: 1 );
       }
     }
 
-    private void ReadNormal( ref Vertex vertex )
+    private void ReadNormal( NativeReader reader, ref Vertex vertex )
     {
       if ( Flags.HasFlag( GeometryBufferFlags._NORM_IN_VERT4 ) )
       {
         if ( Flags.HasFlag( GeometryBufferFlags._COMPRESSED_VERT ) )
-          vertex.Normal = DecompressNormalFromInt16( Reader.ReadInt16() );
+          vertex.Normal = DecompressNormalFromInt16( reader.ReadInt16() );
         else
-          vertex.Normal = DecompressNormalFromFloat( Reader.ReadFloat32() );
+          vertex.Normal = DecompressNormalFromFloat( reader.ReadFloat32() );
       }
       else if ( Flags.HasFlag( GeometryBufferFlags._BONE ) )
       {
@@ -110,31 +120,31 @@ namespace LibSaber.Halo2A.Serialization.Geometry
         // TODO: This is a guess
         // This is to handle cases where _NORM isn't defined but _COMPRESSED_NORM is.
         // So far this seems correct...
-        var x = Reader.ReadFloat32();
-        var y = Reader.ReadFloat32();
-        var z = Reader.ReadFloat32();
+        var x = reader.ReadFloat32();
+        var y = reader.ReadFloat32();
+        var z = reader.ReadFloat32();
         vertex.Normal = new Vector4( x, y, z, 1 );
       }
     }
 
-    private void ReadSkinningData( ref Vertex vertex )
+    private void ReadSkinningData( NativeReader reader, ref Vertex vertex )
     {
       // TODO: Idk if these data types are right, and/or what to do with them.
       if ( Flags.HasFlag( GeometryBufferFlags._WEIGHT1 ) )
-        vertex.Weight1 = Reader.ReadByte().UNormToFloat();
+        vertex.Weight1 = reader.ReadByte().UNormToFloat();
       if ( Flags.HasFlag( GeometryBufferFlags._WEIGHT2 ) )
-        vertex.Weight2 = Reader.ReadByte().UNormToFloat();
+        vertex.Weight2 = reader.ReadByte().UNormToFloat();
       if ( Flags.HasFlag( GeometryBufferFlags._WEIGHT3 ) )
-        vertex.Weight3 = Reader.ReadByte().UNormToFloat();
+        vertex.Weight3 = reader.ReadByte().UNormToFloat();
       if ( Flags.HasFlag( GeometryBufferFlags._WEIGHT4 ) )
-        vertex.Weight4 = Reader.ReadByte().UNormToFloat();
+        vertex.Weight4 = reader.ReadByte().UNormToFloat();
 
       if ( Flags.HasFlag( GeometryBufferFlags._INDEX ) )
       {
-        vertex.Index1 = Reader.ReadByte();
-        vertex.Index2 = Reader.ReadByte();
-        vertex.Index3 = Reader.ReadByte();
-        vertex.Index4 = Reader.ReadByte();
+        vertex.Index1 = reader.ReadByte();
+        vertex.Index2 = reader.ReadByte();
+        vertex.Index3 = reader.ReadByte();
+        vertex.Index4 = reader.ReadByte();
       }
     }
 
