@@ -10,8 +10,8 @@ namespace LibSaber.Halo2A.Serialization.Geometry
 
     #region Constructor
 
-    public FaceSerializer( NativeReader reader, GeometryBuffer buffer )
-      : base( reader, buffer )
+    public FaceSerializer( GeometryBuffer buffer )
+      : base( buffer )
     {
     }
 
@@ -19,14 +19,25 @@ namespace LibSaber.Halo2A.Serialization.Geometry
 
     #region Overrides
 
-    protected override Face ReadElement()
+    public override Face Deserialize( NativeReader reader )
     {
       return new Face
       {
-        A = Reader.ReadInt16(),
-        B = Reader.ReadInt16(),
-        C = Reader.ReadInt16()
+        A = reader.ReadUInt16(),
+        B = reader.ReadUInt16(),
+        C = reader.ReadUInt16(),
       };
+    }
+
+    public override IEnumerable<Face> DeserializeRange( NativeReader reader, int startIndex, int endIndex )
+    {
+      var startOffset = Buffer.StartOffset + ( startIndex * Buffer.ElementSize );
+      var length = endIndex - startIndex;
+
+      reader.Position = startOffset;
+
+      for ( var i = 0; i < length; i++ )
+        yield return Deserialize( reader );
     }
 
     #endregion

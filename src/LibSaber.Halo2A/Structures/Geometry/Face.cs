@@ -6,9 +6,9 @@
 
     #region Data Members
 
-    public short A;
-    public short B;
-    public short C;
+    public ushort A;
+    public ushort B;
+    public ushort C;
 
     #endregion
 
