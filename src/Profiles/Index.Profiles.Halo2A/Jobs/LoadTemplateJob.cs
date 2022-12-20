@@ -32,7 +32,7 @@ namespace Index.Profiles.Halo2A.Jobs
       AddJob<DeserializeTemplateJob>();
       AddJob<ConvertGeometryJob>();
       AddJob<LoadGeometryTexturesJob>();
-      //AddJob<IdentifyMeshesJob>();
+      AddJob<IdentifyMeshesJob>();
     }
 
     protected override async Task OnCompleted()

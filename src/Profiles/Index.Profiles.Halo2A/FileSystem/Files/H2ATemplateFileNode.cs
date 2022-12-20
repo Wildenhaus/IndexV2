@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Index.Domain.Assets;
+﻿using Index.Domain.Assets;
 using Index.Domain.FileSystem;
 using Index.Profiles.Halo2A.Assets;
 
@@ -25,7 +20,7 @@ namespace Index.Profiles.Halo2A.FileSystem.Files
     #region Constructor
 
     public H2ATemplateFileNode( IFileSystemDevice device, string name, long startOffset, long sizeInBytes, IFileSystemNode parent = null )
-      : base( device, name, startOffset, sizeInBytes, parent )
+      : base( device, SanitizeName( name ), startOffset, sizeInBytes, parent )
     {
     }
 

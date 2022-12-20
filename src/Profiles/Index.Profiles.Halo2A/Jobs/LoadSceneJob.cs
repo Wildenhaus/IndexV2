@@ -36,10 +36,10 @@ namespace Index.Profiles.Halo2A.Jobs
     {
       AddJob<DeserializeSceneJob>();
       AddJob<ConvertGeometryJob>();
-      //AddJob<IdentifyMeshesJob>();
-      //AddJob<ConvertScenePropsJob>();
-      //AddJob<ConvertSceneLightsJob>();
       AddJob<LoadGeometryTexturesJob>();
+      AddJob<IdentifyMeshesJob>();
+      AddJob<ConvertScenePropsJob>();
+      //AddJob<ConvertSceneLightsJob>();
     }
 
     protected override async Task OnCompleted()
@@ -49,8 +49,8 @@ namespace Index.Profiles.Halo2A.Jobs
       asset.AssetLoadContext = Parameters.Get<IAssetLoadContext>();
       asset.AssimpScene = Parameters.Get<SceneContext>().Scene;
       asset.Textures = Parameters.Get<Dictionary<string, ITextureAsset>>( "Textures" );
-      //asset.LodMeshNames = Parameters.Get<ISet<string>>( "LodMeshSet" );
-      //asset.VolumeMeshNames = Parameters.Get<ISet<string>>( "VolumeMeshSet" );
+      asset.LodMeshNames = Parameters.Get<ISet<string>>( "LodMeshSet" );
+      asset.VolumeMeshNames = Parameters.Get<ISet<string>>( "VolumeMeshSet" );
 
       SetResult( asset );
     }

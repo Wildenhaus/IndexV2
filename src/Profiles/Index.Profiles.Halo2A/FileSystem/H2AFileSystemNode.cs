@@ -21,12 +21,12 @@ namespace Index.Profiles.Halo2A.FileSystem
     #region Constructor
 
     public H2AFileSystemNode( IFileSystemDevice device, string name, IFileSystemNode parent = null )
-      : base( device, SanitizeName( name ), parent )
+      : base( device, name, parent )
     {
     }
 
     public H2AFileSystemNode( IFileSystemDevice device, string name, long startOffset, long sizeInBytes, IFileSystemNode parent = null )
-      : base( device, SanitizeName( name ), parent )
+      : base( device, name, parent )
     {
       StartOffset = startOffset;
       SizeInBytes = sizeInBytes;
@@ -36,7 +36,7 @@ namespace Index.Profiles.Halo2A.FileSystem
 
     #region Private Methods
 
-    private static string SanitizeName( string name )
+    protected static string SanitizeName( string name )
       => Path.GetFileNameWithoutExtension( name );
 
     #endregion
