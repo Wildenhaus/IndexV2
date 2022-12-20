@@ -214,6 +214,10 @@ namespace Index.Profiles.Halo2A.Jobs
 
       foreach ( var boneObject in boneObjects )
       {
+        var boneObjectName = boneObject.GetName();
+        if ( string.IsNullOrEmpty( boneObjectName ) )
+          continue;
+
         if ( boneLookup.ContainsKey( boneObject.GetName() ) )
           continue;
 
@@ -254,8 +258,9 @@ namespace Index.Profiles.Halo2A.Jobs
       nodeQueue.Enqueue( Context.Scene.RootNode );
       while ( nodeQueue.TryDequeue( out var node ) )
       {
-        if ( node.Name.StartsWith( "_b_" ) )
-          node.Name = node.Name.Substring( 3 );
+        if ( !string.IsNullOrEmpty( node.Name ) )
+          if ( node.Name.StartsWith( "_b_" ) )
+            node.Name = node.Name.Substring( 3 );
 
         foreach ( var child in node.Children )
           nodeQueue.Enqueue( child );
