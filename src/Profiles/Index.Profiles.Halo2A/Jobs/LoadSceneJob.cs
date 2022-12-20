@@ -35,11 +35,11 @@ namespace Index.Profiles.Halo2A.Jobs
     protected override void CreateSubJobs()
     {
       AddJob<DeserializeSceneJob>();
-      //AddJob<LoadGeometryTexturesJob>();
       AddJob<ConvertGeometryJob>();
       //AddJob<IdentifyMeshesJob>();
       //AddJob<ConvertScenePropsJob>();
       //AddJob<ConvertSceneLightsJob>();
+      AddJob<LoadGeometryTexturesJob>();
     }
 
     protected override async Task OnCompleted()
