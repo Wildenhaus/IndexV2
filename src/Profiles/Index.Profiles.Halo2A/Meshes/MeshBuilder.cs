@@ -18,7 +18,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Index.Profiles.Halo2A.Meshes
 {
 
-  internal class MeshBuilder
+  public class MeshBuilder
   {
 
     #region Properties
@@ -27,7 +27,7 @@ namespace Index.Profiles.Halo2A.Meshes
     protected SaberObject Object { get; }
     protected GeometrySubMesh Submesh { get; }
 
-    private H2AStream Stream => Context.Stream;
+    private Stream Stream => Context.Stream;
     private NativeReader Reader => Context.Reader;
     private GeometryGraph Graph => Context.GeometryGraph;
 
@@ -107,20 +107,17 @@ namespace Index.Profiles.Halo2A.Meshes
     {
       var offset = Submesh.BufferInfo.FaceOffset;
       var startIndex = offset + bufferInfo.SubBufferOffset / buffer.ElementSize;
+      var endIndex = startIndex + Submesh.BufferInfo.FaceCount;
 
-      var startOffset = buffer.StartOffset + ( startIndex * buffer.ElementSize );
-      Reader.Position = startOffset;
-
-      var faceSerializer = new FaceSerializer( Reader, buffer );
-      for ( var i = 0; i < Submesh.BufferInfo.FaceCount; i++ )
+      var faceSerializer = new FaceSerializer( buffer );
+      foreach ( var face in faceSerializer.DeserializeRange( Reader, startIndex, endIndex ) )
       {
-        faceSerializer.MoveNext();
-        var face = faceSerializer.Current;
-
         var assimpFace = new Assimp.Face();
         assimpFace.Indices.Add( VertexLookup[ face.A ] );
         assimpFace.Indices.Add( VertexLookup[ face.B ] );
         assimpFace.Indices.Add( VertexLookup[ face.C ] );
+
+        Mesh.Faces.Add( assimpFace );
       }
     }
 
@@ -132,9 +129,7 @@ namespace Index.Profiles.Halo2A.Meshes
     {
       var offset = Submesh.BufferInfo.VertexOffset;
       var startIndex = offset + bufferInfo.SubBufferOffset / buffer.ElementSize;
-
-      var startOffset = buffer.StartOffset * ( startIndex * buffer.ElementSize );
-      Reader.Position = startOffset;
+      var endIndex = startIndex + Submesh.BufferInfo.VertexCount;
 
       var scale = new Vector3D( 1, 1, 1 );
       if ( Submesh.Scale.HasValue )
@@ -144,12 +139,9 @@ namespace Index.Profiles.Halo2A.Meshes
       if ( Submesh.Position.HasValue )
         pos = Submesh.Position.Value.ToAssimp();
 
-      var vertexSerializer = new VertexSerializer( Reader, buffer );
-      for ( var i = 0; i < Submesh.BufferInfo.VertexCount; i++ )
+      var vertexSerializer = new VertexSerializer( buffer );
+      foreach ( var vertex in vertexSerializer.DeserializeRange( Reader, startIndex, endIndex ) )
       {
-        vertexSerializer.MoveNext();
-        var vertex = vertexSerializer.Current;
-
         Mesh.Vertices.Add( vertex.Position.ToAssimpVector3D() * scale + pos );
 
         if ( vertex.Normal.HasValue )
@@ -197,16 +189,11 @@ namespace Index.Profiles.Halo2A.Meshes
     {
       var offset = Submesh.BufferInfo.VertexOffset;
       var startIndex = offset + ( bufferInfo.SubBufferOffset / buffer.ElementSize );
+      var endIndex = startIndex + Submesh.BufferInfo.VertexCount;
 
-      var startOffset = buffer.StartOffset * ( startIndex * buffer.ElementSize );
-      Reader.Position = startOffset;
-
-      var interleavedSerializer = new InterleavedDataSerializer( Reader, buffer );
-      for ( var i = 0; i < Submesh.BufferInfo.VertexCount; i++ )
+      var interleavedSerializer = new InterleavedDataSerializer( buffer );
+      foreach ( var datum in interleavedSerializer.DeserializeRange( Reader, startIndex, endIndex ) )
       {
-        interleavedSerializer.MoveNext();
-        var datum = interleavedSerializer.Current;
-
         if ( datum.UV0.HasValue ) AddVertexUV( 0, datum.UV0.Value );
         if ( datum.UV1.HasValue ) AddVertexUV( 1, datum.UV1.Value );
         if ( datum.UV2.HasValue ) AddVertexUV( 2, datum.UV2.Value );
@@ -253,13 +240,11 @@ namespace Index.Profiles.Halo2A.Meshes
     {
       var offset = Submesh.BufferInfo.VertexOffset;
       var startIndex = offset + bufferInfo.SubBufferOffset / buffer.ElementSize;
-      var endIndex = startIndex + Submesh.BufferInfo.VertexOffset;
+      var endIndex = startIndex + Submesh.BufferInfo.VertexCount;
 
       var boneIds = Submesh.BoneIds;
 
-      var startOffset = buffer.StartOffset * ( startIndex * buffer.ElementSize );
-      Reader.Position = startOffset;
-
+      Reader.Position = buffer.StartOffset + bufferInfo.SubBufferOffset + offset * buffer.ElementSize;
       for ( var i = startIndex; i < endIndex; i++ )
       {
         var boneIndex = boneIds[ Reader.ReadInt32() ];
@@ -336,11 +321,13 @@ namespace Index.Profiles.Halo2A.Meshes
       if ( !BoneNames.TryGetValue( boneName, out var bone ) )
       {
         System.Numerics.Matrix4x4.Invert( boneObject.MatrixLT, out var invMatrix );
+        var transform = invMatrix.ToAssimp();
+        transform.Transpose();
 
         bone = new Bone
         {
           Name = boneName,
-          OffsetMatrix = invMatrix.ToAssimp()
+          OffsetMatrix = transform
         };
 
         Mesh.Bones.Add( bone );

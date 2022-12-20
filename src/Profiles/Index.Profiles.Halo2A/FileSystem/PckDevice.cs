@@ -157,6 +157,12 @@ namespace Index.Profiles.Halo2A.FileSystem
         case ".pct":
           node = new H2ATextureFileNode( this, name, offset, size, parent );
           break;
+        case ".lg":
+          node = new H2ASceneFileNode( this, name, offset, size, parent );
+          break;
+        case ".tpl":
+          node = new H2ATemplateFileNode( this, name, offset, size, parent );
+          break;
 
         default:
           node = new H2AFileSystemNode( this, name, offset, size, parent );

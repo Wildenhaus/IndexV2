@@ -7,15 +7,16 @@ using LibSaber.IO;
 namespace Index.Profiles.Halo2A.Meshes
 {
 
-  internal class SceneContext
+  public class SceneContext
   {
 
     #region Properties
 
     public Scene Scene { get; }
+    public string Name { get; }
     public Node RootNode => Scene.RootNode;
 
-    public H2AStream Stream { get; }
+    public Stream Stream { get; }
     public NativeReader Reader { get; }
     public GeometryGraph GeometryGraph { get; }
 
@@ -30,9 +31,11 @@ namespace Index.Profiles.Halo2A.Meshes
 
     #region Constructor
 
-    public SceneContext( GeometryGraph graph, H2AStream stream )
+    public SceneContext( string name, GeometryGraph graph, Stream stream )
     {
+      Name = name;
       Scene = new Scene();
+      Scene.RootNode = new Node( name );
 
       Stream = stream;
       Reader = new NativeReader( stream, Endianness.LittleEndian );
