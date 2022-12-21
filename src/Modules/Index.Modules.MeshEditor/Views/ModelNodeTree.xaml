@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Index.Modules.MeshEditor.Views"
+             xmlns:localCtrl="clr-namespace:Index.Modules.MeshEditor.Controls"
              xmlns:controls="clr-namespace:Index.UI.Controls;assembly=Index.UI"
              xmlns:vm="clr-namespace:Index.Modules.MeshEditor.ViewModels"
              xmlns:ui="clr-namespace:Index.UI;assembly=Index.UI"
@@ -55,11 +56,24 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="30" />
                                         <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
                                     <CheckBox Grid.Column="0" IsChecked="{Binding IsVisible}" Focusable="False" FocusVisualStyle="{x:Null}" />
                                     <TextBlock Grid.Column="1" Text="{Binding Name}" Foreground="{DynamicResource Brushes.Foreground.Static}" />
+
+                                    <localCtrl:MeshTypeIndicator x:Name="LodTag" Grid.Column="2" Color="#47c9d0" Text="LOD" Visibility="Collapsed" />
+                                    <localCtrl:MeshTypeIndicator x:Name="VolTag" Grid.Column="2" Color="#ac47d0" Text="VOL" Visibility="Collapsed" />
+
                                 </Grid>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding IsLod}" Value="True">
+                                        <Setter TargetName="LodTag" Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsVolume}" Value="True">
+                                        <Setter TargetName="VolTag" Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

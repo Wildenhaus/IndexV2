@@ -27,6 +27,9 @@ namespace Index.Modules.MeshEditor.ViewModels
     public string Name => Node.Name;
     public ICollection<ModelNodeViewModel> Items { get; }
 
+    public bool IsLod { get; set; }
+    public bool IsVolume { get; set; }
+
     [OnChangedMethod( nameof( OnNodeVisibilityChanged ) )]
     public bool IsVisible { get; set; }
     [OnChangedMethod( nameof( OnShowTextureChanged ) )]

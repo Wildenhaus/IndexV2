@@ -73,13 +73,18 @@ namespace Index.Modules.MeshEditor.ViewModels
 
         ApplyMaterialToNode( meshAsset, meshNode );
 
-        if ( meshAsset.LodMeshNames.Contains( meshNode.Name ) )
-          meshNode.Visible = false;
-        else if ( meshAsset.VolumeMeshNames.Contains( meshNode.Name ) )
-          meshNode.Visible = false;
-
         var nodeViewModel = new ModelNodeViewModel( meshNode );
-        nodeViewModel.IsVisible = meshNode.Visible;
+        if ( meshAsset.LodMeshNames.Contains( meshNode.Name ) )
+        {
+          nodeViewModel.IsVisible = false;
+          nodeViewModel.IsLod = true;
+        }
+        else if ( meshAsset.VolumeMeshNames.Contains( meshNode.Name ) )
+        {
+          nodeViewModel.IsVisible = false;
+          nodeViewModel.IsVolume = true;
+        }
+
 
         lock ( _collectionLock )
           _nodes.Add( nodeViewModel );
