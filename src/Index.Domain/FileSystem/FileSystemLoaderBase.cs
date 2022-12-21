@@ -69,6 +69,16 @@
         _loadedDevices.Add( device );
     }
 
+    protected async Task LoadFileWithName( string name, Func<string, IFileSystemDevice> deviceFactory )
+    {
+      foreach ( var filePath in Directory.EnumerateFiles( _basePath, name, SearchOption.AllDirectories ) )
+      {
+        var fileName = Path.GetFileNameWithoutExtension( filePath ).ToLower();
+        await LoadDevice( filePath, deviceFactory );
+        break;
+      }
+    }
+
     protected async Task LoadFilesWithExtension( string extension, Func<string, IFileSystemDevice> deviceFactory, IEnumerable<string> excludedFileNames = null )
     {
       if ( excludedFileNames is null )
