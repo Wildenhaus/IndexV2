@@ -69,20 +69,113 @@ namespace Index.Profiles.Halo2A.FileSystem
 
       // Initialize Entries
       var reader = new NativeReader( CreateStream(), Endianness.LittleEndian );
-
-      ReadHeader( reader );
-      ReadChildren( reader, rootNode );
+      CreateContainerBlockNodes( reader, rootNode );
 
       return rootNode;
     }
 
-    private void ReadHeader( NativeReader reader )
+    private void CreateContainerBlockNodes( NativeReader reader, IFileSystemNode parent, long additionalOffset = 0 )
     {
-      // TODO: Skipping this for now
+      if ( !TryReadBlockMagic( reader, out var blockSignature ) )
+        return;
+
+      // Skip Header
       reader.Position += 0x45;
+
+      var entries = ReadBlockEntries( reader, additionalOffset );
+      foreach ( var entry in entries )
+        CreateNode( reader, entry.Name, entry.Offset, entry.SizeInBytes, parent );
     }
 
-    private void ReadChildren( NativeReader reader, IFileSystemNode rootNode, long additionalOffset = 0 )
+    private void CreateNode( NativeReader reader, string name, long offset, int size, IFileSystemNode parent )
+    {
+      name = SanitizeName( name );
+      reader.Position = offset;
+
+      if ( IsNestedContainer( reader, name, offset, size ) )
+        CreateNodeForNestedContainer( reader, name, offset, parent );
+      else
+        CreateNodeForFileEntry( name, offset, size, parent );
+    }
+
+    private bool IsNestedContainer( NativeReader reader, string name, long offset, int size )
+    {
+      if ( !TryReadBlockMagic( reader, out var signature ) )
+        return false;
+
+      switch ( signature )
+      {
+        case "1SERpak":
+        case "1SERcache_block":
+          return true;
+
+        default:
+          return false;
+      }
+    }
+
+    private void CreateNodeForNestedContainer( NativeReader reader, string name, long offset, IFileSystemNode parent )
+    {
+      var containerNode = new H2AFileSystemNode( this, name, parent );
+      parent.AddChild( containerNode );
+
+      CreateContainerBlockNodes( reader, containerNode, offset );
+    }
+
+    private void CreateNodeForFileEntry( string name, long offset, int size, IFileSystemNode parent )
+    {
+      H2AFileSystemNode node;
+
+      switch ( Path.GetExtension( name ) )
+      {
+        case ".pct":
+          node = new H2ATextureFileNode( this, name, offset, size, parent );
+          break;
+        case ".lg":
+          node = new H2ASceneFileNode( this, name, offset, size, parent );
+          break;
+        case ".tpl":
+          node = new H2ATemplateFileNode( this, name, offset, size, parent );
+          break;
+        case ".td":
+          node = new H2ATextureDefinitionFileNode( this, name, offset, size, parent );
+          break;
+
+        case ".dsh":
+        case ".fx":
+        case ".hsh":
+        case ".psh":
+        case ".vsh":
+          node = new H2AShaderCodeFileNode( this, name, offset, size, parent );
+          break;
+
+        default:
+          node = new H2AFileSystemNode( this, name, offset, size, parent );
+          break;
+      }
+
+      parent.AddChild( node );
+    }
+
+    private bool TryReadBlockMagic( NativeReader reader, out string signature )
+    {
+      const uint MAGIC_1SER = 0x52455331; // 1SER
+
+      signature = default;
+      var originalOffset = reader.Position;
+
+      var magic = reader.ReadUInt32();
+      reader.Position = originalOffset;
+
+      if ( magic != MAGIC_1SER )
+        return false;
+
+      signature = reader.ReadNullTerminatedString();
+      reader.Position = originalOffset;
+      return true;
+    }
+
+    private PakEntry[] ReadBlockEntries( NativeReader reader, long additionalOffset = 0 )
     {
       var entryCount = reader.ReadInt32();
       _ = reader.ReadInt32(); // TODO
@@ -109,67 +202,20 @@ namespace Index.Profiles.Halo2A.FileSystem
         sizes[ i ] = reader.ReadInt32();
 
       // Create entries
+      var entries = new List<PakEntry>( entryCount );
       for ( var i = 0; i < entryCount; i++ )
       {
         var name = names[ i ];
-        var offset = offsets[ i ];
+        var offset = offsets[ i ] + additionalOffset;
         var size = sizes[ i ];
 
         if ( size == 0 )
           continue;
 
-        CreateNode( reader, name, offset + additionalOffset, size, rootNode );
-      }
-    }
-
-    private void CreateNode( NativeReader reader, string name, long offset, int size, IFileSystemNode parent )
-    {
-      name = SanitizeName( name );
-      if ( IsNestedContainer( reader, name, offset, size ) )
-        CreateNodeForNestedContainer( reader, offset, parent );
-      else
-        CreateNodeForFileEntry( name, offset, size, parent );
-    }
-
-    private bool IsNestedContainer( NativeReader reader, string name, long offset, int size )
-    {
-      const long MAGIC_1SERpak = 0x006B617052455331;
-
-      reader.Position = offset;
-      var signature = reader.ReadInt64();
-      reader.Position -= sizeof( long );
-
-      return signature == MAGIC_1SERpak;
-    }
-
-    private void CreateNodeForNestedContainer( NativeReader reader, long offset, IFileSystemNode parent )
-    {
-      ReadHeader( reader );
-      ReadChildren( reader, parent, offset );
-    }
-
-    private void CreateNodeForFileEntry( string name, long offset, int size, IFileSystemNode parent )
-    {
-      H2AFileSystemNode node;
-
-      switch ( Path.GetExtension( name ) )
-      {
-        case ".pct":
-          node = new H2ATextureFileNode( this, name, offset, size, parent );
-          break;
-        case ".lg":
-          node = new H2ASceneFileNode( this, name, offset, size, parent );
-          break;
-        case ".tpl":
-          node = new H2ATemplateFileNode( this, name, offset, size, parent );
-          break;
-
-        default:
-          node = new H2AFileSystemNode( this, name, offset, size, parent );
-          break;
+        entries.Add( new PakEntry( name, offset, size ) );
       }
 
-      parent.AddChild( node );
+      return entries.ToArray();
     }
 
     private static string SanitizeName( string name )
@@ -179,7 +225,35 @@ namespace Index.Profiles.Halo2A.FileSystem
       if ( name.Contains( ">" ) )
         name = name.Substring( name.IndexOf( '>' ) + 1 );
 
-      return Path.GetFileName( name );
+      return name;
+    }
+
+    #endregion
+
+    #region Embedded Types
+
+    private readonly struct PakEntry
+    {
+
+      #region Data Members
+
+      public readonly string Name;
+      public readonly long Offset;
+      public readonly int SizeInBytes;
+
+      #endregion
+
+      #region Constructor
+
+      public PakEntry( string name, long offset, int sizeInBytes )
+      {
+        Name = name;
+        Offset = offset;
+        SizeInBytes = sizeInBytes;
+      }
+
+      #endregion
+
     }
 
     #endregion

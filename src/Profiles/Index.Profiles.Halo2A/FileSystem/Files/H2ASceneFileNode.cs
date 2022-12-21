@@ -20,7 +20,7 @@ namespace Index.Profiles.Halo2A.FileSystem.Files
     #region Constructor
 
     public H2ASceneFileNode( IFileSystemDevice device, string name, long startOffset, long sizeInBytes, IFileSystemNode parent = null )
-      : base( device, name, startOffset, sizeInBytes, parent )
+      : base( device, SanitizeName( name ), startOffset, sizeInBytes, parent )
     {
     }
 
