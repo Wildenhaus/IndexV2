@@ -131,7 +131,8 @@
                                    Command="{Binding RemoveSelectedPathCommand}"
                                    IsEnabled="{Binding ElementName=gameConfigList, Path=SelectedItems.Count}" />
                 <controls:IxButton Content="Manage Plugins"
-                                   Icon="{x:Static ui:SegoeIcon.Setting}" />
+                                   Icon="{x:Static ui:SegoeIcon.Setting}"
+                                   Visibility="Collapsed"/>
             </StackPanel>
 
             <StackPanel HorizontalAlignment="Right"
