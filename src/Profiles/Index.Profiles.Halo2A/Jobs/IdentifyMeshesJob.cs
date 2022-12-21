@@ -60,6 +60,30 @@ namespace Index.Profiles.Halo2A.Jobs
       var set = new HashSet<string>();
       //EvaluateMesh( set, scene, scene.RootNode, IsVolumeMesh );
 
+      foreach ( var pair in Context.LodIndices )
+      {
+        var objId = pair.Key;
+        var lodIndex = pair.Value;
+
+        if ( lodIndex == 0 )
+          continue;
+
+        if ( Context.SkinCompounds.ContainsKey( objId ) )
+        {
+          var skinCompoundObjects = Context.GeometryGraph.Objects
+            .Where( x => x.SubMeshes.Any( y => y.BufferInfo.SkinCompoundId == objId ) );
+
+          foreach ( var obj in skinCompoundObjects )
+            set.Add( obj.GetMeshName() );
+        }
+        else
+        {
+          var obj = Context.GeometryGraph.Objects.First( x => x.Id == pair.Key );
+          var meshName = obj.GetMeshName();
+          set.Add( meshName );
+        }
+      }
+
       return set;
     }
 

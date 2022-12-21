@@ -65,8 +65,8 @@ namespace Index.Profiles.Halo2A.Jobs
       Context = Parameters.Get<SceneContext>();
       Textures = Parameters.Get<Dictionary<string, ITextureAsset>>( "Textures" );
 
-      //LodMeshNames = Parameters.Get<ISet<string>>( "LodMeshSet" );
-      //VolumeMeshNames = Parameters.Get<ISet<string>>( "VolumeMeshSet" );
+      LodMeshNames = Parameters.Get<ISet<string>>( "LodMeshSet" );
+      VolumeMeshNames = Parameters.Get<ISet<string>>( "VolumeMeshSet" );
     }
 
     protected override async Task OnExecuting()
