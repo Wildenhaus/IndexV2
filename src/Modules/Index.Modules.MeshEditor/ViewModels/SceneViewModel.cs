@@ -1,10 +1,15 @@
-﻿using HelixToolkit.SharpDX.Core;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
+using HelixToolkit.SharpDX.Core;
 using HelixToolkit.SharpDX.Core.Assimp;
 using HelixToolkit.SharpDX.Core.Model;
 using HelixToolkit.SharpDX.Core.Model.Scene;
 using HelixToolkit.Wpf.SharpDX;
 using Index.Domain.Assets.Meshes;
 using Index.UI.ViewModels;
+using Index.Utilities;
+using PropertyChanged;
 using Serilog;
 
 namespace Index.Modules.MeshEditor.ViewModels
@@ -13,9 +18,27 @@ namespace Index.Modules.MeshEditor.ViewModels
   public class SceneViewModel : ViewModelBase
   {
 
+    #region Data Members
+
+    private readonly object _collectionLock = new object();
+    private ObservableCollection<ModelNodeViewModel> _nodes;
+    private ICollectionView _nodeCollectionView;
+
+    private ActionDebouncer _searchDebouncer;
+
+    #endregion
+
     #region Properties
 
     public SceneNodeGroupModel3D GroupModel { get; private set; }
+    public ICollectionView Nodes => _nodeCollectionView;
+
+    [OnChangedMethod( nameof( OnSearchTermChanged ) )]
+    public string SearchTerm { get; set; }
+    [OnChangedMethod( nameof( OnShowTexturesChanged ) )]
+    public bool ShowTextures { get; set; }
+    [OnChangedMethod( nameof( OnShowWireframeChanged ) )]
+    public bool ShowWireframe { get; set; }
 
     #endregion
 
@@ -23,8 +46,13 @@ namespace Index.Modules.MeshEditor.ViewModels
 
     public SceneViewModel()
     {
+      _searchDebouncer = new ActionDebouncer( 1000, ApplySearchTerm );
       GroupModel = new SceneNodeGroupModel3D();
+      InitializeNodeCollection();
+
       ApplyTransforms();
+
+      ShowTextures = true;
     }
 
     #endregion
@@ -49,6 +77,12 @@ namespace Index.Modules.MeshEditor.ViewModels
           meshNode.Visible = false;
         else if ( meshAsset.VolumeMeshNames.Contains( meshNode.Name ) )
           meshNode.Visible = false;
+
+        var nodeViewModel = new ModelNodeViewModel( meshNode );
+        nodeViewModel.IsVisible = meshNode.Visible;
+
+        lock ( _collectionLock )
+          _nodes.Add( nodeViewModel );
       }
 
       GroupModel.Dispatcher.Invoke( () =>
@@ -92,6 +126,48 @@ namespace Index.Modules.MeshEditor.ViewModels
         nodeMaterial.DiffuseMap = TextureModel.Create( texture.Images[ 0 ].PreviewStream );
         nodeMaterial.UVTransform = new UVTransform( 0, 1, -1, 0, 0 );
       }
+    }
+
+    private void InitializeNodeCollection()
+    {
+      _nodes = new ObservableCollection<ModelNodeViewModel>();
+      BindingOperations.EnableCollectionSynchronization( _nodes, _collectionLock );
+
+      var collectionView = CollectionViewSource.GetDefaultView( _nodes );
+      collectionView.SortDescriptions.Add( new SortDescription( nameof( ModelNodeViewModel.Name ), ListSortDirection.Ascending ) );
+      collectionView.Filter = ( obj ) =>
+      {
+        if ( string.IsNullOrEmpty( SearchTerm ) )
+          return true;
+
+        var node = obj as ModelNodeViewModel;
+        return node.Name.Contains( SearchTerm, System.StringComparison.OrdinalIgnoreCase );
+      };
+
+      _nodeCollectionView = collectionView;
+    }
+
+    private void OnShowTexturesChanged()
+    {
+      foreach ( var node in _nodes )
+        node.ShowTexture = ShowTextures;
+    }
+
+    private void OnShowWireframeChanged()
+    {
+      foreach ( var node in _nodes )
+        node.ShowWireframe = ShowWireframe;
+    }
+
+    private void OnSearchTermChanged()
+      => _searchDebouncer.Invoke();
+
+    private void ApplySearchTerm()
+    {
+      Dispatcher.BeginInvoke( () =>
+      {
+        _nodeCollectionView.Refresh();
+      } );
     }
 
     #endregion

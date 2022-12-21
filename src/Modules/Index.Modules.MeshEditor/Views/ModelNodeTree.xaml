@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="Index.Modules.MeshEditor.Views.ModelNodeTree"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Index.Modules.MeshEditor.Views"
+             xmlns:controls="clr-namespace:Index.UI.Controls;assembly=Index.UI"
+             xmlns:vm="clr-namespace:Index.Modules.MeshEditor.ViewModels"
+             xmlns:ui="clr-namespace:Index.UI;assembly=Index.UI"
+             mc:Ignorable="d" 
+             d:DesignHeight="720"
+             d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--#region Header -->
+        <Border Grid.Row="0"
+                BorderThickness="1"
+                BorderBrush="{DynamicResource Brushes.Tertiary.Border.Static}"
+                Background="{DynamicResource Brushes.Tertiary.Background.Static}"
+                HorizontalAlignment="Stretch">
+            <TextBlock Text="Meshes"
+                       Foreground="{DynamicResource Brushes.Foreground.Static}"
+                       Padding="5,2"
+                       VerticalAlignment="Center" />
+        </Border>
+        <!--#endregion-->
+
+        <controls:IxTextBox Grid.Row="1"
+                            Panel.ZIndex="1"
+                            PlaceholderText="Search"
+                            Icon="{x:Static ui:SegoeIcon.Search}"
+                            Text="{Binding Scene.SearchTerm, UpdateSourceTrigger=PropertyChanged}" />
+
+        <!--#region Node List -->
+        <ListView Grid.Row="2"
+                  ItemsSource="{Binding Scene.Nodes}"
+                  VirtualizingPanel.IsContainerVirtualizable="True"
+                  VirtualizingPanel.IsVirtualizing="True"
+                  VirtualizingPanel.VirtualizationMode="Recycling"
+                  HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Stretch"
+                  SizeChanged="OnListViewSizeChanged"
+                  Loaded="OnListViewLoaded">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate DataType="{x:Type vm:ModelNodeViewModel}">
+                                <Grid HorizontalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <CheckBox Grid.Column="0" IsChecked="{Binding IsVisible}" Focusable="False" FocusVisualStyle="{x:Null}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}" Foreground="{DynamicResource Brushes.Foreground.Static}" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <!--#endregion-->
+
+    </Grid>
+</UserControl>
