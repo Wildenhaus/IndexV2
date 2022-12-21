@@ -442,9 +442,12 @@ namespace Index.Modules.MeshEditor.Views
 
       _moveSpeedThrottler?.Dispose();
 
-      Viewport?.RenderHost?.Dispose();
-      Viewport?.Dispose();
+      Viewport.RenderHost.StopRendering();
+      Viewport.RenderHost.EndD3D();
+      Viewport.RenderHost.Dispose();
+      Viewport.Dispose();
 
+      Viewport = null;
       Camera = null;
       Model = null;
     }

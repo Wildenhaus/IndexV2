@@ -74,10 +74,6 @@ namespace Index.Modules.MeshEditor.ViewModels
 
       EffectsManager = null;
       Camera = null;
-
-      GC.Collect( 2, GCCollectionMode.Forced );
-      GC.Collect( 2, GCCollectionMode.Forced );
-      GC.WaitForFullGCComplete();
     }
 
     #endregion

@@ -61,41 +61,43 @@ namespace Index.Modules.MeshEditor.ViewModels
 
     public void ApplyMeshAsset( IMeshAsset meshAsset )
     {
-      using var importer = new Importer();
-      importer.ToHelixToolkitScene( meshAsset.AssimpScene, out var helixScene );
-
-      foreach ( var node in helixScene.Root.Traverse() )
+      using ( var importer = new Importer() )
       {
-        if ( !( node is MeshNode meshNode ) )
-          continue;
+        importer.ToHelixToolkitScene( meshAsset.AssimpScene, out var helixScene );
 
-        meshNode.CullMode = SharpDX.Direct3D11.CullMode.Back;
-
-        ApplyMaterialToNode( meshAsset, meshNode );
-
-        var nodeViewModel = new ModelNodeViewModel( meshNode );
-        if ( meshAsset.LodMeshNames.Contains( meshNode.Name ) )
+        foreach ( var node in helixScene.Root.Traverse() )
         {
-          nodeViewModel.IsVisible = false;
-          nodeViewModel.IsLod = true;
+          if ( !( node is MeshNode meshNode ) )
+            continue;
+
+          meshNode.CullMode = SharpDX.Direct3D11.CullMode.Back;
+
+          ApplyMaterialToNode( meshAsset, meshNode );
+
+          var nodeViewModel = new ModelNodeViewModel( meshNode );
+          if ( meshAsset.LodMeshNames.Contains( meshNode.Name ) )
+          {
+            nodeViewModel.IsVisible = false;
+            nodeViewModel.IsLod = true;
+          }
+          else if ( meshAsset.VolumeMeshNames.Contains( meshNode.Name ) )
+          {
+            nodeViewModel.IsVisible = false;
+            nodeViewModel.IsVolume = true;
+          }
+
+
+          lock ( _collectionLock )
+            _nodes.Add( nodeViewModel );
         }
-        else if ( meshAsset.VolumeMeshNames.Contains( meshNode.Name ) )
+
+        GroupModel.Dispatcher.Invoke( () =>
         {
-          nodeViewModel.IsVisible = false;
-          nodeViewModel.IsVolume = true;
-        }
-
-
-        lock ( _collectionLock )
-          _nodes.Add( nodeViewModel );
+          GroupModel.AddNode( helixScene.Root );
+          GroupModel.SceneNode.ForceUpdateTransformsAndBounds();
+          GroupModel.GroupNode.ForceUpdateTransformsAndBounds();
+        } );
       }
-
-      GroupModel.Dispatcher.Invoke( () =>
-      {
-        GroupModel.AddNode( helixScene.Root );
-        GroupModel.SceneNode.ForceUpdateTransformsAndBounds();
-        GroupModel.GroupNode.ForceUpdateTransformsAndBounds();
-      } );
     }
 
     #endregion
@@ -182,10 +184,18 @@ namespace Index.Modules.MeshEditor.ViewModels
     protected override void OnDisposing()
     {
       base.OnDisposing();
+      lock ( _collectionLock )
+        _nodes.Clear();
+
+      foreach ( var n in GroupModel.GroupNode.Traverse() )
+        n.ForceDispose();
+      GroupModel.GroupNode?.ForceDispose();
+
+      foreach ( var n in GroupModel.SceneNode.Traverse() )
+        n.ForceDispose();
+      GroupModel.SceneNode?.ForceDispose();
 
       GroupModel.Clear();
-      GroupModel.GroupNode?.ForceDispose();
-      GroupModel.SceneNode?.ForceDispose();
       GroupModel.Dispose();
       GroupModel = null;
     }

@@ -10,6 +10,7 @@ using Index.Jobs;
 using Index.UI.ViewModels;
 using Index.Utilities;
 using Prism.Commands;
+using Prism.Common;
 using Prism.Ioc;
 using Prism.Regions;
 using Prism.Services.Dialogs;
@@ -140,15 +141,16 @@ namespace Index.UI.Commands
 
       InvokeOnNavigatedFrom( tab, navigationContext );
 
-      var view = tab as FrameworkElement;
-      if ( view != null )
-      {
-        if ( view.DataContext is IDisposable disposableViewModel )
-          disposableViewModel.Dispose();
+      //var view = tab as FrameworkElement;
+      //if ( view != null )
+      //{
+      //  if ( view.DataContext is IDisposable disposableViewModel )
+      //    disposableViewModel.Dispose();
 
-        if ( tab is IDisposable disposableTab )
-          disposableTab?.Dispose();
-      }
+      //  if ( tab is IDisposable disposableTab )
+      //    disposableTab?.Dispose();
+      //}
+      MvvmHelpers.ViewAndViewModelAction<IDisposable>( tab, d => d.Dispose() );
 
       region.Remove( tab );
 

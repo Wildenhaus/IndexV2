@@ -1,4 +1,5 @@
-﻿using Index.UI.Views;
+﻿using System.Windows.Controls;
+using Index.UI.Views;
 
 namespace Index.Modules.MeshEditor.Views
 {
@@ -20,7 +21,12 @@ namespace Index.Modules.MeshEditor.Views
     protected override void OnDisposing( bool dispose )
     {
       base.OnDisposing( dispose );
+
+      if ( this.Content is Panel contentPanel )
+        contentPanel.Children.Clear();
+
       MeshViewer?.Dispose();
+      MeshViewer = null;
     }
 
     #endregion

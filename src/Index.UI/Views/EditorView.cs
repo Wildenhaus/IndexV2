@@ -12,6 +12,15 @@ namespace Index.UI.Views
 
     #endregion
 
+    #region Properties
+
+    public bool KeepAlive
+    {
+      get => !_isDisposed;
+    }
+
+    #endregion
+
     #region Constructor
 
     public EditorView()
