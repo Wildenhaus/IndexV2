@@ -16,6 +16,7 @@ namespace Index.Profiles.Halo2A.Jobs
     {
       "visibility_hidden",
       "visibility_occluder",
+      "lighting_sm_invisible_shadowcaster_affix"
     };
 
     #endregion
