@@ -24,15 +24,14 @@
     <DataTemplate x:Key="TabItemDataTemplate"
                   DataType="{x:Type vm:ITabViewModel}">
         <DockPanel HorizontalAlignment="Stretch"
-                   IsHitTestVisible="True"
-                   ContextMenu="{Binding ContextMenu}">
+                   IsHitTestVisible="True">
             
             <DockPanel.InputBindings>
                 <MouseBinding Command="{Binding CloseCommand}" Gesture="MiddleClick" />
             </DockPanel.InputBindings>
 
             <TextBlock DockPanel.Dock="Left"
-                       Text="{Binding TabName}" />
+                       Text="{Binding TabName}"/>
 
             <Button x:Name="PART_CloseButton"
                     HorizontalAlignment="Right"
@@ -88,7 +87,7 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="1,1,1,0"
                         Background="{TemplateBinding Background}"
-                        Opacity="0" />
+                        Opacity="0"/>
             </Border>
 
             <ContentPresenter x:Name="PART_ContentPresenter"
@@ -98,7 +97,9 @@
                               ContentSource="Header"
                               Focusable="False"
                               RecognizesAccessKey="True"
-                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                        IsHitTestVisible="True"
+                        ContextMenu="{Binding ContextMenu}" />
         </Grid>
 
         <ControlTemplate.Triggers>
