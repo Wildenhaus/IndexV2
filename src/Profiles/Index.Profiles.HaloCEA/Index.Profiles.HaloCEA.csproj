@@ -4,6 +4,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<AssemblyVersion>0.3.0.*</AssemblyVersion>
+	<FileVersion>0.3.0.*</FileVersion>
+	<Deterministic>false</Deterministic>
+	<RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,7 +33,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="echo $(FrameworkVersion)&#xD;&#xA;echo $(Platform)&#xD;&#xA;mkdir &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\win-x64\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\win-x64\GameProfiles\$(TargetName).dll&quot;" />
+    <Exec Command="echo $(FrameworkVersion)&#xD;&#xA;echo $(Platform)&#xD;&#xA;mkdir &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\win-x64\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\win-x64\GameProfiles\$(TargetName).dll&quot;&#xD;&#xA;mkdir &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\GameProfiles\$(TargetName).dll&quot;" />
   </Target>
 
 </Project>

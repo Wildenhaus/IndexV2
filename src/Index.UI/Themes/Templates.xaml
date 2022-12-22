@@ -9,6 +9,7 @@
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/GridView.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/GridSplitter.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/GroupBox.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/Label.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/ListView.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/Menu.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/ProgressBar.xaml" />

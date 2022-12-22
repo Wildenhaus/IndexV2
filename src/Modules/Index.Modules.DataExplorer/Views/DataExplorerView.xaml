@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Index.Modules.DataExplorer.Views"
              xmlns:controls="clr-namespace:Index.UI.Controls;assembly=Index.UI"
+             xmlns:commands="clr-namespace:Index.UI.Commands;assembly=Index.UI"
              xmlns:ui="clr-namespace:Index.UI;assembly=Index.UI"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:viewmodels="clr-namespace:Index.Modules.DataExplorer.ViewModels"
@@ -35,10 +36,25 @@
                 BorderThickness="0,0,0,0"
                 BorderBrush="{DynamicResource Brushes.Quarternary.Border.Static}"
                 Background="{DynamicResource Brushes.Secondary.Background.Hover}">
-            <TextBlock Margin="5,0,0,1"
-                       VerticalAlignment="Center"
-                       Text="Data Explorer"
-                       Foreground="{DynamicResource Brushes.Foreground.Static}" />
+            <DockPanel>
+                <TextBlock Margin="5,0,0,1"
+                           VerticalAlignment="Center"
+                           DockPanel.Dock="Left"
+                           Text="Data Explorer"
+                           Foreground="{DynamicResource Brushes.Foreground.Static}" />
+                <Button Width="20"
+                        Margin="0"
+                        Padding="0"
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        DockPanel.Dock="Right"
+                        Command="{Binding OpenAboutDialogCommand}">
+                    <Button.Content>
+                        <controls:IxIcon SegoeIcon="Help" Margin="0" Padding="0" Height="10"/>
+                    </Button.Content>
+                </Button>
+            </DockPanel>
             <Border.Effect>
                 <DropShadowEffect Direction="270"
                                   ShadowDepth="1"

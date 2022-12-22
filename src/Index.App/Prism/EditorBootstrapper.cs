@@ -30,7 +30,14 @@ namespace Index.App.Prism
     }
 
     protected override IContainerExtension CreateContainerExtension()
-      => _dryIocContainer.Resolve<IContainerExtension>();
+    {
+      var container = _dryIocContainer.Resolve<IContainerExtension>();
+
+      GlobalCommands.Initialize( container );
+      EditorCommands.Initialize( container );
+
+      return container;
+    }
 
     protected override DependencyObject CreateShell()
       => Container.Resolve<MainShell>();
@@ -50,12 +57,11 @@ namespace Index.App.Prism
     {
       containerRegistry.RegisterDialogWindow<IxDialogWindow>();
       containerRegistry.RegisterDialog<UnhandledExceptionDialog>();
+      containerRegistry.RegisterDialog<AboutView>();
     }
 
     protected override void OnInitialized()
     {
-      EditorCommands.Initialize( Container );
-
       AppDomain.CurrentDomain.UnhandledException += ( sender, e ) =>
       {
         App.Current.Dispatcher.Invoke( () =>

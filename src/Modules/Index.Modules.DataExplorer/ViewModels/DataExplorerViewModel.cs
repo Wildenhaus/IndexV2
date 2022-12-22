@@ -5,6 +5,7 @@ using Index.Domain.Assets;
 using Index.Domain.FileSystem;
 using Index.Domain.Models;
 using Index.Modules.DataExplorer.Services;
+using Index.UI.Commands;
 using Index.UI.ViewModels;
 using Index.Utilities;
 using Prism.Commands;
@@ -37,6 +38,7 @@ namespace Index.Modules.DataExplorer.ViewModels
     public string SearchTerm { get; set; }
 
     public ICommand NavigateToAssetCommand { get; }
+    public ICommand OpenAboutDialogCommand { get; }
 
     #endregion
 
@@ -52,6 +54,7 @@ namespace Index.Modules.DataExplorer.ViewModels
       FileTreeNodes = InitializeFileTreeNodes( environment.FileSystem );
 
       NavigateToAssetCommand = new DelegateCommand<IAssetReference>( NavigateToAsset );
+      OpenAboutDialogCommand = GlobalCommands.OpenAboutDialogCommand;
 
       _searchDebouncer = new ActionThrottler( ApplySearchTerm, 500 );
     }

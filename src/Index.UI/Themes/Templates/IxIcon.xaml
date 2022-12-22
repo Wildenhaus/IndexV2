@@ -19,6 +19,7 @@
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    Padding="{TemplateBinding Padding}"
+                                   FontSize="{TemplateBinding Height}"
                                    Text="{TemplateBinding SegoeIcon, Converter={StaticResource SegoeIconConverter}}" />
 
                         <Path x:Name="PART_Path"
