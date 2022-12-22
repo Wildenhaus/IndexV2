@@ -152,6 +152,9 @@ namespace Index.Jobs
           return;
         }
 
+        if ( State == JobState.Faulted )
+          return;
+
         SetIndeterminate();
         SetStatus( "Finishing Up" );
 

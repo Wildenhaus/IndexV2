@@ -59,6 +59,11 @@ namespace Index.Jobs
           job.Progress.PropertyChanged += OnSubJobProgressPropertyChanged;
           await job.Execute();
         }
+        catch ( Exception ex )
+        {
+          HandleException( ex );
+          return;
+        }
         finally
         {
           _completedJobs++;
