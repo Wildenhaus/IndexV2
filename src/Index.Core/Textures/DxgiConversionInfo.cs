@@ -57,7 +57,7 @@ namespace Index.Textures
 
     public static readonly DxgiConversionInfo PNG = DxgiConversionInfo.Define(
       formatId: "PNG",
-      defaultFormat: DXGI_FORMAT.R32G32B32A32_FLOAT,
+      defaultFormat: DXGI_FORMAT.R8G8B8A8_UNORM,
       supportedFormats: new DXGI_FORMAT[]
       {
         DXGI_FORMAT.R32G32B32A32_FLOAT,
@@ -95,7 +95,7 @@ namespace Index.Textures
 
     public static readonly DxgiConversionInfo JPEG = DxgiConversionInfo.Define(
       formatId: "JPEG",
-      defaultFormat: DXGI_FORMAT.R32G32B32A32_FLOAT,
+      defaultFormat: DXGI_FORMAT.R8G8B8A8_UNORM,
       supportedFormats: new DXGI_FORMAT[]
       {
         DXGI_FORMAT.R32G32B32A32_FLOAT,
@@ -123,7 +123,7 @@ namespace Index.Textures
 
     public static readonly DxgiConversionInfo BMP = DxgiConversionInfo.Define(
       formatId: "BMP",
-      defaultFormat: DXGI_FORMAT.R32G32B32A32_FLOAT,
+      defaultFormat: DXGI_FORMAT.R8G8B8A8_UNORM,
       supportedFormats: new DXGI_FORMAT[]
       {
         DXGI_FORMAT.R32G32B32A32_FLOAT,
@@ -151,7 +151,7 @@ namespace Index.Textures
 
     public static readonly DxgiConversionInfo TIFF = DxgiConversionInfo.Define(
       formatId: "TIFF",
-      defaultFormat: DXGI_FORMAT.R32G32B32A32_FLOAT,
+      defaultFormat: DXGI_FORMAT.R8G8B8A8_UNORM,
       supportedFormats: new DXGI_FORMAT[]
       {
         DXGI_FORMAT.R32G32B32A32_FLOAT,
