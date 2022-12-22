@@ -60,6 +60,23 @@ namespace Index.UI.ViewModels
     protected sealed override void OnInitializationJobCompleted( IJob job )
     {
       var assetJob = job as IJob<TAsset>;
+      if ( assetJob.State == JobState.Faulted )
+      {
+        var parameters = new DialogParameters();
+        parameters.Add( nameof( Exception ), assetJob.Exception );
+
+        var dialogService = Container.Resolve<IDialogService>();
+        Dispatcher.Invoke( () =>
+        {
+          dialogService.ShowDialog( "UnhandledExceptionDialog", parameters, r =>
+          {
+            this.Close();
+          } );
+        } );
+
+        return;
+      }
+
       Asset = assetJob.Result;
       OnAssetLoaded( Asset );
     }

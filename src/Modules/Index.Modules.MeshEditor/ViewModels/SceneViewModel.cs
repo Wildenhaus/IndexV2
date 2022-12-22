@@ -191,7 +191,8 @@ namespace Index.Modules.MeshEditor.ViewModels
     {
       base.OnDisposing();
       lock ( _collectionLock )
-        _nodes.Clear();
+        if ( _nodes != null )
+          _nodes.Clear();
 
       foreach ( var n in GroupModel.GroupNode.Traverse() )
         n.ForceDispose();
