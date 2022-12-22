@@ -22,7 +22,6 @@ namespace Index.Modules.MeshEditor.ViewModels
 
     private readonly object _collectionLock = new object();
     private ObservableCollection<ModelNodeViewModel> _nodes;
-    private ICollectionView _nodeCollectionView;
 
     private ActionDebouncer _searchDebouncer;
 
@@ -31,7 +30,7 @@ namespace Index.Modules.MeshEditor.ViewModels
     #region Properties
 
     public SceneNodeGroupModel3D GroupModel { get; private set; }
-    public ICollectionView Nodes => _nodeCollectionView;
+    public ICollectionView Nodes { get; private set; }
 
     [OnChangedMethod( nameof( OnSearchTermChanged ) )]
     public string SearchTerm { get; set; }
@@ -48,7 +47,6 @@ namespace Index.Modules.MeshEditor.ViewModels
     {
       _searchDebouncer = new ActionDebouncer( 1000, ApplySearchTerm );
       GroupModel = new SceneNodeGroupModel3D();
-      InitializeNodeCollection();
 
       ApplyTransforms();
 
@@ -63,6 +61,7 @@ namespace Index.Modules.MeshEditor.ViewModels
     {
       using ( var importer = new Importer() )
       {
+        var nodes = new ObservableCollection<ModelNodeViewModel>();
         importer.ToHelixToolkitScene( meshAsset.AssimpScene, out var helixScene );
 
         foreach ( var node in helixScene.Root.Traverse() )
@@ -87,8 +86,7 @@ namespace Index.Modules.MeshEditor.ViewModels
           }
 
 
-          lock ( _collectionLock )
-            _nodes.Add( nodeViewModel );
+          nodes.Add( nodeViewModel );
         }
 
         GroupModel.Dispatcher.Invoke( () =>
@@ -97,6 +95,8 @@ namespace Index.Modules.MeshEditor.ViewModels
           GroupModel.SceneNode.ForceUpdateTransformsAndBounds();
           GroupModel.GroupNode.ForceUpdateTransformsAndBounds();
         } );
+
+        InitializeNodeCollection( nodes );
       }
     }
 
@@ -135,27 +135,33 @@ namespace Index.Modules.MeshEditor.ViewModels
       }
     }
 
-    private void InitializeNodeCollection()
+    private void InitializeNodeCollection( ObservableCollection<ModelNodeViewModel> nodes )
     {
-      _nodes = new ObservableCollection<ModelNodeViewModel>();
-      BindingOperations.EnableCollectionSynchronization( _nodes, _collectionLock );
-
-      var collectionView = CollectionViewSource.GetDefaultView( _nodes );
-      collectionView.SortDescriptions.Add( new SortDescription( nameof( ModelNodeViewModel.Name ), ListSortDirection.Ascending ) );
-      collectionView.Filter = ( obj ) =>
+      Dispatcher.Invoke( () =>
       {
-        if ( string.IsNullOrEmpty( SearchTerm ) )
-          return true;
+        _nodes = nodes;
+        BindingOperations.EnableCollectionSynchronization( _nodes, _collectionLock );
 
-        var node = obj as ModelNodeViewModel;
-        return node.Name.Contains( SearchTerm, System.StringComparison.OrdinalIgnoreCase );
-      };
+        var collectionView = CollectionViewSource.GetDefaultView( _nodes );
+        collectionView.SortDescriptions.Add( new SortDescription( nameof( ModelNodeViewModel.Name ), ListSortDirection.Ascending ) );
+        collectionView.Filter = ( obj ) =>
+        {
+          if ( string.IsNullOrEmpty( SearchTerm ) )
+            return true;
 
-      _nodeCollectionView = collectionView;
+          var node = obj as ModelNodeViewModel;
+          return node.Name.Contains( SearchTerm, System.StringComparison.OrdinalIgnoreCase );
+        };
+
+        Nodes = collectionView;
+      } );
     }
 
     private void OnShowTexturesChanged()
     {
+      if ( _nodes is null )
+        return;
+
       foreach ( var node in _nodes )
         node.ShowTexture = ShowTextures;
     }
@@ -173,7 +179,7 @@ namespace Index.Modules.MeshEditor.ViewModels
     {
       Dispatcher.BeginInvoke( () =>
       {
-        _nodeCollectionView.Refresh();
+        Nodes.Refresh();
       } );
     }
 
