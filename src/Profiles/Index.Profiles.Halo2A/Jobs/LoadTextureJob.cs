@@ -3,6 +3,7 @@ using Index.Domain.Assets;
 using Index.Domain.Assets.Textures;
 using Index.Domain.Assets.Textures.Dxgi;
 using Index.Jobs;
+using Index.Profiles.Halo2A.Assets;
 using Index.Textures;
 using LibSaber.Halo2A.Enumerations;
 using LibSaber.Halo2A.Serialization;
@@ -77,11 +78,11 @@ namespace Index.Profiles.Halo2A.Jobs
       var textureType = GetTextureType( _assetReference );
       var asset = new DxgiTextureAsset( _assetReference, textureType, images, dxgiImage );
 
-      //var textureDefinition = await GetTextureDefinitionAsset();
-      //if ( textureDefinition is null )
-      //  Log.Warning( "Failed to find a texture definition for {textureName}.", asset.AssetName );
-      //else
-      //  asset.AdditionalData.Add( textureDefinition.AssetName, textureDefinition.TextStream );
+      var textureDefinition = await GetTextureDefinitionAsset();
+      if ( textureDefinition is null )
+        Log.Warning( "Failed to find a texture definition for {textureName}.", asset.AssetName );
+      else
+        asset.AdditionalData.Add( textureDefinition.AssetName, textureDefinition.TextStream );
 
       SetResult( asset );
     }
@@ -175,6 +176,21 @@ namespace Index.Profiles.Halo2A.Jobs
           return TextureType.Diffuse;
       }
 
+    }
+
+    private async Task<H2ATextureDefinitionAsset> GetTextureDefinitionAsset()
+    {
+      var textureDefinitionName = Path.ChangeExtension( _assetReference.AssetName, ".td" );
+      textureDefinitionName = Path.GetFileName( textureDefinitionName );
+
+      _assetManager.TryGetAssetReference( typeof( H2ATextureDefinitionAsset ),
+        textureDefinitionName, out var textureDefinitionAssetReference );
+
+      if ( textureDefinitionAssetReference is null )
+        return null;
+
+      var textureDefinition = await _assetManager.LoadAssetAsync<H2ATextureDefinitionAsset>( textureDefinitionAssetReference );
+      return textureDefinition;
     }
 
     #endregion

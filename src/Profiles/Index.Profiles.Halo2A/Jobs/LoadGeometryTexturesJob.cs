@@ -66,11 +66,11 @@ namespace Index.Profiles.Halo2A.Jobs
 
       foreach ( var material in Context.Scene.Materials )
       {
-        var materialName = material.Name;
-        if ( string.IsNullOrEmpty( materialName ) )
+        var diffuseName = material.TextureDiffuse.FilePath;
+        if ( string.IsNullOrEmpty( diffuseName ) )
           continue;
 
-        var matches = textureAssetReferences.Where( x => x.AssetName.StartsWith( materialName ) );
+        var matches = textureAssetReferences.Where( x => x.AssetName.StartsWith( diffuseName ) );
         foreach ( var match in matches )
           toLoadSet.Add( match );
       }

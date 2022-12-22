@@ -346,7 +346,7 @@ namespace Index.Profiles.Halo2A.Meshes
 
       var materialName = submeshMaterial.ShadingMaterialMaterial;
       var textureName = submeshMaterial.ShadingMaterialTexture;
-      var exportMatName = textureName; // submeshMaterial.MaterialName;
+      var exportMatName = submeshMaterial.MaterialName;
 
       if ( Context.MaterialIndices.TryGetValue( exportMatName, out var materialIndex ) )
       {
