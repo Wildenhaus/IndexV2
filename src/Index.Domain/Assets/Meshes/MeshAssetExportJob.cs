@@ -14,6 +14,7 @@ namespace Index.Domain.Assets.Meshes
     #region Properties
 
     protected IJobManager JobManager { get; }
+    protected Scene AssimpScene { get; private set; }
 
     #endregion
 
@@ -31,6 +32,8 @@ namespace Index.Domain.Assets.Meshes
 
     protected override async Task ExportAsset()
     {
+      AssimpScene = Asset.AssimpScene;
+
       if ( Options.ExportTextures )
         await ExportTextures();
 
@@ -69,11 +72,18 @@ namespace Index.Domain.Assets.Meshes
       if ( !Directory.Exists( exportDir ) )
         Directory.CreateDirectory( exportDir );
 
-      var assimpScene = Asset.AssimpScene;
-      var assimpFormatId = Options.ExportFormat.GetAssimpFormatId();
-      using ( var ctx = new AssimpContext() )
+      try
       {
-        ctx.ExportFile( assimpScene, exportPath, assimpFormatId );
+        var assimpScene = AssimpScene;
+        var assimpFormatId = Options.ExportFormat.GetAssimpFormatId();
+        using ( var ctx = new AssimpContext() )
+        {
+          ctx.ExportFile( assimpScene, exportPath, assimpFormatId );
+        }
+      }
+      catch ( Exception ex )
+      {
+        ex.ToString();
       }
     }
 
@@ -178,27 +188,8 @@ namespace Index.Domain.Assets.Meshes
       if ( removeMeshNames.Count == 0 )
         return;
 
-      var meshes = Asset.AssimpScene.Meshes;
-      var indicesToRemove = new HashSet<int>();
-      for ( var i = 0; i < meshes.Count; i++ )
-      {
-        var mesh = meshes[ i ];
-        if ( removeMeshNames.Contains( mesh.Name ) )
-          indicesToRemove.Add( i );
-      }
-
-      RemoveLodsAndVolumes( Asset.AssimpScene.RootNode, indicesToRemove );
-    }
-
-    private void RemoveLodsAndVolumes( Node node, HashSet<int> indicesToRemove )
-    {
-      var meshIndices = node.MeshIndices.ToArray();
-      foreach ( var index in meshIndices )
-        if ( indicesToRemove.Contains( index ) )
-          node.MeshIndices.Remove( index );
-
-      foreach ( var child in node.Children )
-        RemoveLodsAndVolumes( child, indicesToRemove );
+      var filterer = new SceneMeshFilterer( Asset, removeMeshNames );
+      AssimpScene = filterer.RecreateScene();
     }
 
     #endregion
