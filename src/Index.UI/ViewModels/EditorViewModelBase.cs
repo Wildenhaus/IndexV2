@@ -187,6 +187,15 @@ namespace Index.UI.ViewModels
           IsExporting = false;
           ShowProgressOverlay = false;
           Progress = null;
+
+          if ( j.State == JobState.Faulted )
+          {
+            var dialogParams = new DialogParameters();
+            dialogParams.Add( nameof( Exception ), j.Exception );
+
+            dialogService.ShowDialog( "UnhandledExceptionDialog", dialogParams, r => { } );
+          }
+
         } );
       } );
     }
