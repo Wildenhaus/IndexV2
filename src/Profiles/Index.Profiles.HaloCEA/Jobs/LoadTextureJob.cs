@@ -8,7 +8,6 @@ using Index.Profiles.HaloCEA.FileSystem.Files;
 using Index.Textures;
 using Prism.Ioc;
 using Serilog;
-using SharpDX.Toolkit.Graphics;
 
 namespace Index.Profiles.HaloCEA.Jobs
 {
@@ -169,6 +168,7 @@ namespace Index.Profiles.HaloCEA.Jobs
       switch ( suffix )
       {
         case "nm":
+        case "det":
           return TextureType.Normals;
         case "spec":
           return TextureType.SpecularColor;

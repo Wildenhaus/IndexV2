@@ -1,5 +1,4 @@
-﻿using DirectXTexNet;
-using Index.Domain.Assets;
+﻿using Index.Domain.Assets;
 using Index.Domain.Assets.Textures;
 using Index.Domain.Assets.Textures.Dxgi;
 using Index.Jobs;
@@ -155,6 +154,7 @@ namespace Index.Profiles.Halo2A.Jobs
       switch ( suffix )
       {
         case "nm":
+        case "det":
           return TextureType.Normals;
         case "em":
           return TextureType.Emission;
