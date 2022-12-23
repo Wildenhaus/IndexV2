@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Index.Domain.Assets;
+﻿using Index.Domain.Assets;
 using Index.Domain.Assets.Textures;
 using Index.Domain.Jobs;
 using Index.Jobs;
 using Index.Profiles.Halo2A.Meshes;
+using LibSaber.Halo2A.Serialization.Scripting;
+using LibSaber.Halo2A.Structures.Textures;
 using Prism.Ioc;
 
 namespace Index.Profiles.Halo2A.Jobs
@@ -53,6 +50,13 @@ namespace Index.Profiles.Halo2A.Jobs
 
       var toLoadSet = GatherTextures();
       await LoadTextures( toLoadSet );
+
+      SetStatus( "Loading Additional Textures" );
+      SetIndeterminate();
+      SetIncludeUnitsInStatus();
+
+      toLoadSet = GatherAdditionalTextures();
+      await LoadTextures( toLoadSet );
     }
 
     #endregion
@@ -78,7 +82,7 @@ namespace Index.Profiles.Halo2A.Jobs
       return toLoadSet;
     }
 
-    private async Task<Dictionary<string, ITextureAsset>> LoadTextures( ICollection<IAssetReference> toLoadSet )
+    private async Task LoadTextures( ICollection<IAssetReference> toLoadSet )
     {
       SetCompletedUnits( 0 );
       SetTotalUnits( toLoadSet.Count );
@@ -104,7 +108,37 @@ namespace Index.Profiles.Halo2A.Jobs
       }
 
       await Task.WhenAll( jobs );
-      return Textures;
+    }
+
+    private HashSet<IAssetReference> GatherAdditionalTextures()
+    {
+      var toLoadSet = new HashSet<IAssetReference>();
+      var loadedTextures = Textures.Values.ToArray();
+      var textureAssetReferences = AssetManager.GetAssetReferencesOfType<ITextureAsset>();
+
+      foreach ( var loadedTexture in loadedTextures )
+      {
+        var texName = loadedTexture.AssetName;
+        var tdName = Path.ChangeExtension( texName, ".td" );
+
+        if ( !loadedTexture.AdditionalData.TryGetValue( tdName, out var tdData ) )
+          continue;
+
+        var serializer = new FileScriptingSerializer<TextureDefinition>();
+        var td = serializer.Deserialize( tdData );
+
+        foreach ( var additionalTexture in td.GetTextureNames() )
+        {
+          if ( Textures.ContainsKey( additionalTexture ) )
+            continue;
+
+          var matches = textureAssetReferences.Where( x => x.AssetName.StartsWith( additionalTexture ) );
+          foreach ( var match in matches )
+            toLoadSet.Add( match );
+        }
+      }
+
+      return toLoadSet;
     }
 
     #endregion
