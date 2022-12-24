@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Index.Domain.Assets;
 using Index.Domain.FileSystem;
@@ -7,11 +6,8 @@ using Index.Domain.Models;
 using Index.Modules.DataExplorer.Services;
 using Index.UI.Commands;
 using Index.UI.ViewModels;
-using Index.Utilities;
 using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Regions;
-using PropertyChanged;
 
 namespace Index.Modules.DataExplorer.ViewModels
 {
@@ -24,8 +20,7 @@ namespace Index.Modules.DataExplorer.ViewModels
     private readonly IAssetManager _assetManager;
     private readonly IFileSystem _fileSystem;
     private readonly IRegionManager _regionManager;
-
-    private readonly ActionThrottler _searchDebouncer;
+    private string _searchTerm;
 
     #endregion
 
@@ -34,9 +29,7 @@ namespace Index.Modules.DataExplorer.ViewModels
     public ObservableCollection<AssetNodeViewModel> AssetNodes { get; }
     public ObservableCollection<FileTreeNodeViewModel> FileTreeNodes { get; }
 
-    [OnChangedMethod( nameof( OnSearchTermChanged ) )]
-    public string SearchTerm { get; set; }
-
+    public ICommand SearchCommand { get; }
     public ICommand NavigateToAssetCommand { get; }
     public ICommand OpenAboutDialogCommand { get; }
 
@@ -55,17 +48,10 @@ namespace Index.Modules.DataExplorer.ViewModels
 
       NavigateToAssetCommand = new DelegateCommand<IAssetReference>( NavigateToAsset );
       OpenAboutDialogCommand = GlobalCommands.OpenAboutDialogCommand;
-
-      _searchDebouncer = new ActionThrottler( ApplySearchTerm, 500 );
+      SearchCommand = new DelegateCommand<string>( ApplySearchTerm );
     }
 
     #endregion
-
-    protected override void OnDisposing()
-    {
-      base.OnDisposing();
-      _searchDebouncer.Dispose();
-    }
 
     #region Private Methods
 
@@ -89,12 +75,8 @@ namespace Index.Modules.DataExplorer.ViewModels
       _regionManager.RequestNavigate( "EditorRegion", "TextureEditorView", parameters );
     }
 
-    private void OnSearchTermChanged()
-      => _searchDebouncer.Execute();
-
-    private void ApplySearchTerm()
+    private void ApplySearchTerm( string searchTerm )
     {
-      var searchTerm = SearchTerm;
       foreach ( var node in AssetNodes )
         node.ApplySearchCriteria( searchTerm );
     }

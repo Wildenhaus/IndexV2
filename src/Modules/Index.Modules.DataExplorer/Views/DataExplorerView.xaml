@@ -51,7 +51,10 @@
                         DockPanel.Dock="Right"
                         Command="{Binding OpenAboutDialogCommand}">
                     <Button.Content>
-                        <controls:IxIcon SegoeIcon="Help" Margin="0" Padding="0" Height="10"/>
+                        <controls:IxIcon SegoeIcon="Help"
+                                         Margin="0"
+                                         Padding="0"
+                                         Height="10" />
                     </Button.Content>
                 </Button>
             </DockPanel>
@@ -68,7 +71,7 @@
                             Panel.ZIndex="1"
                             PlaceholderText="Search"
                             Icon="{x:Static ui:SegoeIcon.Search}"
-                            Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}">
+                            SubmitTextCommand="{Binding SearchCommand}">
             <controls:IxTextBox.Style>
                 <Style TargetType="{x:Type controls:IxTextBox}"
                        BasedOn="{StaticResource {x:Type controls:IxTextBox}}">
@@ -92,13 +95,13 @@
 
         <TreeView Grid.Row="2"
                   ItemsSource="{Binding AssetNodes}"
+                  VirtualizingPanel.IsContainerVirtualizable="True"
                   VirtualizingPanel.IsVirtualizing="True"
+                  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
                   VirtualizingPanel.VirtualizationMode="Recycling">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <TextBlock Text="{Binding Name}"
-                               VirtualizingPanel.IsVirtualizing="True"
-                               VirtualizingPanel.VirtualizationMode="Recycling">
+                    <TextBlock Text="{Binding Name}">
                         <TextBlock.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick"
                                           Command="{Binding DoubleClickCommand}" />

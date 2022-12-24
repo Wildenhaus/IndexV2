@@ -1,11 +1,19 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Index.UI.Controls
 {
 
   public class IxTextBox : TextBox
   {
+
+    #region Data Members
+
+    private bool _isSubmitting;
+
+    #endregion
 
     #region Properties
 
@@ -42,6 +50,17 @@ namespace Index.UI.Controls
       set => SetValue( PlaceholderTextProperty, value );
     }
 
+    public static readonly DependencyProperty SubmitTextCommandProperty = DependencyProperty.Register(
+      nameof( SubmitTextCommand ),
+      typeof( ICommand ),
+      typeof( IxTextBox ) );
+
+    public ICommand SubmitTextCommand
+    {
+      get => ( ICommand ) GetValue( SubmitTextCommandProperty );
+      set => SetValue( SubmitTextCommandProperty, value );
+    }
+
     #endregion
 
     #region Constructor
@@ -61,6 +80,39 @@ namespace Index.UI.Controls
     {
       base.OnTextChanged( e );
       HasText = Text.Length != 0;
+    }
+
+    protected override void OnPreviewKeyDown( KeyEventArgs e )
+    {
+      base.OnPreviewKeyDown( e );
+
+      if ( e.Key == Key.Enter )
+        SubmitText();
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void SubmitText()
+    {
+      var submitCommand = SubmitTextCommand;
+      if ( _isSubmitting || submitCommand is null )
+        return;
+
+      IsEnabled = false;
+      _isSubmitting = true;
+      var text = Text;
+
+      Task.Run( () =>
+      {
+        submitCommand.Execute( text );
+      } )
+        .ContinueWith( t =>
+        {
+          _isSubmitting = false;
+          Dispatcher.Invoke( () => { IsEnabled = true; } );
+        } );
     }
 
     #endregion
