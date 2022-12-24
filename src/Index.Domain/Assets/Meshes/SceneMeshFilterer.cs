@@ -119,16 +119,14 @@ namespace Index.Domain.Assets.Meshes
 
     private Node AddNode( Node oldNode, Node newParentNode = null )
     {
-      if ( _removeSet.Contains( oldNode.Name ) )
-        return null;
-
       var newNode = new Node( oldNode.Name, newParentNode );
       if ( newParentNode != null )
         newParentNode.Children.Add( newNode );
 
       newNode.Transform = oldNode.Transform;
 
-      CopyNodeMeshes( oldNode, newNode );
+      if ( !_removeSet.Contains( oldNode.Name ) )
+        CopyNodeMeshes( oldNode, newNode );
 
       foreach ( var child in oldNode.Children )
         AddNode( child, newNode );
