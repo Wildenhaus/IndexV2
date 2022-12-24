@@ -129,6 +129,9 @@ namespace Index.Profiles.Halo2A.Jobs
 
         foreach ( var additionalTexture in td.GetTextureNames() )
         {
+          if ( string.IsNullOrWhiteSpace( additionalTexture ) )
+            continue;
+
           if ( Textures.ContainsKey( additionalTexture ) )
             continue;
 
