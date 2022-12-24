@@ -50,6 +50,9 @@ namespace Index.Domain.Assets.Meshes
       var newRoot = AddNode( oldRoot );
 
       NewScene.RootNode = newRoot;
+
+      CopyLights();
+
       return NewScene;
     }
 
@@ -131,6 +134,25 @@ namespace Index.Domain.Assets.Meshes
         AddNode( child, newNode );
 
       return newNode;
+    }
+
+    private void CopyLights()
+    {
+      foreach ( var light in OldScene.Lights )
+      {
+        NewScene.Lights.Add( new Light
+        {
+          Name = light.Name,
+          Position = light.Position,
+          LightType = light.LightType,
+          ColorAmbient = light.ColorAmbient,
+          ColorDiffuse = light.ColorDiffuse,
+          ColorSpecular = light.ColorSpecular,
+          AngleInnerCone = light.AngleInnerCone,
+          AngleOuterCone = light.AngleOuterCone,
+          Up = light.Up
+        } );
+      }
     }
 
     #endregion
