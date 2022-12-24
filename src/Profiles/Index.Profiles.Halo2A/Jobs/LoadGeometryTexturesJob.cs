@@ -92,6 +92,12 @@ namespace Index.Profiles.Halo2A.Jobs
       var jobSemaphore = new SemaphoreSlim( 5 );
       foreach ( var assetToLoad in toLoadSet )
       {
+        lock ( Textures )
+        {
+          if ( Textures.ContainsKey( assetToLoad.AssetName ) )
+            continue;
+        }
+
         jobSemaphore.Wait();
         var loadJob = AssetManager.LoadAsset<ITextureAsset>( assetToLoad, AssetLoadContext );
         loadJob.RegisterCompletionCallback( job =>
