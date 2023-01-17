@@ -14,7 +14,7 @@ namespace Index.App.ViewModels
     #region Events
 
     public event EventHandler? Complete;
-    public event EventHandler? Faulted;
+    public event EventHandler<Exception>? Faulted;
 
     #endregion
 
@@ -74,7 +74,7 @@ namespace Index.App.ViewModels
       }
       catch ( Exception ex )
       {
-        Faulted?.Invoke( this, EventArgs.Empty );
+        Faulted?.Invoke( this, ex );
       }
     }
 

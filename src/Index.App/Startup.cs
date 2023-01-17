@@ -2,8 +2,10 @@
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 using DryIoc;
 using Index.App.Prism;
+using Index.App.ViewModels;
 using Index.App.Views;
 using Index.Domain.Assets;
 using Index.Domain.Database;
@@ -14,9 +16,11 @@ using Index.Domain.Models;
 using Index.Jobs;
 using Index.Textures;
 using Index.UI.Services;
+using Index.UI.Windows;
 using Microsoft.EntityFrameworkCore;
 using Prism.DryIoc;
 using Prism.Ioc;
+using Prism.Services.Dialogs;
 
 namespace Index.App
 {
@@ -109,6 +113,7 @@ namespace Index.App
     private void RunStartupFlow()
     {
       App.Current.MainWindow = new Window();
+      App.Current.DispatcherUnhandledException += OnUnhandledException;
 
       InitializeDatabase();
 
@@ -118,6 +123,8 @@ namespace Index.App
 
       if ( !InitializeEditor() )
         Environment.Exit( 0 );
+
+      App.Current.DispatcherUnhandledException -= OnUnhandledException;
     }
 
     private void InitializeDatabase()
@@ -137,7 +144,10 @@ namespace Index.App
       var loadingView = Container.Resolve<EditorLoadingView>();
       var result = loadingView.ShowDialog();
 
-      return true;
+      if ( result == false && loadingView.Exception != null )
+        ShowUnhandledExceptionDialog( loadingView.Exception );
+
+      return result ?? true;
     }
 
     private void RunEditor()
@@ -171,6 +181,32 @@ namespace Index.App
       editorEnvironment.GameProfile = profile;
 
       return true;
+    }
+
+    private void ShowUnhandledExceptionDialog( Exception exception )
+    {
+      var parameters = new DialogParameters { { nameof( Exception ), exception } };
+
+      var exceptionViewModel = new UnhandledExceptionDialogViewModel( null );
+      exceptionViewModel.OnDialogOpened( parameters );
+
+      var exceptionView = new UnhandledExceptionDialog();
+
+      var exceptionWindow = new IxDialogWindow();
+      exceptionWindow.DataContext = exceptionViewModel;
+      exceptionWindow.Content = exceptionView;
+
+      exceptionWindow.ShowDialog();
+    }
+
+    #endregion
+
+    #region Event Handlers
+
+    private void OnUnhandledException( object sender, DispatcherUnhandledExceptionEventArgs e )
+    {
+      // A temporary event hook for showing exception windows before the editor is loaded.
+      ShowUnhandledExceptionDialog( e.Exception );
     }
 
     #endregion
