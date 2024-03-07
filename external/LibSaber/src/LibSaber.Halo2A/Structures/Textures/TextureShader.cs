@@ -202,6 +202,12 @@ namespace LibSaber.Halo2A.Structures.Textures
     [ScriptingProperty( "texNM" )]
     public String TextureNormalMap { get; set; }
 
+    [ScriptingProperty( "textureScaleU" )]
+    public Single TextureScaleU { get; set; }
+
+    [ScriptingProperty( "textureScaleV" )]
+    public Single TextureScaleV{ get; set; }
+
     [ScriptingProperty( "tint" )]
     public SaberColor Tint { get; set; }
 
@@ -219,6 +225,9 @@ namespace LibSaber.Halo2A.Structures.Textures
 
     [ScriptingProperty( "writeDepth" )]
     public Boolean WriteDepth { get; set; }
+
+    [ScriptingProperty( "z_write_force_off" )]
+    public Boolean ZWriteForceOff { get; set; }
 
     [ScriptingProperty( "z_func_less" )]
     public Boolean ZFuncLessEnabled { get; set; }
