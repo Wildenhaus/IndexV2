@@ -55,9 +55,16 @@ namespace Index.Profiles.HaloCEA.Jobs
       SetStatus( "Loading Scene Props" );
       SetIndeterminate();
 
-      var propsToLoad = GatherProps();
-      var loadedProps = await LoadProps( propsToLoad );
-      AddProps( loadedProps );
+      try
+      {
+        var propsToLoad = GatherProps();
+        var loadedProps = await LoadProps( propsToLoad );
+        AddProps( loadedProps );
+      }
+      catch(Exception ex)
+      {
+        Log.Logger.Error(ex, "Failed to add props." );
+      }
     }
 
     private HashSet<string> GatherProps()
