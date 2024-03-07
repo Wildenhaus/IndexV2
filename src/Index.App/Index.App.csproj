@@ -8,8 +8,8 @@
 	<PackageIcon>Icon.ico</PackageIcon>
 	<ApplicationIcon>Icon.ico</ApplicationIcon>
 	<XamlDebuggingInformation>True</XamlDebuggingInformation>
-	<AssemblyVersion>0.3.0.1</AssemblyVersion>
-	<FileVersion>0.3.0.1</FileVersion>
+	<AssemblyVersion>0.3.0.2</AssemblyVersion>
+	<FileVersion>0.3.0.2</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
