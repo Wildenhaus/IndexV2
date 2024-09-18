@@ -1,16 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <RootNamespace>Index</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DirectXTexNet" Version="1.0.3" />
-    <PackageReference Include="Magick.NET-Q16-HDRI-x64" Version="12.2.1" />
+    <ProjectReference Include="..\src\Profiles\Index.Profiles.Halo2A\Index.Profiles.Halo2A.csproj" />
   </ItemGroup>
 
 </Project>

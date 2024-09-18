@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
 	<PackageIcon>Icon.ico</PackageIcon>
@@ -33,6 +33,7 @@
     <ProjectReference Include="..\Modules\Index.Modules.MeshEditor\Index.Modules.MeshEditor.csproj" />
     <ProjectReference Include="..\Modules\Index.Modules.TextEditor\Index.Modules.TextEditor.csproj" />
     <ProjectReference Include="..\Modules\Index.Modules.TextureEditor\Index.Modules.TextureEditor.csproj" />
+    <ProjectReference Include="..\Profiles\Index.Profiles.SpaceMarine2\Index.Profiles.SpaceMarine2.csproj" />
   </ItemGroup>
 
   <ItemGroup>
