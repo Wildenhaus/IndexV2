@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:Index.UI.Controls;assembly=Index.UI"
         xmlns:windows="clr-namespace:Index.UI.Windows;assembly=Index.UI"
+        xmlns:appVm="clr-namespace:Index.App.ViewModels"
         Width="400"
         Height="150"
         ResizeMode="NoResize"
@@ -34,7 +35,7 @@
                        VerticalAlignment="Center">
                     <Path Width="60"
                           Height="60"
-                          Stroke="{DynamicResource Brushes.Foreground.Static}"
+                          Stroke="{Binding IconBrush}"
                           StrokeThickness="2"
                           Stretch="Uniform"
                           Data="{Binding Source={StaticResource Path.IndexLogo}, Path=Data}" />

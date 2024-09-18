@@ -27,7 +27,7 @@ namespace Index.Domain.Assets
 
     #region Public Methods
 
-    public abstract IJob<TAsset> LoadAsset( IAssetReference assetReference );
+    public abstract IJob<TAsset> LoadAsset( IAssetReference assetReference, IAssetLoadContext assetLoadContext = null );
 
     #endregion
 

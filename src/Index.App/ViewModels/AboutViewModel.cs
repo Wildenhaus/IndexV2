@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Index.Common;
 using Index.UI.ViewModels;
 using Prism.Ioc;
 
@@ -12,8 +13,7 @@ namespace Index.App.ViewModels
     {
       get
       {
-        var version = GetBuildVersion();
-        return $"v{version}";
+        return GetBuildVersion();
       }
     }
 
@@ -26,8 +26,7 @@ namespace Index.App.ViewModels
     private static string GetBuildVersion()
     {
       var assembly = Assembly.GetExecutingAssembly();
-      var attr = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-      return attr?.InformationalVersion;
+      return AssemblyHelpers.GetBuildString( assembly );
     }
 
   }

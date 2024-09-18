@@ -26,6 +26,12 @@ namespace Index.Domain.Assets
     bool TryGetAssetReference( Type assetType, string assetName, out IAssetReference assetReference );
     IEnumerable<IAssetReference> GetAssetReferencesOfType<TAsset>();
 
+    string GetAssetTypeName( Type assetType );
+    Type GetAssetExportOptionsType( Type assetType );
+
+    void RegisterViewTypeForExportOptionsType( Type exportOptionsType, Type viewType );
+    Type GetViewTypeForExportOptionsType( Type exportOptionsType );
+
     #endregion
 
   }

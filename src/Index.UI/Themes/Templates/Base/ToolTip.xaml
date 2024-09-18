@@ -1,0 +1,41 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style TargetType="{x:Type ToolTip}">
+        <Setter Property="Background" Value="{DynamicResource Popup.Static.Background}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Popup.Static.Border}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ABrush.Foreground.Static}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="MaxWidth" Value="800"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="HasDropShadow" Value="True"/>
+        <Setter Property="Placement" Value="MousePoint"/>
+        <Setter Property="PlacementRectangle" Value="10 10 5 5"/>
+        <Setter Property="HorizontalOffset" Value="15"/>
+        <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+        <Setter Property="VerticalOffset" Value="15"/>
+        <Setter Property="ToolTipService.ShowDuration" Value="30000"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="500"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToolTip}">
+                    <Border Name="Border" SnapsToDevicePixels="True" BorderThickness="1" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                        <ContentPresenter Margin="10,6" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                            <ContentPresenter.Resources>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                    <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                    <Setter Property="TextAlignment" Value="Left"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource Brushes.Foreground.Static}"/>
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

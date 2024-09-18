@@ -1,4 +1,5 @@
 ﻿using Index.Common;
+using Index.Domain.Jobs;
 using Prism.Ioc;
 using static System.Reflection.Metadata.BlobBuilder;
 
@@ -17,6 +18,12 @@ namespace Index.Jobs
     private IJob _currentJob;
     private int _currentJobKey;
     private int _completedJobs;
+
+    #endregion
+
+    #region Properties
+
+    protected bool ContinueOnSubJobFaulted { get; set; }
 
     #endregion
 
@@ -46,8 +53,15 @@ namespace Index.Jobs
     protected override async Task OnExecuting()
     {
       SetIndeterminate();
-      foreach ( (int jobKey, IJob job) in _jobs )
+
+      var queue = new Queue<(int jobKey, IJob job)>( _jobs );
+
+      var index = 0;
+      while ( queue.TryDequeue(out (int jobKey, IJob job) result ) )
       {
+        var jobKey = result.jobKey;
+        var job = result.job;
+
         if ( IsCancellationRequested )
           return;
 
@@ -61,22 +75,32 @@ namespace Index.Jobs
         }
         catch ( Exception ex )
         {
-          HandleException( ex );
-          return;
+          if ( !ContinueOnSubJobFaulted )
+          {
+            HandleException( job.Exception );
+            return;
+          }
         }
         finally
         {
           _completedJobs++;
+          SetCompletedUnits( _completedJobs );
           job.Progress.PropertyChanged -= OnSubJobProgressPropertyChanged;
         }
 
         if ( job.State == JobState.Faulted )
         {
-          HandleException( job.Exception );
-          return;
+          if ( !ContinueOnSubJobFaulted )
+          {
+            HandleException( job.Exception );
+            return;
+          }
         }
 
         await OnSubJobCompleted( jobKey, job );
+
+        _jobs[ index ] = (jobKey, new CompletedJob());
+        index++;
       }
     }
 

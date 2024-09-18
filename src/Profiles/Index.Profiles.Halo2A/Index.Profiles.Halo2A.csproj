@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyVersion>0.3.0.*</AssemblyVersion>
@@ -19,11 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fody" Version="6.6.4">
+    <PackageReference Include="Fody" Version="6.8.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="ILMerge.Fody" Version="1.23.0" />
+    <PackageReference Include="ILMerge.Fody" Version="1.24.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="echo $(FrameworkVersion)&#xD;&#xA;echo $(Platform)&#xD;&#xA;mkdir &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\win-x64\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\win-x64\GameProfiles\$(TargetName).dll&quot;&#xD;&#xA;mkdir &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\GameProfiles\$(TargetName).dll&quot;" />
+    <Exec Command="echo $(FrameworkVersion)&#xD;&#xA;echo $(Platform)&#xD;&#xA;mkdir &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net8.0-windows7.0\win-x64\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net8.0-windows7.0\win-x64\GameProfiles\$(TargetName).dll&quot;&#xD;&#xA;mkdir &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net8.0-windows7.0\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net8.0-windows7.0\GameProfiles\$(TargetName).dll&quot;" />
   </Target>
 
 </Project>

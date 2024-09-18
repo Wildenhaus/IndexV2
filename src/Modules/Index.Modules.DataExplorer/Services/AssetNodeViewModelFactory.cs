@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Index.Domain.Assets;
@@ -38,18 +39,43 @@ namespace Index.Modules.DataExplorer.Services
       return rootCategories;
     }
 
+    public List<AssetNodeViewModel> CreateNodeSearchGraph( IEnumerable<AssetNodeViewModel> nodes )
+    {
+      var flattenedList = new List<AssetNodeViewModel>();
+
+      void FlattenNode( AssetNodeViewModel node, List<AssetNodeViewModel> result )
+      {
+        foreach ( var child in node.Children )
+        {
+          FlattenNode( child, result );
+        }
+
+        result.Add( node );
+      }
+
+      foreach ( var root in nodes )
+      {
+        FlattenNode( root, flattenedList );
+      }
+
+      return flattenedList;
+    }
+
     #endregion
 
     private AssetNodeViewModel CreateCategoryNode( IAssetReferenceCollection assetReferenceCollection )
     {
       var categoryNode = new AssetNodeViewModel( assetReferenceCollection.AssetTypeName );
+      categoryNode.AssetType = assetReferenceCollection.AssetType;
+      categoryNode.Children.SuppressNotifications = true;
 
-      var groups = assetReferenceCollection.GroupBy( x => GetAssetSubDirectory( x ) );
+      var groups = assetReferenceCollection.Where(x => !x.Node.IsHidden).GroupBy( x => GetAssetSubDirectory( x ) );
       if ( groups.Count() == 1 )
       {
-        foreach ( var asset in groups.Single().OrderBy( x => x.Node.Name ) )
+        foreach ( var asset in groups.Single().Where( x => !x.Node.IsHidden ).OrderBy( x => x.Node.Name ) )
           categoryNode.Children.Add( new AssetNodeViewModel( asset ) );
 
+        categoryNode.Children.SuppressNotifications = false;
         return categoryNode;
       }
 
@@ -63,19 +89,20 @@ namespace Index.Modules.DataExplorer.Services
 
         if ( string.IsNullOrEmpty( group.Key ) )
         {
-          foreach ( var asset in group.OrderBy( x => x.Node.Name ) )
+          foreach ( var asset in group.Where(x => !x.Node.IsHidden).OrderBy( x => x.Node.Name ) )
             categoryNode.Children.Add( new AssetNodeViewModel( asset ) );
 
           continue;
         }
 
         var groupNode = new AssetNodeViewModel( group.Key );
-        foreach ( var asset in group.OrderBy( x => x.Node.Name ) )
+        foreach ( var asset in group.Where( x => !x.Node.IsHidden ).OrderBy( x => x.Node.Name ) )
           groupNode.Children.Add( new AssetNodeViewModel( asset ) );
 
         categoryNode.Children.Add( groupNode );
       }
 
+      categoryNode.Children.SuppressNotifications = false;
       return categoryNode;
     }
 

@@ -1,0 +1,127 @@
+﻿<UserControl x:Class="Index.Modules.DataExplorer.Views.BulkExportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:local="clr-namespace:Index.Modules.DataExplorer.Views"
+             xmlns:controls="clr-namespace:Index.UI.Controls;assembly=Index.UI"
+             xmlns:domain="clr-namespace:Index.Domain;assembly=Index.Domain"
+             xmlns:viewmodels="clr-namespace:Index.Modules.DataExplorer.ViewModels"
+             xmlns:ui="clr-namespace:Index.UI;assembly=Index.UI"
+             d:DataContext="{d:DesignInstance Type=viewmodels:BulkExportViewModel}"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="#40000000">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+        <TabControl x:Name="OptionsTabs" 
+                TabStripPlacement="Left"
+                prism:RegionManager.RegionName="{x:Static domain:RegionKeys.BulkExportOptionsTabsRegion}">
+
+            <TabItem Header="Files" MinWidth="100">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <controls:IxTextBox Grid.Row="0"
+                                    Padding="2"
+                                    Panel.ZIndex="1"
+                                    PlaceholderText="Search"
+                                    Icon="{x:Static ui:SegoeIcon.Search}"
+                                    SubmitTextCommand="{Binding SearchCommand}">
+                        <controls:IxTextBox.Style>
+                            <Style TargetType="{x:Type controls:IxTextBox}"
+                               BasedOn="{StaticResource {x:Type controls:IxTextBox}}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                        <Setter Property="BorderThickness" Value="0,1,0,1" />
+                                        <Setter Property="Effect">
+                                            <Setter.Value>
+                                                <DropShadowEffect x:Name="DropShadow"
+                                              ShadowDepth="1"
+                                              BlurRadius="10"
+                                              Opacity="1"
+                                              Color="#000" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </controls:IxTextBox.Style>
+                    </controls:IxTextBox>
+
+                    <TreeView Grid.Row="1" 
+                          ItemsSource="{Binding NodesView}"
+                          VirtualizingPanel.IsContainerVirtualizable="True"
+                          VirtualizingPanel.IsVirtualizing="True"
+                          VirtualizingStackPanel.VirtualizationMode="Recycling"
+                          ScrollViewer.CanContentScroll="True">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding ChildrenView, IsAsync=True}">
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel.InputBindings>
+                                        <KeyBinding Key="Space" Command="{Binding ToggleCheckedCommand}" />
+                                    </StackPanel.InputBindings>
+                                    <CheckBox IsChecked="{Binding IsChecked}"
+                                          Margin="1"/>
+                                    <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                </StackPanel>
+
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}"
+                               BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsVisible, Mode=OneWay}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                    </TreeView>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <StackPanel Grid.Row="1"
+                    Margin="0"
+                    Visibility="{Binding IsExporting, Mode=OneWay, Converter={StaticResource InverseVisibilityConverter}}">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0">
+                <Button Content="Export"
+                        Width="70"
+                        Margin="0,1,0,0"
+                        HorizontalAlignment="Right"
+                        Command="{Binding ExportCommand}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Visibility="{Binding IsExporting, Mode=OneWay, Converter={StaticResource VisibilityConverter}}">
+            <ProgressBar Maximum="1"
+                         Value="{Binding ExportJob.Progress.PercentCompleted, Mode=OneWay}"
+                         IsIndeterminate="{Binding ExportJob.Progress.IsIndeterminate, Mode=OneWay}" />
+            <TextBlock Text="{Binding ExportJob.Progress.PercentCompleted, Mode=OneWay, StringFormat='0.00%'}"
+                       Visibility="{Binding ExportJob.Progress.IsIndeterminate, Mode=OneWay, Converter={StaticResource InverseVisibilityConverter}}"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center">
+                <TextBlock.Effect>
+                    <DropShadowEffect ShadowDepth="0"
+                          BlurRadius="10"
+                          Opacity="1"
+                          Color="#000" />
+                </TextBlock.Effect>
+            </TextBlock>
+        </Grid>
+    </Grid>
+
+</UserControl>
