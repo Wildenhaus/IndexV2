@@ -19,7 +19,7 @@
 
     #region Properties
 
-    public bool IsCubeMap => FaceCount > 1;
+    public bool IsCubeMap => FaceCount >= 6;
 
     #endregion
 

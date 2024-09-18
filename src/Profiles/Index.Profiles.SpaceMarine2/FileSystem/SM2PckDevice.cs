@@ -30,15 +30,18 @@ public class SM2PckDevice : FileSystemDeviceBase
 
   public override Stream GetStream( IFileSystemNode node )
   {
-    var smNode = node as SM2FileSystemNode;
-    ASSERT( smNode != null, "Node is not an SM2FileSystemNode." );
+    lock ( _zipArchive )
+    {
+      var smNode = node as SM2FileSystemNode;
+      ASSERT( smNode != null, "Node is not an SM2FileSystemNode." );
 
-    var stream = new MemoryStream();
-    using ( var smStream = smNode.Entry.Open() )
-      smStream.CopyTo( stream );
+      var stream = new MemoryStream();
+      using ( var smStream = smNode.Entry.Open() )
+        smStream.CopyTo( stream );
 
-    stream.Position = 0;
-    return stream;
+      stream.Position = 0;
+      return stream;
+    }
   }
 
   protected override Task<IResult<IFileSystemNode>> OnInitializing( CancellationToken cancellationToken = default )

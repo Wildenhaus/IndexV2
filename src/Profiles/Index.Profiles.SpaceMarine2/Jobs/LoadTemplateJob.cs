@@ -25,6 +25,7 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       AddJob<DeserializeTemplateJob>();
       AddJob<ConvertGeometryJob>();
       AddJob<LoadGeometryTexturesJob>();
+      AddJob<IdentifyMeshesJob>();
     }
 
     protected override async Task OnCompleted()
@@ -34,6 +35,8 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       asset.AssetLoadContext = Parameters.Get<IAssetLoadContext>();
       asset.AssimpScene = Parameters.Get<SceneContext>().Scene;
       asset.Textures = Parameters.Get<Dictionary<string, ITextureAsset>>( "Textures" );
+      asset.LodMeshNames = Parameters.Get<HashSet<string>>( "LodMeshSet" );
+      asset.VolumeMeshNames = Parameters.Get<HashSet<string>>( "VolumeMeshSet" );
 
       SetResult( asset );
     }

@@ -160,9 +160,11 @@ namespace Index.Profiles.SpaceMarine2.Jobs
           return DxgiTextureFormat.DXGI_FORMAT_BC7_UNORM;
         case SM2TextureFormat.R8U:
           return DxgiTextureFormat.DXGI_FORMAT_R8_UNORM;
+        case SM2TextureFormat.XT5: // TODO: NOT CORRECT
+          return DxgiTextureFormat.DXGI_FORMAT_BC5_UNORM;
 
         default:
-          throw new NotSupportedException( "Invalid SM2 Texture Type." );
+          throw new NotSupportedException( "Invalid SM2 Texture Type: " + format.ToString() );
       }
     }
 
