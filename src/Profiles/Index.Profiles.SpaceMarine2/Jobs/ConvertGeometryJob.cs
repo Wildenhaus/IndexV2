@@ -95,6 +95,7 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       SetCompletedUnits( 0 );
 
       var rootNode = Context.RootNode;
+      //AddNodesRecursive( Context.GeometryGraph.RootObject, rootNode );
 
       foreach ( var obj in objects )
       {
@@ -126,6 +127,20 @@ namespace Index.Profiles.SpaceMarine2.Jobs
 
         IncreaseCompletedUnits( 1 );
       }
+    }
+
+    private void AddNodesRecursive(objOBJ obj, Node parentNode)
+    {
+      if ( obj.SubMeshes.Any() )
+        return;
+
+      var node = new Node( obj.GetName(), parentNode );
+      parentNode.Children.Add( node );
+      Context.Nodes.Add( obj.id, node );
+      IncreaseCompletedUnits( 1 );
+
+      foreach ( var childObj in obj.EnumerateChildren() )
+        AddNodesRecursive( childObj, node );
     }
 
     private void AddMeshNodes( List<objOBJ> objects )
@@ -163,13 +178,13 @@ namespace Index.Profiles.SpaceMarine2.Jobs
         var meshId = Context.Scene.Meshes.Count - 1;
         node.MeshIndices.Add( meshId );
 
-        //var transform = obj.MatrixLT.ToAssimp();
-        //transform.Transpose();
-        //node.Transform = transform;
+        var transform = obj.MatrixLT.ToAssimp();
+        transform.Transpose();
+        node.Transform = transform;
 
         var meshName = obj.GetMeshName();
-        //if ( !mesh.HasBones && obj.Parent != null )
-        //  builder.ParentMeshToBone( obj.Parent );
+        if ( !mesh.HasBones && obj.Parent != null )
+          builder.ParentMeshToBone( obj.Parent );
 
         IncreaseCompletedUnits( 1 );
       }

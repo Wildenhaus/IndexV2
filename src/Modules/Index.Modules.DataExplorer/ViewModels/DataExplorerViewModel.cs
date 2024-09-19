@@ -1,5 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Index.Domain.Assets;
 using Index.Domain.FileSystem;
 using Index.Domain.Models;
@@ -77,8 +80,11 @@ namespace Index.Modules.DataExplorer.ViewModels
 
     private void ApplySearchTerm( string searchTerm )
     {
-      foreach ( var node in AssetNodes )
-        node.ApplySearchCriteria( searchTerm );
+      Application.Current.Dispatcher.BeginInvoke( new Action( () =>
+      {
+        foreach ( var node in AssetNodes )
+          node.ApplySearchCriteria( searchTerm );
+      } ), DispatcherPriority.Background );
     }
 
     #endregion

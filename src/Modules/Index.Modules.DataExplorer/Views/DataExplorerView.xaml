@@ -94,34 +94,39 @@
         </controls:IxTextBox>
 
         <TreeView Grid.Row="2"
-                  ItemsSource="{Binding AssetNodes}"
-                  VirtualizingPanel.IsContainerVirtualizable="True"
-                  VirtualizingPanel.IsVirtualizing="True"
-                  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-                  VirtualizingPanel.VirtualizationMode="Recycling">
+          ItemsSource="{Binding AssetNodes}"
+          VirtualizingPanel.IsContainerVirtualizable="True"
+          VirtualizingPanel.IsVirtualizing="True"
+          VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+          VirtualizingPanel.VirtualizationMode="Recycling"
+          ScrollViewer.CanContentScroll="True">
+            <TreeView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel IsVirtualizing="True"
+                                    VirtualizationMode="Recycling" />
+                </ItemsPanelTemplate>
+            </TreeView.ItemsPanel>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                     <TextBlock Text="{Binding Name}">
                         <TextBlock.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick"
-                                          Command="{Binding DoubleClickCommand}" />
+                                  Command="{Binding DoubleClickCommand}" />
                         </TextBlock.InputBindings>
                     </TextBlock>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}"
-                       BasedOn="{StaticResource {x:Type TreeViewItem}}">
+               BasedOn="{StaticResource {x:Type TreeViewItem}}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsVisible}"
-                                     Value="False">
+                        <DataTrigger Binding="{Binding IsVisible}" Value="False">
                             <Setter Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </TreeView.ItemContainerStyle>
-
         </TreeView>
 
     </Grid>

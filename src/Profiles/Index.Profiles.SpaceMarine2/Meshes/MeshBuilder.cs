@@ -66,20 +66,20 @@ namespace Index.Profiles.SpaceMarine2.Meshes
           case GeometryElementType.Vertex:
             AddVertices( buffer, meshBuffer );
             break;
-          case GeometryElementType.Unknown:
+          case GeometryElementType.Face:
             AddFaces( buffer, meshBuffer );
             break;
           case GeometryElementType.Interleaved:
             AddInterleavedData( buffer, meshBuffer );
             break;
-            //case GeometryElementType.BoneId:
-            //  AddSkinCompoundBoneIds( buffer, meshBuffer );
-            //  break;
+          case GeometryElementType.BoneId:
+            AddSkinCompoundBoneIds( buffer, meshBuffer );
+            break;
         }
       }
 
-      //ApplySkinCompoundData();
-      AddMaterial();
+      ApplySkinCompoundData();
+      //AddMaterial();
 
       return Mesh;
     }
@@ -153,16 +153,16 @@ namespace Index.Profiles.SpaceMarine2.Meshes
     private void AddVertexSkinningData( Vertex vertex )
     {
       var boneIds = Submesh.BoneIds;
-      var set = new HashSet<byte>();
+      var set = new HashSet<short>();
 
       if ( vertex.Weight1.HasValue && set.Add( vertex.Index1 ) )
-        AddVertexWeight( boneIds[ vertex.Index1 ], vertex.Weight1.Value );
+        AddVertexWeight( vertex.Index1, vertex.Weight1.Value );
       if ( vertex.Weight2.HasValue && set.Add( vertex.Index2 ) )
-        AddVertexWeight( boneIds[ vertex.Index2 ], vertex.Weight2.Value );
+        AddVertexWeight( vertex.Index2, vertex.Weight2.Value );
       if ( vertex.Weight3.HasValue && set.Add( vertex.Index3 ) )
-        AddVertexWeight( boneIds[ vertex.Index3 ], vertex.Weight3.Value );
+        AddVertexWeight( vertex.Index3, vertex.Weight3.Value );
       if ( vertex.Weight4.HasValue && set.Add( vertex.Index4 ) )
-        AddVertexWeight( boneIds[ vertex.Index4 ], vertex.Weight4.Value );
+        AddVertexWeight( vertex.Index4, vertex.Weight4.Value );
     }
 
     private void AddVertexWeight( short boneObjectId, float weight, int vertIndex = -1 )
