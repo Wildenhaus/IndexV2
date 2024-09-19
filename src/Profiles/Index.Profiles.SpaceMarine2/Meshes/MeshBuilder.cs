@@ -79,7 +79,7 @@ namespace Index.Profiles.SpaceMarine2.Meshes
       }
 
       ApplySkinCompoundData();
-      //AddMaterial();
+      AddMaterial();
 
       return Mesh;
     }

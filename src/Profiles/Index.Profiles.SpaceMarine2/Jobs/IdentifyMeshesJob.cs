@@ -112,12 +112,12 @@ namespace Index.Profiles.SpaceMarine2.Jobs
         {
           if ( VolumeAffixes.Contains( affix ) )
           {
-            set.Add( obj.GetMeshName() );
+            set.Add( obj.GetName() );
             break;
           }
-          else if ( obj.GetMeshName().Contains("cdt", StringComparison.InvariantCultureIgnoreCase))
+          else if ( obj.GetName().Contains("cdt", StringComparison.InvariantCultureIgnoreCase))
           {
-            set.Add( obj.GetMeshName() );
+            set.Add( obj.GetName() );
           }
         }
       }
