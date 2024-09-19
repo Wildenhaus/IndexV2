@@ -54,8 +54,15 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       AddNodes( Context.GeometryGraph.objects );
       //BuildSkinCompounds();
       AddMeshNodes( Context.GeometryGraph.objects );
-      //AddRemainingMeshBones();
+      AddRemainingMeshBones();
       //RenameBones();
+
+      using ( var ctx = new AssimpContext() )
+      {
+        var s = ctx.ExportFile( Context.Scene, @"E:\test\test.fbx", "fbx" );
+
+        var test = ctx.ImportFile( @"E:\test\test.fbx" );
+      }
     }
 
     private void BuildSkinCompounds()
@@ -95,38 +102,42 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       SetCompletedUnits( 0 );
 
       var rootNode = Context.RootNode;
-      //AddNodesRecursive( Context.GeometryGraph.RootObject, rootNode );
+      var rootObject = Context.GeometryGraph.RootObject;
+      if ( rootObject.ReadName is null )
+        rootObject.ReadName = Context.Name;
 
-      foreach ( var obj in objects )
-      {
-        var path = obj.UnkName;
-        if ( string.IsNullOrEmpty( path ) )
-          continue;
+      AddNodesRecursive(rootObject, rootNode);
 
-        var pathParts = path.Split( '|', StringSplitOptions.RemoveEmptyEntries );
-        var parentNode = rootNode;
-        foreach ( var part in pathParts )
-        {
-          if ( !Context.NodeNames.TryGetValue( part, out var newNode ) )
-          {
-            newNode = new Node( part, parentNode );
-            parentNode.Children.Add( newNode );
-            Context.NodeNames.Add( part, newNode );
-          }
+      //foreach ( var obj in objects )
+      //{
+      //  var path = obj.UnkName;
+      //  if ( string.IsNullOrEmpty( path ) )
+      //    continue;
 
-          parentNode = newNode;
-        }
+      //  var pathParts = path.Split( '|', StringSplitOptions.RemoveEmptyEntries );
+      //  var parentNode = rootNode;
+      //  foreach ( var part in pathParts )
+      //  {
+      //    if ( !Context.NodeNames.TryGetValue( part, out var newNode ) )
+      //    {
+      //      newNode = new Node( part, parentNode );
+      //      parentNode.Children.Add( newNode );
+      //      Context.NodeNames.Add( part, newNode );
+      //    }
 
-        var nodeName = pathParts.Last();
-        var node = Context.NodeNames[ nodeName ];
-        Context.Nodes.Add( obj.id, node );
+      //    parentNode = newNode;
+      //  }
 
-        var transform = obj.MatrixModel.ToAssimp();
-        transform.Transpose();
-        node.Transform = transform;
+      //  var nodeName = pathParts.Last();
+      //  var node = Context.NodeNames[ nodeName ];
+      //  Context.Nodes.Add( obj.id, node );
 
-        IncreaseCompletedUnits( 1 );
-      }
+      //  var transform = obj.MatrixModel.ToAssimp();
+      //  transform.Transpose();
+      //  node.Transform = transform;
+
+      //  IncreaseCompletedUnits( 1 );
+      //}
     }
 
     private void AddNodesRecursive(objOBJ obj, Node parentNode)
@@ -134,9 +145,17 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       if ( obj.SubMeshes.Any() )
         return;
 
-      var node = new Node( obj.GetName(), parentNode );
+      var objName = obj.GetName();
+
+      var node = new Node( objName, parentNode );
       parentNode.Children.Add( node );
       Context.Nodes.Add( obj.id, node );
+      Context.NodeNames.Add( objName, node );
+
+      var transform = obj.MatrixModel.ToAssimp();
+      transform.Transpose();
+      node.Transform = transform;
+
       IncreaseCompletedUnits( 1 );
 
       foreach ( var childObj in obj.EnumerateChildren() )
@@ -168,7 +187,7 @@ namespace Index.Profiles.SpaceMarine2.Jobs
     {
       foreach ( var submesh in obj.SubMeshes )
       {
-        var node = new Node( obj.GetMeshName(), Context.RootNode );
+        var node = new Node( obj.GetName(), Context.RootNode );
         Context.RootNode.Children.Add( node );
 
         var builder = new MeshBuilder( Context, obj, submesh );
@@ -182,7 +201,7 @@ namespace Index.Profiles.SpaceMarine2.Jobs
         transform.Transpose();
         node.Transform = transform;
 
-        var meshName = obj.GetMeshName();
+        var meshName = obj.GetName();
         if ( !mesh.HasBones && obj.Parent != null )
           builder.ParentMeshToBone( obj.Parent );
 
@@ -224,44 +243,44 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       }
 
       // Issue #20: Add zero weights to any unused bones for animation retargeting
-      var boneObjects = Context.GeometryGraph.objects
-        .Where( x => x.GetBoneName() == x.GetName() )
-        .ToArray();
+      //var boneObjects = Context.GeometryGraph.objects
+      //  .Where( x => x.GetName() == x.GetName() )
+      //  .ToArray();
 
-      foreach ( var boneObject in boneObjects )
-      {
-        var boneObjectName = boneObject.GetName();
-        if ( string.IsNullOrEmpty( boneObjectName ) )
-          continue;
+      //foreach ( var boneObject in boneObjects )
+      //{
+      //  var boneObjectName = boneObject.GetName();
+      //  if ( string.IsNullOrEmpty( boneObjectName ) )
+      //    continue;
 
-        if ( boneLookup.ContainsKey( boneObject.GetName() ) )
-          continue;
+      //  if ( boneLookup.ContainsKey( boneObject.GetName() ) )
+      //    continue;
 
-        var boneParent = boneObject.Parent;
-        if ( boneParent is null || boneParent.GetBoneName() != boneParent.GetName() )
-          continue;
+      //  var boneParent = boneObject.Parent;
+      //  if ( boneParent is null )
+      //    continue;
 
-        foreach ( var mesh in Context.Scene.Meshes )
-        {
-          if ( !mesh.Bones.Any( x => x.Name == boneParent.GetName() ) )
-            continue;
+      //  foreach ( var mesh in Context.Scene.Meshes )
+      //  {
+      //    if ( !mesh.Bones.Any( x => x.Name == boneParent.GetName() ) )
+      //      continue;
 
-          System.Numerics.Matrix4x4.Invert( boneObject.MatrixLT, out var invMatrix );
-          var transform = invMatrix.ToAssimp();
-          transform.Transpose();
+      //    System.Numerics.Matrix4x4.Invert( boneObject.MatrixLT, out var invMatrix );
+      //    var transform = invMatrix.ToAssimp();
+      //    transform.Transpose();
 
-          var bone = new Bone
-          {
-            Name = boneObject.GetName(),
-            OffsetMatrix = transform
-          };
+      //    var bone = new Bone
+      //    {
+      //      Name = boneObject.GetName(),
+      //      OffsetMatrix = transform
+      //    };
 
-          for ( var i = 0; i < mesh.VertexCount; i++ )
-            bone.VertexWeights.Add( new VertexWeight( i, 0f ) );
+      //    for ( var i = 0; i < mesh.VertexCount; i++ )
+      //      bone.VertexWeights.Add( new VertexWeight( i, 0f ) );
 
-          mesh.Bones.Add( bone );
-        }
-      }
+      //    mesh.Bones.Add( bone );
+      //  }
+      //}
     }
 
     private void RenameBones()
@@ -295,12 +314,9 @@ namespace Index.Profiles.SpaceMarine2.Jobs
 
     private void FixupArmature()
     {
-      var armatureNode = Context.Scene.RootNode.FindNode( "h" );
+      var armatureNode = Context.Scene.RootNode.FindNode( Context.Name );
       if ( armatureNode is null )
         return;
-
-      // Rename armature node
-      armatureNode.Name = Path.GetFileNameWithoutExtension( Context.Name );
 
       // Fix Scale
       const float METER_TO_FEET = 3.2808399f;
@@ -322,8 +338,8 @@ namespace Index.Profiles.SpaceMarine2.Jobs
         node.Transform = transform;
       }
 
-      foreach ( var node in Context.Scene.RootNode.Children )
-        SetScale( node );
+      //foreach ( var node in Context.Scene.RootNode.Children )
+        SetScale( armatureNode );
     }
 
     #endregion

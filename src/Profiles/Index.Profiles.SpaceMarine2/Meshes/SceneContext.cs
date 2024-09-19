@@ -34,7 +34,7 @@ namespace Index.Profiles.SpaceMarine2.Meshes
     {
       Name = name;
       Scene = new Scene();
-      Scene.RootNode = new Node( name );
+      Scene.RootNode = new Node(name);
 
       Stream = stream;
       Reader = new NativeReader( stream, Endianness.LittleEndian );

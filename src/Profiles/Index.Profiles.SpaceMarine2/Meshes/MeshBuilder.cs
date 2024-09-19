@@ -42,7 +42,7 @@ namespace Index.Profiles.SpaceMarine2.Meshes
       Submesh = submesh;
       SkinCompoundId = Submesh.BufferInfo.SkinCompoundId;
 
-      var meshName = Object.GetMeshName();
+      var meshName = Object.GetName();
       Mesh = new Mesh( meshName, PrimitiveType.Triangle );
 
       Bones = new Dictionary<short, Bone>();
@@ -86,7 +86,7 @@ namespace Index.Profiles.SpaceMarine2.Meshes
 
     public void ParentMeshToBone( objOBJ boneObject )
     {
-      if ( boneObject.GetBoneName() is null )
+      if ( boneObject.GetName() is null )
         return;
 
       for ( var i = 0; i < Mesh.VertexCount; i++ )
@@ -155,13 +155,13 @@ namespace Index.Profiles.SpaceMarine2.Meshes
       var boneIds = Submesh.BoneIds;
       var set = new HashSet<short>();
 
-      if ( vertex.Weight1.HasValue && set.Add( vertex.Index1 ) )
+      if ( vertex.Weight1.HasValue)
         AddVertexWeight( vertex.Index1, vertex.Weight1.Value );
-      if ( vertex.Weight2.HasValue && set.Add( vertex.Index2 ) )
+      if ( vertex.Weight2.HasValue)
         AddVertexWeight( vertex.Index2, vertex.Weight2.Value );
-      if ( vertex.Weight3.HasValue && set.Add( vertex.Index3 ) )
+      if ( vertex.Weight3.HasValue)
         AddVertexWeight( vertex.Index3, vertex.Weight3.Value );
-      if ( vertex.Weight4.HasValue && set.Add( vertex.Index4 ) )
+      if ( vertex.Weight4.HasValue)
         AddVertexWeight( vertex.Index4, vertex.Weight4.Value );
     }
 
@@ -271,7 +271,7 @@ namespace Index.Profiles.SpaceMarine2.Meshes
         if ( !boneLookup.TryGetValue( boneId, out var adjustedBoneId ) )
         {
           var boneObject = Graph.objects[ boneId ];
-          var boneName = Object.GetBoneName();
+          var boneName = Object.GetName();
           if ( boneName is null )
             adjustedBoneId = boneId;
           else if ( boneObject.GetName() != boneName )
