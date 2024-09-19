@@ -12,6 +12,7 @@
 
     public int FaceCount;
     public int MipCount;
+    public bool IsNotCubeMapOverride;
 
     public DxgiTextureFormat Format;
 

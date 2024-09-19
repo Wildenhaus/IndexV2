@@ -15,6 +15,7 @@ using LibSaber.IO;
 using LibSaber.SpaceMarine2.Serialization;
 using LibSaber.SpaceMarine2.Enumerations;
 using Index.Domain.FileSystem;
+using LibSaber.SpaceMarine2.Structures;
 
 namespace Index.Profiles.SpaceMarine2.Jobs
 {
@@ -107,11 +108,39 @@ namespace Index.Profiles.SpaceMarine2.Jobs
 
     private byte[] GetTextureData()
     {
+      if ( !string.IsNullOrWhiteSpace( _resource.pct ) )
+        return GetTextureDataOldFormat();
+      else
+        return GetTextureDataNewFormat();
+    }
+
+    private byte[] GetTextureDataOldFormat()
+    {
+      var pctFileName = _resource.pct;
+
+      var node = _fileSystem.EnumerateFiles().FirstOrDefault( x => x.Name.Contains( pctFileName ) );
+      if ( node is null )
+        throw new Exception($"Texture specifies old format, but PCT file not found: {pctFileName}");
+
+      var reader = new NativeReader(node.Open(), Endianness.LittleEndian);
+      var pct = Serializer<pctPICTURE>.Deserialize( reader );
+
+      _resource.header.nMipMap = pct.MipMapCount;
+      _resource.header.nFaces = pct.Faces;
+      _resource.header.sx = pct.Width;
+      _resource.header.sy = pct.Height;
+      _resource.header.sz = pct.Depth;
+
+      return pct.Data;
+    }
+
+    private byte[] GetTextureDataNewFormat()
+    {
       using var ms = new MemoryStream();
 
-      foreach(var mipName in _resource.mipMaps)
+      foreach ( var mipName in _resource.mipMaps )
       {
-        var node = _fileSystem.EnumerateFiles().FirstOrDefault(x => x.Name.Contains(mipName));
+        var node = _fileSystem.EnumerateFiles().FirstOrDefault( x => x.Name.Contains( mipName ) );
         if ( node is null )
           continue;
         using var mipStream = node.Open();
@@ -131,7 +160,9 @@ namespace Index.Profiles.SpaceMarine2.Jobs
         Depth = resource.header.sz,
         FaceCount = resource.header.nFaces,
         MipCount = resource.header.nMipMap,
-        Format = GetDxgiFormat( resource.TextureFormat )
+        Format = GetDxgiFormat( resource.TextureFormat ),
+
+        IsNotCubeMapOverride = resource.header.nFaces % 6 != 0
       };
     }
 
