@@ -1,6 +1,10 @@
-﻿using System.IO.Compression;
+﻿using System.Collections.Concurrent;
+using System.IO.Compression;
 using Index.Domain.FileSystem;
 using Index.Profiles.SpaceMarine2.FileSystem.Files;
+using LibSaber.IO;
+using LibSaber.SpaceMarine2.Serialization;
+using LibSaber.SpaceMarine2.Structures.Resources;
 
 namespace Index.Profiles.SpaceMarine2.FileSystem;
 
@@ -11,7 +15,7 @@ public class SM2PckDevice : FileSystemDeviceBase
 
   private readonly string _basePath;
   private readonly string _filePath;
-  private readonly ZipArchive _zipArchive;
+  private readonly fioZIP_FILE _zipFile;
 
   #endregion
 
@@ -21,7 +25,7 @@ public class SM2PckDevice : FileSystemDeviceBase
   {
     _basePath = basePath;
     _filePath = filePath;
-    _zipArchive = ZipFile.OpenRead( _filePath );
+    _zipFile = fioZIP_FILE.Open( _filePath );
   }
 
   #endregion
@@ -30,18 +34,10 @@ public class SM2PckDevice : FileSystemDeviceBase
 
   public override Stream GetStream( IFileSystemNode node )
   {
-    lock ( _zipArchive )
-    {
-      var smNode = node as SM2FileSystemNode;
-      ASSERT( smNode != null, "Node is not an SM2FileSystemNode." );
+    var smNode = node as SM2FileSystemNode;
+    ASSERT( smNode != null, "Node is not an SM2FileSystemNode." );
 
-      var stream = new MemoryStream();
-      using ( var smStream = smNode.Entry.Open() )
-        smStream.CopyTo( stream );
-
-      stream.Position = 0;
-      return stream;
-    }
+    return _zipFile.GetFileStream( smNode.Entry );
   }
 
   protected override Task<IResult<IFileSystemNode>> OnInitializing( CancellationToken cancellationToken = default )
@@ -55,7 +51,7 @@ public class SM2PckDevice : FileSystemDeviceBase
 
   protected override void OnDisposing()
   {
-    _zipArchive?.Dispose();
+    _zipFile?.Dispose();
     base.OnDisposing();
   }
 
@@ -65,38 +61,85 @@ public class SM2PckDevice : FileSystemDeviceBase
 
   private IFileSystemNode InitNodes()
   {
-    var fileName = _filePath.Replace(_basePath, "");
+    var fileName = _filePath.Replace( _basePath, "" );
     var rootNode = new SM2FileSystemNode( this, fileName );
 
-    foreach ( var entry in _zipArchive.Entries )
+    var taskList = new List<Task>();
+    foreach ( var entry in _zipFile.Entries.Values )
     {
-      CreateNode( entry, rootNode );
+      CreateNode( entry, rootNode, taskList );
     }
+
+    Task.WaitAll( taskList.ToArray() );
 
     return rootNode;
   }
 
-  private void CreateNode( ZipArchiveEntry entry, IFileSystemNode parent )
+  private void CreateNode( 
+    fioZIP_CACHE_FILE.ENTRY entry, 
+    IFileSystemNode parent,
+    List<Task> taskList)
   {
     SM2FileSystemNode node = null;
 
-    if ( entry.Name.EndsWith( ".pct.resource" ) )
-      node = new SM2TextureFileNode( this, entry, parent );
-    else
-    {
-      switch ( Path.GetExtension( entry.Name ) )
-      {
-        case ".tpl":
-          node = new SM2TemplateFileNode( this, entry, parent );
-          break;
-        default:
-          node = new SM2FileSystemNode( this, entry, parent );
-          break;
-      }
-    }
+    var ext = Path.GetExtension( entry.FileName );
 
-    if(node != null)
+    if ( ext == ".resource" )
+      node = CreateResourceFileNode( entry, parent, taskList );
+    else
+      node = new SM2FileSystemNode( this, entry, parent );
+
+    if ( node != null )
       parent.AddChild( node );
+  }
+
+  private SM2FileSystemNode CreateResourceFileNode( 
+    fioZIP_CACHE_FILE.ENTRY entry,
+    IFileSystemNode parent,
+    List<Task> taskList)
+  {
+    var fileName = entry.FileName.Replace( ".resource", "" );
+    var resourceExt = Path.GetExtension( fileName );
+
+    switch(resourceExt)
+    {
+      case ".pct":
+        return BeginInitResourceNode( new SM2TextureResourceFileNode( this, entry, parent ), taskList );
+      case ".tpl":
+        return BeginInitResourceNode( new SM2TemplateResourceFileNode( this, entry, parent ), taskList );
+
+      default:
+        return new SM2FileSystemNode( this, entry, parent );
+    }
+  }
+
+  private SM2FileSystemNode BeginInitResourceNode<TResDesc>(SM2ResourceFileNode<TResDesc> node, List<Task> taskList)
+    where TResDesc : resDESC
+  {
+    var task = Task.Run( () =>
+    {
+      var entry = node.Entry;
+      using var descStream = _zipFile.GetFileStream( node.Entry );
+      var reader = new NativeReader( descStream, Endianness.LittleEndian );
+
+      var desc = Serializer<resDESC>.Deserialize( reader );
+
+      var expectedType = typeof(TResDesc);
+      var actualType = desc.GetType();
+      if( actualType != expectedType )
+      {
+        FAIL(
+          "resDESC deserialized to an unexpected type!\n" +
+          $"File: {entry.FileName}\n" +
+          $"Expected type: {expectedType.Name}\n" +
+          $"Actual type: {actualType.Name}" );
+      }
+
+      node.ResourceDescription = desc as TResDesc;
+    } );
+
+    taskList.Add( task );
+    return node;
   }
 
   #endregion

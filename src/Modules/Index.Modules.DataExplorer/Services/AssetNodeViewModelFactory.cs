@@ -44,10 +44,10 @@ namespace Index.Modules.DataExplorer.Services
     {
       var categoryNode = new AssetNodeViewModel( assetReferenceCollection.AssetTypeName );
 
-      var groups = assetReferenceCollection.GroupBy( x => GetAssetSubDirectory( x ) );
+      var groups = assetReferenceCollection.Where(x => !x.Node.IsHidden).GroupBy( x => GetAssetSubDirectory( x ) );
       if ( groups.Count() == 1 )
       {
-        foreach ( var asset in groups.Single().OrderBy( x => x.Node.Name ) )
+        foreach ( var asset in groups.Single().Where( x => !x.Node.IsHidden ).OrderBy( x => x.Node.Name ) )
           categoryNode.Children.Add( new AssetNodeViewModel( asset ) );
 
         return categoryNode;
@@ -63,14 +63,14 @@ namespace Index.Modules.DataExplorer.Services
 
         if ( string.IsNullOrEmpty( group.Key ) )
         {
-          foreach ( var asset in group.OrderBy( x => x.Node.Name ) )
+          foreach ( var asset in group.Where(x => !x.Node.IsHidden).OrderBy( x => x.Node.Name ) )
             categoryNode.Children.Add( new AssetNodeViewModel( asset ) );
 
           continue;
         }
 
         var groupNode = new AssetNodeViewModel( group.Key );
-        foreach ( var asset in group.OrderBy( x => x.Node.Name ) )
+        foreach ( var asset in group.Where( x => !x.Node.IsHidden ).OrderBy( x => x.Node.Name ) )
           groupNode.Children.Add( new AssetNodeViewModel( asset ) );
 
         categoryNode.Children.Add( groupNode );

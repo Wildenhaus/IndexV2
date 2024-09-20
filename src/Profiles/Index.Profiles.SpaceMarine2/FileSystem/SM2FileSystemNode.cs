@@ -1,5 +1,5 @@
-﻿using System.IO.Compression;
-using Index.Domain.FileSystem;
+﻿using Index.Domain.FileSystem;
+using LibSaber.SpaceMarine2.Structures.Resources;
 
 namespace Index.Profiles.SpaceMarine2.FileSystem;
 
@@ -8,7 +8,7 @@ public class SM2FileSystemNode : FileSystemNodeBase
 
   #region Properties
 
-  internal ZipArchiveEntry Entry { get; set; }
+  internal fioZIP_CACHE_FILE.ENTRY Entry { get; set; }
   public long SizeInBytes { get; set; }
 
   #endregion
@@ -20,11 +20,11 @@ public class SM2FileSystemNode : FileSystemNodeBase
   {
   }
 
-  public SM2FileSystemNode( IFileSystemDevice device, ZipArchiveEntry entry, IFileSystemNode parent = null )
-        : base( device, entry.FullName, parent )
+  public SM2FileSystemNode( IFileSystemDevice device, fioZIP_CACHE_FILE.ENTRY entry, IFileSystemNode parent = null )
+        : base( device, entry.FileName, parent )
   {
     Entry = entry;
-    SizeInBytes = entry.Length;
+    SizeInBytes = entry.Size;
   }
 
   #endregion

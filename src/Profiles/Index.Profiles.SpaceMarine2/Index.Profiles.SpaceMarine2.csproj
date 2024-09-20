@@ -7,9 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="GameIcon.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\LibSaber\LibSaber.SpaceMarine2\LibSaber.SpaceMarine2.csproj" />
     <ProjectReference Include="..\..\Index.Core\Index.Core.csproj" />
     <ProjectReference Include="..\..\Index.Domain\Index.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="GameIcon.jpg" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

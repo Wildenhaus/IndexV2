@@ -30,7 +30,7 @@ namespace Index.Modules.DataExplorer.ViewModels
     public AssetNodeViewModel( IAssetReference assetReference )
     {
       _assetReference = assetReference;
-      _name = assetReference.Node.Name;
+      _name = assetReference.Node.DisplayName;
 
       DoubleClickCommand = new DelegateCommand( HandleDoubleClick );
     }

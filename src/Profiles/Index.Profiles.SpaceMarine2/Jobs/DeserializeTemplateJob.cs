@@ -2,6 +2,7 @@
 using Index.Domain.Assets.Textures;
 using Index.Domain.FileSystem;
 using Index.Jobs;
+using Index.Profiles.SpaceMarine2.FileSystem.Files;
 using Index.Profiles.SpaceMarine2.Meshes;
 using LibSaber.IO;
 using LibSaber.Serialization;
@@ -14,11 +15,18 @@ namespace Index.Profiles.SpaceMarine2.Jobs
   public class DeserializeTemplateJob : JobBase<SceneContext>
   {
 
+    #region Properties
+
+    private IFileSystem FileSystem { get; }
+
+    #endregion
+
     #region Constructor
 
     public DeserializeTemplateJob( IContainerProvider container, IParameterCollection parameters )
       : base( container, parameters )
     {
+      FileSystem = container.Resolve<IFileSystem>();
     }
 
     #endregion
@@ -31,15 +39,17 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       SetIndeterminate();
 
       var assetReference = Parameters.Get<IAssetReference>();
-      var stream = assetReference.Node.Open();
+
+      var tplFile = GetTplFile( assetReference );
+      var tplDataFile = GetTplDataFile( assetReference );
+
+      using var stream = tplFile.Open();
       var reader = new NativeReader( stream, Endianness.LittleEndian );
 
       var name = Path.GetFileNameWithoutExtension( assetReference.AssetName );
       var template = Serializer<animTPL>.Deserialize( reader, new SerializationContext() );
 
-      var tplDataFile = GetTplDataFile( assetReference );
       var tplDataStream = tplDataFile.Open();
-
       var context = new SceneContext( name, template.GeometryGraph, tplDataStream );
       //context.AddLodDefinitions( template.LodDefinitions );
 
@@ -53,12 +63,29 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       SetResult( context );
     }
 
+    private IFileSystemNode GetTplFile( IAssetReference assetReference )
+    {
+      var assetNode = assetReference.Node as SM2TemplateResourceFileNode;
+      ASSERT( assetNode is not null, "Template AssetNode is null." );
+
+      var tplFile = assetNode.ResourceDescription.tpl;
+      var tplFileNode = FileSystem.EnumerateFiles().SingleOrDefault(x => Path.GetFileName(x.Name) == tplFile );
+
+      return tplFileNode;
+    }
+
     private IFileSystemNode GetTplDataFile( IAssetReference assetReference )
     {
-      var fileName = assetReference.Node.Name;
-      fileName += "_data";
+      var assetNode = assetReference.Node as SM2TemplateResourceFileNode;
+      ASSERT( assetNode is not null, "Template AssetNode is null." );
 
-      return assetReference.Node.Device.EnumerateFiles().Where( x => x.Name == fileName ).FirstOrDefault();
+      var tplDataFile = assetNode.ResourceDescription.tplData;
+      ASSERT( !string.IsNullOrWhiteSpace( tplDataFile ), "Template does not have an associated .tpl_data file." );
+
+      var tplDataFileNode = FileSystem.EnumerateFiles().SingleOrDefault( x => Path.GetFileName( x.Name ) == tplDataFile );
+      ASSERT( tplDataFileNode is not null, "TPL_DATA file not found." );
+
+      return tplDataFileNode;
     }
 
     #endregion

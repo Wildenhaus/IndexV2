@@ -30,7 +30,7 @@ namespace Index.Profiles.SpaceMarine2.Jobs
     private readonly IFileSystem _fileSystem;
 
     private IAssetReference _assetReference;
-    private PctResource _resource;
+    private resDESC_PCT _resource;
 
     #endregion
 
@@ -98,12 +98,12 @@ namespace Index.Profiles.SpaceMarine2.Jobs
 
     #region Private Methods
 
-    private PctResource DeserializePctResource( IAssetReference assetReference )
+    private resDESC_PCT DeserializePctResource( IAssetReference assetReference )
     {
       var stream = assetReference.Node.Open();
       var reader = new NativeReader( stream, Endianness.LittleEndian );
 
-      return Serializer<PctResource>.Deserialize( reader );
+      return Serializer<resDESC_PCT>.Deserialize( reader );
     }
 
     private byte[] GetTextureData()
@@ -151,7 +151,7 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       return ms.ToArray();
     }
 
-    private DxgiTextureInfo CreateTextureInfo( PctResource resource )
+    private DxgiTextureInfo CreateTextureInfo( resDESC_PCT resource )
     {
       return new DxgiTextureInfo
       {
