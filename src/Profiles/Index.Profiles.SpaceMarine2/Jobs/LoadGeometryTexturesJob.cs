@@ -120,33 +120,33 @@ namespace Index.Profiles.SpaceMarine2.Jobs
     private HashSet<IAssetReference> GatherAdditionalTextures()
     {
       var toLoadSet = new HashSet<IAssetReference>();
-      var loadedTextures = Textures.Values.ToArray();
-      var textureAssetReferences = AssetManager.GetAssetReferencesOfType<ITextureAsset>();
+      //var loadedTextures = Textures.Values.ToArray();
+      //var textureAssetReferences = AssetManager.GetAssetReferencesOfType<ITextureAsset>();
 
-      foreach ( var loadedTexture in loadedTextures )
-      {
-        var texName = loadedTexture.AssetName;
-        var tdName = Path.ChangeExtension( texName, ".td" );
+      //foreach ( var loadedTexture in loadedTextures )
+      //{
+      //  var texName = loadedTexture.AssetName;
+      //  var tdName = Path.ChangeExtension( texName, ".td" );
 
-        if ( !loadedTexture.AdditionalData.TryGetValue( tdName, out var tdData ) )
-          continue;
+      //  if ( !loadedTexture.AdditionalData.TryGetValue( tdName, out var tdData ) )
+      //    continue;
 
-        var serializer = new FileScriptingSerializer<TextureDefinition>();
-        var td = serializer.Deserialize( tdData );
+      //  var serializer = new FileScriptingSerializer<TextureDefinition>();
+      //  var td = serializer.Deserialize( tdData );
 
-        foreach ( var additionalTexture in td.GetTextureNames() )
-        {
-          if ( string.IsNullOrWhiteSpace( additionalTexture ) )
-            continue;
+      //  foreach ( var additionalTexture in td.GetTextureNames() )
+      //  {
+      //    if ( string.IsNullOrWhiteSpace( additionalTexture ) )
+      //      continue;
 
-          if ( Textures.ContainsKey( additionalTexture ) )
-            continue;
+      //    if ( Textures.ContainsKey( additionalTexture ) )
+      //      continue;
 
-          var matches = textureAssetReferences.Where( x => x.AssetName.StartsWith( additionalTexture ) );
-          foreach ( var match in matches )
-            toLoadSet.Add( match );
-        }
-      }
+      //    var matches = textureAssetReferences.Where( x => x.AssetName.StartsWith( additionalTexture ) );
+      //    foreach ( var match in matches )
+      //      toLoadSet.Add( match );
+      //  }
+      //}
 
       return toLoadSet;
     }

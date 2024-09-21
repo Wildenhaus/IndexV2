@@ -23,9 +23,7 @@ namespace Index.Textures
 
       // Create a scratch image
       ScratchImage img;
-      if ( info.IsNotCubeMapOverride )
-        img = TexHelper.Instance.InitializeCube( format, info.Width, info.Height, info.FaceCount, info.MipCount, CP_FLAGS.NONE );
-      else if ( info.IsCubeMap )
+      if ( info.IsCubeMap )
         img = TexHelper.Instance.InitializeCube( format, info.Width, info.Height, info.FaceCount / 6, info.MipCount, CP_FLAGS.NONE );
       else
         img = TexHelper.Instance.Initialize2D( format, info.Width, info.Height, info.Depth, info.MipCount, CP_FLAGS.NONE );

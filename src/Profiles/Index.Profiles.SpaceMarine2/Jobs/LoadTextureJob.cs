@@ -16,6 +16,7 @@ using LibSaber.SpaceMarine2.Serialization;
 using LibSaber.SpaceMarine2.Enumerations;
 using Index.Domain.FileSystem;
 using LibSaber.SpaceMarine2.Structures;
+using Index.Profiles.SpaceMarine2.Assets;
 
 namespace Index.Profiles.SpaceMarine2.Jobs
 {
@@ -85,11 +86,11 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       // var textureType = GetTextureType( _assetReference );
       var asset = new DxgiTextureAsset( _assetReference, TextureType.Unknown, images, dxgiImage );
 
-      //var textureDefinition = await GetTextureDefinitionAsset();
-      //if ( textureDefinition is null )
-      //  Log.Warning( "Failed to find a texture definition for {textureName}.", asset.AssetName );
-      //else
-      //  asset.AdditionalData.Add( textureDefinition.AssetName, textureDefinition.TextStream );
+      var textureDefinition = await GetTextureDefinitionAsset();
+      if ( textureDefinition is null )
+        Log.Warning( "Failed to find a texture definition for {textureName}.", asset.AssetName );
+      else
+        asset.AdditionalData.Add( textureDefinition.AssetName, textureDefinition.TextStream );
 
       SetResult( asset );
     }
@@ -197,6 +198,21 @@ namespace Index.Profiles.SpaceMarine2.Jobs
         default:
           throw new NotSupportedException( "Invalid SM2 Texture Type: " + format.ToString() );
       }
+    }
+
+    private async Task<SM2TextureDefinitionAsset> GetTextureDefinitionAsset()
+    {
+      var textureDefinitionName = Path.ChangeExtension( _assetReference.AssetName, ".td" );
+      textureDefinitionName = Path.GetFileName( textureDefinitionName );
+
+      _assetManager.TryGetAssetReference( typeof( SM2TextureDefinitionAsset ),
+        textureDefinitionName, out var textureDefinitionAssetReference );
+
+      if ( textureDefinitionAssetReference is null )
+        return null;
+
+      var textureDefinition = await _assetManager.LoadAssetAsync<SM2TextureDefinitionAsset>( textureDefinitionAssetReference );
+      return textureDefinition;
     }
 
     #endregion
