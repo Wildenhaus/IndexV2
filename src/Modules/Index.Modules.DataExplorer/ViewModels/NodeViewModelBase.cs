@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using Index.UI.Common;
 using Index.UI.Controls.Menus;
 using Prism.Mvvm;
 
@@ -32,6 +36,8 @@ namespace Index.Modules.DataExplorer.ViewModels
     {
       get => _children;
     }
+
+    public ICollectionView ChildrenView { get; }
 
     public bool IsExpanded
     {
@@ -72,6 +78,13 @@ namespace Index.Modules.DataExplorer.ViewModels
       _isExpanded = false;
       _isVisible = true;
       _children = new ObservableCollection<TViewModel>();
+
+      ChildrenView = CollectionViewSource.GetDefaultView( _children );
+      ChildrenView.Filter = ( node ) =>
+      {
+        var vm = node as NodeViewModelBase<TViewModel>;
+        return vm.IsVisible;
+      };
     }
 
     #endregion

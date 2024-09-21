@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Index.Domain.Assets;
@@ -36,6 +37,28 @@ namespace Index.Modules.DataExplorer.Services
 
       rootCategories.Sort( ( a, b ) => a.Name.CompareTo( b.Name ) );
       return rootCategories;
+    }
+
+    public List<AssetNodeViewModel> CreateNodeSearchGraph( List<AssetNodeViewModel> nodes )
+    {
+      var flattenedList = new List<AssetNodeViewModel>();
+
+      void FlattenNode( AssetNodeViewModel node, List<AssetNodeViewModel> result )
+      {
+        foreach ( var child in node.Children )
+        {
+          FlattenNode( child, result );
+        }
+
+        result.Add( node );
+      }
+
+      foreach ( var root in nodes )
+      {
+        FlattenNode( root, flattenedList );
+      }
+
+      return flattenedList;
     }
 
     #endregion

@@ -94,21 +94,14 @@
         </controls:IxTextBox>
 
         <TreeView Grid.Row="2"
-          ItemsSource="{Binding AssetNodes}"
+          ItemsSource="{Binding AssetNodesView}"
           VirtualizingPanel.IsContainerVirtualizable="True"
           VirtualizingPanel.IsVirtualizing="True"
-          VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-          VirtualizingPanel.VirtualizationMode="Recycling"
+          VirtualizingStackPanel.VirtualizationMode="Recycling"
           ScrollViewer.CanContentScroll="True">
-            <TreeView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel IsVirtualizing="True"
-                                    VirtualizationMode="Recycling" />
-                </ItemsPanelTemplate>
-            </TreeView.ItemsPanel>
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <TextBlock Text="{Binding Name}">
+                <HierarchicalDataTemplate ItemsSource="{Binding ChildrenView, IsAsync=True}">
+                    <TextBlock Text="{Binding Name, Mode=OneWay}">
                         <TextBlock.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick"
                                   Command="{Binding DoubleClickCommand}" />
@@ -118,10 +111,10 @@
             </TreeView.ItemTemplate>
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}"
-               BasedOn="{StaticResource {x:Type TreeViewItem}}">
+                       BasedOn="{StaticResource {x:Type TreeViewItem}}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsVisible}" Value="False">
+                        <DataTrigger Binding="{Binding IsVisible, Mode=OneWay}" Value="False">
                             <Setter Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
                     </Style.Triggers>
