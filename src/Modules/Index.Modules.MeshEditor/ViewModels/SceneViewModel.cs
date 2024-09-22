@@ -109,8 +109,8 @@ namespace Index.Modules.MeshEditor.ViewModels
       var transformGroup = new System.Windows.Media.Media3D.Transform3DGroup();
 
       var rotTransform = new System.Windows.Media.Media3D.RotateTransform3D();
-      rotTransform.Rotation = new System.Windows.Media.Media3D.AxisAngleRotation3D(
-        new System.Windows.Media.Media3D.Vector3D( 0, 1, 0 ), -90 );
+      //rotTransform.Rotation = new System.Windows.Media.Media3D.AxisAngleRotation3D(
+      //  new System.Windows.Media.Media3D.Vector3D( 0, 1, 0 ), -90 );
       transformGroup.Children.Add( rotTransform );
 
       GroupModel.Transform = transformGroup;

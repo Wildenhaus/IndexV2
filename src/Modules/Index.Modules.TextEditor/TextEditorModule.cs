@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Index.Domain.Assets;
 using Index.Domain.Assets.Text;
 using Index.Domain.Editors;
 using Index.Modules.TextEditor.Views;
@@ -19,13 +15,15 @@ namespace Index.Modules.TextEditor
 
     public void OnInitialized( IContainerProvider containerProvider )
     {
+      var assetManager = containerProvider.Resolve<IAssetManager>();
+      assetManager.RegisterViewTypeForExportOptionsType( typeof( TextAssetExportOptions ), typeof( AssetExportOptionsViewBase ) );
     }
 
     public void RegisterTypes( IContainerRegistry containerRegistry )
     {
       containerRegistry.RegisterForNavigation<TextEditorView>( DefaultEditorKeys.TextEditorKey );
 
-      containerRegistry.RegisterDialog<AssetExportOptionsViewBase, AssetExportOptionsViewModel<TextAssetExportOptions>>( nameof( TextAssetExportOptions ) );
+      containerRegistry.RegisterDialog<AssetExportOptionsViewBase, AssetExportOptionsWindowViewModel<TextAssetExportOptions>>( nameof( TextAssetExportOptions ) );
     }
 
   }

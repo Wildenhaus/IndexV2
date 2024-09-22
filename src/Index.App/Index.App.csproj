@@ -33,7 +33,6 @@
     <ProjectReference Include="..\Modules\Index.Modules.MeshEditor\Index.Modules.MeshEditor.csproj" />
     <ProjectReference Include="..\Modules\Index.Modules.TextEditor\Index.Modules.TextEditor.csproj" />
     <ProjectReference Include="..\Modules\Index.Modules.TextureEditor\Index.Modules.TextureEditor.csproj" />
-    <ProjectReference Include="..\Profiles\Index.Profiles.SpaceMarine2\Index.Profiles.SpaceMarine2.csproj" />
   </ItemGroup>
 
   <ItemGroup>

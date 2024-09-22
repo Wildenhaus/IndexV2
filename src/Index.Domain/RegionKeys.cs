@@ -8,6 +8,8 @@
     public const string DataExplorerRegion = "DataExplorerRegion";
     public const string EditorDocumentRegion = "EditorDocumentRegion";
 
+    public const string BulkExportOptionsTabsRegion = "BulkExportOptionsTabsRegion";
+
   }
 
 }

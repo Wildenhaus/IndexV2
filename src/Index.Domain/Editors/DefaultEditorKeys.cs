@@ -9,6 +9,8 @@
     public static string TextEditorKey = "IxTextEditor";
     public static string TextureEditor = "IxTextureEditor";
 
+    public static string BulkExport = "IxBulkExport";
+
   }
 
 }

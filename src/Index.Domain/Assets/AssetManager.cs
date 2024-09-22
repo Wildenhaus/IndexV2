@@ -1,4 +1,5 @@
-﻿using Index.Domain.FileSystem;
+﻿using System.Reflection;
+using Index.Domain.FileSystem;
 using Index.Domain.Jobs;
 using Index.Jobs;
 using Prism.Ioc;
@@ -15,6 +16,7 @@ namespace Index.Domain.Assets
     private readonly IJobManager _jobManager;
 
     private readonly Dictionary<Type, IAssetReferenceCollection> _references;
+    private readonly Dictionary<Type, Type> _exportOptionsViewTypeMapping;
 
     private bool _isInitialized;
 
@@ -37,6 +39,7 @@ namespace Index.Domain.Assets
       _jobManager = _container.Resolve<IJobManager>();
 
       _references = new Dictionary<Type, IAssetReferenceCollection>();
+      _exportOptionsViewTypeMapping = new Dictionary<Type, Type>();
     }
 
     #endregion
@@ -129,6 +132,37 @@ namespace Index.Domain.Assets
         foreach ( var assetReference in referenceCollection.Value )
           yield return assetReference;
       }
+    }
+
+    public string GetAssetTypeName( Type assetType )
+    {
+      if ( !_references.TryGetValue( assetType, out var referenceCollection ) )
+        FAIL( "Asset Type not found: " + assetType.FullName );
+
+      return referenceCollection.AssetTypeName;
+    }
+
+    public Type GetAssetExportOptionsType(Type assetType)
+    {
+      ASSERT_NOT_NULL( assetType );
+
+      var attribute = assetType.GetCustomAttribute<AssetExportOptionsTypeAttribute>();
+      ASSERT_NOT_NULL( attribute );
+
+      var assetExportOptionsType = attribute.Type;
+      ASSERT_NOT_NULL( assetExportOptionsType );
+
+      return assetExportOptionsType;
+    }
+
+    public void RegisterViewTypeForExportOptionsType( Type exportOptionsType, Type viewType )
+    {
+      _exportOptionsViewTypeMapping.Add(exportOptionsType, viewType);
+    }
+
+    public Type GetViewTypeForExportOptionsType( Type exportOptionsType )
+    {
+      return _exportOptionsViewTypeMapping[exportOptionsType];
     }
 
     #endregion

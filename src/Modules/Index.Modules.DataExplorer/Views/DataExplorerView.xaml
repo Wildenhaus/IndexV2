@@ -57,6 +57,22 @@
                                          Height="10" />
                     </Button.Content>
                 </Button>
+                <Button Width="20"
+                        Margin="0"
+                        Padding="0"
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        DockPanel.Dock="Right"
+                        ToolTip="Bulk Export"
+                        Command="{Binding OpenBulkExportCommand}">
+                    <Button.Content>
+                        <controls:IxIcon SegoeIcon="SaveCopy"
+                         Margin="0"
+                         Padding="0"
+                         Height="10" />
+                    </Button.Content>
+                </Button>
             </DockPanel>
             <Border.Effect>
                 <DropShadowEffect Direction="270"

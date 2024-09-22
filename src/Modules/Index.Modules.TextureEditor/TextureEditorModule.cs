@@ -1,4 +1,5 @@
-﻿using Index.Domain.Assets.Textures;
+﻿using Index.Domain.Assets;
+using Index.Domain.Assets.Textures;
 using Index.Domain.Assets.Textures.Dxgi;
 using Index.Domain.Editors;
 using Index.Modules.TextureEditor.Views;
@@ -15,13 +16,15 @@ namespace Index.Modules.TextureEditor
 
     public void OnInitialized( IContainerProvider containerProvider )
     {
+      var assetManager = containerProvider.Resolve<IAssetManager>();
+      assetManager.RegisterViewTypeForExportOptionsType(typeof(DxgiTextureExportOptions), typeof(DxgiTextureAssetExportOptionsView));
     }
 
     public void RegisterTypes( IContainerRegistry containerRegistry )
     {
       containerRegistry.RegisterForNavigation<TextureEditorView>( DefaultEditorKeys.TextureEditor );
 
-      containerRegistry.RegisterDialog<DxgiTextureAssetExportOptionsView, AssetExportOptionsViewModel<DxgiTextureExportOptions>>( nameof( DxgiTextureExportOptions ) );
+      containerRegistry.RegisterDialog<DxgiTextureAssetExportOptionsView, AssetExportOptionsWindowViewModel<DxgiTextureExportOptions>>( nameof( DxgiTextureExportOptions ) );
     }
 
   }

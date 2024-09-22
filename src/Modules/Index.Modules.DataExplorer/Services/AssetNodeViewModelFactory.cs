@@ -66,6 +66,8 @@ namespace Index.Modules.DataExplorer.Services
     private AssetNodeViewModel CreateCategoryNode( IAssetReferenceCollection assetReferenceCollection )
     {
       var categoryNode = new AssetNodeViewModel( assetReferenceCollection.AssetTypeName );
+      categoryNode.AssetType = assetReferenceCollection.AssetType;
+      categoryNode.Children.SuppressNotifications = true;
 
       var groups = assetReferenceCollection.Where(x => !x.Node.IsHidden).GroupBy( x => GetAssetSubDirectory( x ) );
       if ( groups.Count() == 1 )
@@ -73,6 +75,7 @@ namespace Index.Modules.DataExplorer.Services
         foreach ( var asset in groups.Single().Where( x => !x.Node.IsHidden ).OrderBy( x => x.Node.Name ) )
           categoryNode.Children.Add( new AssetNodeViewModel( asset ) );
 
+        categoryNode.Children.SuppressNotifications = false;
         return categoryNode;
       }
 
@@ -99,6 +102,7 @@ namespace Index.Modules.DataExplorer.Services
         categoryNode.Children.Add( groupNode );
       }
 
+      categoryNode.Children.SuppressNotifications = false;
       return categoryNode;
     }
 

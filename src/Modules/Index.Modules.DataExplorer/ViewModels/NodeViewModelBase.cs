@@ -20,6 +20,7 @@ namespace Index.Modules.DataExplorer.ViewModels
 
     #region Data Members
 
+    private NodeViewModelBase<TViewModel> _parent;
     private readonly IxObservableCollection<TViewModel> _children;
 
     private bool _isSelected;
@@ -31,6 +32,11 @@ namespace Index.Modules.DataExplorer.ViewModels
     #region Properties
 
     public abstract string Name { get; }
+
+    public TViewModel Parent
+    {
+      get => (TViewModel)_parent;
+    }
 
     public IxObservableCollection<TViewModel> Children
     {
@@ -55,6 +61,16 @@ namespace Index.Modules.DataExplorer.ViewModels
     {
       get => _isVisible;
       set => SetProperty( ref _isVisible, value );
+    }
+
+    public bool IsParent
+    {
+      get => _children.Count != 0;
+    }
+
+    public bool IsChild
+    {
+      get => _parent is not null;
     }
 
     public bool IsLeaf
@@ -91,31 +107,10 @@ namespace Index.Modules.DataExplorer.ViewModels
 
     #region Public Methods
 
-    public bool ApplySearchCriteria( string searchTerm )
+    public void AddChild(TViewModel child)
     {
-      var isEmpty = string.IsNullOrEmpty( searchTerm );
-
-      if ( IsLeaf )
-      {
-        if ( isEmpty )
-          return IsVisible = true;
-        else
-          return IsVisible = IsMatchForSearchTerm( searchTerm );
-      }
-      else
-      {
-        var childrenVisible = false;
-
-        foreach ( var child in _children )
-          childrenVisible |= child.ApplySearchCriteria( searchTerm );
-
-        if ( isEmpty )
-          childrenVisible = true;
-
-        IsExpanded = !isEmpty && childrenVisible;
-        IsVisible = childrenVisible;
-        return childrenVisible;
-      }
+      child._parent = this;
+      _children.Add( child );
     }
 
     #endregion

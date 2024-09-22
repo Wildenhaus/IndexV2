@@ -8,7 +8,9 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Index.Domain;
 using Index.Domain.Assets;
+using Index.Domain.Editors;
 using Index.Domain.FileSystem;
 using Index.Domain.Models;
 using Index.Modules.DataExplorer.Services;
@@ -41,8 +43,8 @@ namespace Index.Modules.DataExplorer.ViewModels
     public ICollectionView AssetNodesView { get; private set; }
 
     public ICommand SearchCommand { get; }
-    public ICommand NavigateToAssetCommand { get; }
     public ICommand OpenAboutDialogCommand { get; }
+    public ICommand OpenBulkExportCommand { get; }
 
     #endregion
 
@@ -57,8 +59,8 @@ namespace Index.Modules.DataExplorer.ViewModels
       AssetNodes = InitializeAssetNodes( environment.AssetManager );
       AssetNodesView = CollectionViewSource.GetDefaultView( AssetNodes );
 
-      NavigateToAssetCommand = new DelegateCommand<IAssetReference>( NavigateToAsset );
       OpenAboutDialogCommand = GlobalCommands.OpenAboutDialogCommand;
+      OpenBulkExportCommand = new DelegateCommand( OpenBulkExport );
       SearchCommand = new DelegateCommand<string>( ApplySearchTerm );
     }
 
@@ -81,6 +83,14 @@ namespace Index.Modules.DataExplorer.ViewModels
       parameters.Add( "AssetReference", assetReference );
 
       _regionManager.RequestNavigate( "EditorRegion", "TextureEditorView", parameters );
+    }
+
+    private void OpenBulkExport()
+    {
+      var parameters = new NavigationParameters();
+      parameters.Add( "AssetNodes", AssetNodes );
+
+      _regionManager.RequestNavigate( RegionKeys.EditorDocumentRegion, DefaultEditorKeys.BulkExport, parameters );
     }
 
     private async void ApplySearchTerm( string searchTerm )

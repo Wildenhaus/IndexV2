@@ -4,6 +4,7 @@ using Index.Textures;
 namespace Index.Domain.Assets.Textures.Dxgi
 {
 
+  [AssetExportOptionsType(typeof(DxgiTextureExportOptions))]
   public class DxgiTextureAsset : TextureAssetBase, IDxgiTextureAsset
   {
 
