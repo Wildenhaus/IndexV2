@@ -37,6 +37,9 @@ namespace Index.Profiles.SpaceMarine2.Meshes
 
     public MeshBuilder( SceneContext context, objOBJ obj, GeometrySubMesh submesh )
     {
+      //if ( obj.GetName() == "acheran_body" )
+      //  Debugger.Break();
+
       Context = context;
       Object = obj;
       Submesh = submesh;
@@ -72,9 +75,9 @@ namespace Index.Profiles.SpaceMarine2.Meshes
           case GeometryElementType.Interleaved:
             AddInterleavedData( buffer, meshBuffer );
             break;
-          case GeometryElementType.BoneId:
-            AddSkinCompoundBoneIds( buffer, meshBuffer );
-            break;
+          //case GeometryElementType.BoneId:
+          //  AddSkinCompoundBoneIds( buffer, meshBuffer );
+          //  break;
         }
       }
 
@@ -161,8 +164,8 @@ namespace Index.Profiles.SpaceMarine2.Meshes
         AddVertexWeight( vertex.Index2, vertex.Weight2.Value );
       if ( vertex.Weight3.HasValue)
         AddVertexWeight( vertex.Index3, vertex.Weight3.Value );
-      if ( vertex.Weight4.HasValue)
-        AddVertexWeight( vertex.Index4, vertex.Weight4.Value );
+      //if ( vertex.Weight4.HasValue)
+      //  AddVertexWeight( vertex.Index4, vertex.Weight4.Value );
     }
 
     private void AddVertexWeight( short boneObjectId, float weight, int vertIndex = -1 )

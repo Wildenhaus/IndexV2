@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Index.Domain.Assets;
 using Index.Domain.Assets.Textures;
-using Index.Domain.Assets;
 using Index.Domain.Assets.Textures.Dxgi;
+using Index.Domain.FileSystem;
 using Index.Jobs;
+using Index.Profiles.SpaceMarine2.Assets;
 using Index.Textures;
+using LibSaber.IO;
+using LibSaber.SpaceMarine2.Enumerations;
+using LibSaber.SpaceMarine2.Serialization;
+using LibSaber.SpaceMarine2.Structures;
+using LibSaber.SpaceMarine2.Structures.Resources;
 using Prism.Ioc;
 using Serilog;
-using LibSaber.SpaceMarine2.Structures.Resources;
-using LibSaber.IO;
-using LibSaber.SpaceMarine2.Serialization;
-using LibSaber.SpaceMarine2.Enumerations;
-using Index.Domain.FileSystem;
-using LibSaber.SpaceMarine2.Structures;
-using Index.Profiles.SpaceMarine2.Assets;
 
 namespace Index.Profiles.SpaceMarine2.Jobs
 {
@@ -83,8 +78,8 @@ namespace Index.Profiles.SpaceMarine2.Jobs
         images.Add( image );
       }
 
-      // var textureType = GetTextureType( _assetReference );
-      var asset = new DxgiTextureAsset( _assetReference, TextureType.Unknown, images, dxgiImage );
+      var textureType = GetTextureType();
+      var asset = new DxgiTextureAsset( _assetReference, textureType, images, dxgiImage );
 
       var textureDefinition = await GetTextureDefinitionAsset();
       if ( textureDefinition is null )
@@ -119,11 +114,11 @@ namespace Index.Profiles.SpaceMarine2.Jobs
     {
       var pctFileName = _resource.pct;
 
-      var node = _fileSystem.EnumerateFiles().FirstOrDefault( x => x.Name.Contains( pctFileName ) );
+      var node = _fileSystem.EnumerateFiles().FirstOrDefault( x => Path.GetFileName(x.Name) == pctFileName );
       if ( node is null )
-        throw new Exception($"Texture specifies old format, but PCT file not found: {pctFileName}");
+        throw new Exception( $"Texture specifies old format, but PCT file not found: {pctFileName}" );
 
-      var reader = new NativeReader(node.Open(), Endianness.LittleEndian);
+      var reader = new NativeReader( node.Open(), Endianness.LittleEndian );
       var pct = Serializer<pctPICTURE>.Deserialize( reader );
 
       _resource.header.nMipMap = pct.MipMapCount;
@@ -154,16 +149,16 @@ namespace Index.Profiles.SpaceMarine2.Jobs
 
     private DxgiTextureInfo CreateTextureInfo( resDESC_PCT resource )
     {
+      // TODO: We're ignoring cubemaps
+
       return new DxgiTextureInfo
       {
         Width = resource.header.sx,
         Height = resource.header.sy,
-        Depth = resource.header.sz,
-        FaceCount = resource.header.nFaces,
+        Depth = resource.header.nFaces * resource.header.sz,
+        FaceCount = 1,
         MipCount = resource.header.nMipMap,
-        Format = GetDxgiFormat( resource.TextureFormat ),
-
-        IsNotCubeMapOverride = resource.header.nFaces % 6 != 0
+        Format = GetDxgiFormat( resource.TextureFormat )
       };
     }
 
@@ -173,30 +168,67 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       {
         case SM2TextureFormat.ARGB8888:
           return DxgiTextureFormat.DXGI_FORMAT_B8G8R8A8_UNORM;
-        case SM2TextureFormat.RGBA16161616F:
-          return DxgiTextureFormat.DXGI_FORMAT_R16G16B16A16_FLOAT;
-        case SM2TextureFormat.OXT1:
-        case SM2TextureFormat.AXT1:
-          return DxgiTextureFormat.DXGI_FORMAT_BC1_UNORM;
-        case SM2TextureFormat.XRGB8888:
-          return DxgiTextureFormat.DXGI_FORMAT_B8G8R8X8_UNORM;
+        case SM2TextureFormat.ARGB16161616U:
+          return DxgiTextureFormat.DXGI_FORMAT_R16G16B16A16_UNORM;
+        case SM2TextureFormat.BC6U:
+          return DxgiTextureFormat.DXGI_FORMAT_BC6H_UF16;
+        case SM2TextureFormat.BC7:
+        case SM2TextureFormat.BC7A:
+          return DxgiTextureFormat.DXGI_FORMAT_BC7_UNORM;
         case SM2TextureFormat.DXN:
           return DxgiTextureFormat.DXGI_FORMAT_BC5_UNORM;
         case SM2TextureFormat.DXT5A:
           return DxgiTextureFormat.DXGI_FORMAT_BC4_UNORM;
-        case SM2TextureFormat.R9G9B9E5_SHAREDEXP:
-          return DxgiTextureFormat.DXGI_FORMAT_R9G9B9E5_SHAREDEXP;
-        case SM2TextureFormat.BC7:
-          return DxgiTextureFormat.DXGI_FORMAT_BC7_UNORM;
-        case SM2TextureFormat.BC7A:
-          return DxgiTextureFormat.DXGI_FORMAT_BC7_UNORM;
+        case SM2TextureFormat.AXT1:
+        case SM2TextureFormat.OXT1:
+          return DxgiTextureFormat.DXGI_FORMAT_BC1_UNORM;
         case SM2TextureFormat.R8U:
           return DxgiTextureFormat.DXGI_FORMAT_R8_UNORM;
-        case SM2TextureFormat.XT5: // TODO: NOT CORRECT
-          return DxgiTextureFormat.DXGI_FORMAT_BC5_UNORM;
+        case SM2TextureFormat.R16:
+          return DxgiTextureFormat.DXGI_FORMAT_R16G16B16A16_SNORM;
+        case SM2TextureFormat.R16G16:
+          return DxgiTextureFormat.DXGI_FORMAT_R16G16_UNORM;
+        case SM2TextureFormat.RGBA16161616F:
+          return DxgiTextureFormat.DXGI_FORMAT_R16G16B16A16_FLOAT;
+        case SM2TextureFormat.XT5:
+          return DxgiTextureFormat.DXGI_FORMAT_BC5_TYPELESS;
+        case SM2TextureFormat.XRGB8888:
+          return DxgiTextureFormat.DXGI_FORMAT_B8G8R8X8_UNORM;
 
         default:
           throw new NotSupportedException( "Invalid SM2 Texture Type: " + format.ToString() );
+      }
+    }
+
+    private TextureType GetTextureType()
+    {
+      var type = _resource.texType;
+      if ( type is null )
+        return TextureType.Unknown;
+
+      switch ( _resource.texType )
+      {
+        case "nm":
+        case "det":
+          return TextureType.Normals;
+        case "em":
+          return TextureType.Emission;
+        case "spec":
+          return TextureType.SpecularColor;
+        case "cube":
+          return TextureType.Cubemap;
+        case "lmdifdir":
+        case "sm":
+          return TextureType.Lightmap;
+
+        case "akill":
+        case "br":
+        case "hdetm":
+        case "mpmask":
+          return TextureType.ChannelPacked;
+
+        default:
+          return TextureType.Diffuse;
       }
     }
 

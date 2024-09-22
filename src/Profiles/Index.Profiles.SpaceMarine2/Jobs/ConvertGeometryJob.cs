@@ -57,12 +57,12 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       AddRemainingMeshBones();
       //RenameBones();
 
-      using ( var ctx = new AssimpContext() )
-      {
-        var s = ctx.ExportFile( Context.Scene, @"E:\test\test.fbx", "fbx" );
+      //using ( var ctx = new AssimpContext() )
+      //{
+      //  var s = ctx.ExportFile( Context.Scene, @"E:\test\test.fbx", "fbx" );
 
-        var test = ctx.ImportFile( @"E:\test\test.fbx" );
-      }
+      //  var test = ctx.ImportFile( @"E:\test\test.fbx" );
+      //}
     }
 
     private void BuildSkinCompounds()
@@ -150,7 +150,7 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       var node = new Node( objName, parentNode );
       parentNode.Children.Add( node );
       Context.Nodes.Add( obj.id, node );
-      Context.NodeNames.Add( objName, node );
+      Context.NodeNames[ objName ] = node;
 
       var transform = obj.MatrixModel.ToAssimp();
       transform.Transpose();
