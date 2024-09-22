@@ -38,7 +38,7 @@ namespace Index.Profiles.SpaceMarine2.Assets
 
       var assetFilePath = asset.GetAssetFilePath( assetReference );
       var matches = _fileSystem.EnumerateFiles().Where( x => x.Name.EndsWith( assetFilePath ) ).ToArray();
-      var assetFileNode = _fileSystem.EnumerateFiles().SingleOrDefault( x => x.Name.EndsWith( assetFilePath ) );
+      var assetFileNode = _fileSystem.EnumerateFiles().SingleOrDefault( x => Path.GetFileName(x.Name) == assetFilePath );
       ASSERT( assetFileNode is not null, "Text asset's data file was not found." );
 
       asset.TextStream = assetFileNode.Open();

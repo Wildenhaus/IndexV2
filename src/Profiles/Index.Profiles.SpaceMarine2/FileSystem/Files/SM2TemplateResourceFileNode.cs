@@ -30,8 +30,8 @@ namespace Index.Profiles.SpaceMarine2.FileSystem.Files
       get
       {
         if ( ResourceDescription is null ) return true;
-        if ( string.IsNullOrEmpty( ResourceDescription.tpl ) ) return true;
-        if ( string.IsNullOrEmpty( ResourceDescription.tplData ) ) return true;
+        //if ( string.IsNullOrEmpty( ResourceDescription.tpl ) ) return true;
+        //if ( string.IsNullOrEmpty( ResourceDescription.tplData ) ) return true;
 
         return false;
       }
