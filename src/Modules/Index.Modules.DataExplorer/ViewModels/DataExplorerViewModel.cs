@@ -93,6 +93,9 @@ namespace Index.Modules.DataExplorer.ViewModels
         bool changesMade = false;
 
         foreach ( var node in _searchGraph )
+          node.Children.SuppressNotifications = true;
+
+        foreach ( var node in _searchGraph )
         {
           bool wasVisible = node.IsVisible;
           if ( isEmpty )
@@ -110,6 +113,10 @@ namespace Index.Modules.DataExplorer.ViewModels
             changesMade = true;
           }
         }
+
+        foreach ( var node in _searchGraph )
+          node.Children.SuppressNotifications = false;
+
         AssetNodes.SuppressNotifications = false;
 
         Application.Current.Dispatcher.BeginInvoke( () =>

@@ -20,7 +20,7 @@ namespace Index.Modules.DataExplorer.ViewModels
 
     #region Data Members
 
-    private readonly ObservableCollection<TViewModel> _children;
+    private readonly IxObservableCollection<TViewModel> _children;
 
     private bool _isSelected;
     private bool _isExpanded;
@@ -32,7 +32,7 @@ namespace Index.Modules.DataExplorer.ViewModels
 
     public abstract string Name { get; }
 
-    public ObservableCollection<TViewModel> Children
+    public IxObservableCollection<TViewModel> Children
     {
       get => _children;
     }
@@ -77,7 +77,7 @@ namespace Index.Modules.DataExplorer.ViewModels
     {
       _isExpanded = false;
       _isVisible = true;
-      _children = new ObservableCollection<TViewModel>();
+      _children = new IxObservableCollection<TViewModel>();
 
       ChildrenView = CollectionViewSource.GetDefaultView( _children );
       ChildrenView.Filter = ( node ) =>
