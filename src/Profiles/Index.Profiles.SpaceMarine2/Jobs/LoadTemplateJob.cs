@@ -18,6 +18,8 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       SetStatus( Name );
 
       Parameters.Set<IAssetLoadContext>( new AssetLoadContext() );
+      Parameters.Set( "LodMeshSet", new HashSet<string>() );
+      Parameters.Set( "VolumeMeshSet", new HashSet<string>() );
     }
 
     protected override void CreateSubJobs()

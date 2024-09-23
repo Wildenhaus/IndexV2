@@ -69,8 +69,11 @@ namespace Index.Domain.Assets
 
       if ( loadContext is not null )
       {
-        if ( loadContext.TryGetAsset<TAsset>( assetReference, out var loadedAsset ) )
-          return new CompletedJob<TAsset>( loadedAsset );
+        lock ( loadContext )
+        {
+          if ( loadContext.TryGetAsset<TAsset>( assetReference, out var loadedAsset ) )
+            return new CompletedJob<TAsset>( loadedAsset );
+        }
       }
 
       var factoryType = assetReference.AssetFactoryType;
@@ -84,8 +87,11 @@ namespace Index.Domain.Assets
 
         if ( loadContext is not null )
         {
-          loadAssetJob.Result.AssetLoadContext = loadContext;
-          loadContext.AddAsset( loadAssetJob.Result );
+          lock ( loadContext )
+          {
+            loadAssetJob.Result.AssetLoadContext = loadContext;
+            loadContext.AddAsset( loadAssetJob.Result );
+          }
         }
       } );
       return loadAssetJob;

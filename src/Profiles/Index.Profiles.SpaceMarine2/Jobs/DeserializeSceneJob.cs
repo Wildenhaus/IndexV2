@@ -40,6 +40,9 @@ namespace Index.Profiles.SpaceMarine2.Jobs
 
       var assetReference = Parameters.Get<IAssetReference>();
 
+      var cdListTask = LoadCdList();
+      var classListTask = LoadClassList();
+
       var lgFile = GetLgFile( assetReference );
       var lgDataFile = GetLgDataFile( assetReference );
 
@@ -56,9 +59,14 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       var context = new SceneContext( name, scene.GeometryGraph, lgDataViewStream );
       var textures = new Dictionary<string, ITextureAsset>();
 
+      var cdList = await cdListTask;
+      var classList = await classListTask;
+
       Parameters.Set( context );
       Parameters.Set( scene );
       Parameters.Set( "Textures", textures );
+      Parameters.Set( cdList );
+      Parameters.Set( classList );
 
       SetResult( context );
     }
@@ -85,6 +93,32 @@ namespace Index.Profiles.SpaceMarine2.Jobs
         .SingleOrDefault( x => Path.GetFileName( x.Name ) == lgDataFile );
 
       return lgDataFileNode;
+    }
+
+    private async Task<cdLIST> LoadCdList()
+    {
+      var assetReference = Parameters.Get<IAssetReference>();
+      var cdListName = Path.ChangeExtension( assetReference.AssetName, ".cd_list" );
+      var fsNode = FileSystem.EnumerateFiles().SingleOrDefault( x => Path.GetFileName( x.Name ) == cdListName );
+      if ( fsNode is null )
+        return null;
+
+      var reader = new NativeReader( fsNode.Open(), Endianness.LittleEndian );
+      var cdList = Serializer.Deserialize<cdLIST>( reader );
+      return cdList;
+    }
+
+    private async Task<ClassList> LoadClassList()
+    {
+      var assetReference = Parameters.Get<IAssetReference>();
+      var classListName = Path.ChangeExtension( assetReference.AssetName, ".class_list" );
+      var fsNode = FileSystem.EnumerateFiles().SingleOrDefault( x => Path.GetFileName( x.Name ) == classListName );
+      if ( fsNode is null )
+        return null;
+
+      var reader = new NativeReader( fsNode.Open(), Endianness.LittleEndian );
+      var classList = Serializer.Deserialize<ClassList>( reader );
+      return classList;
     }
 
     #endregion

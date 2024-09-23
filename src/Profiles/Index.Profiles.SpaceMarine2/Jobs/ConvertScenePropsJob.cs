@@ -10,6 +10,7 @@ using LibSaber.IO;
 using LibSaber.SpaceMarine2.Serialization;
 using Index.Profiles.SpaceMarine2.Common;
 using Index.Domain.FileSystem;
+using Serilog;
 
 namespace Index.Profiles.SpaceMarine2.Jobs
 {
@@ -33,7 +34,8 @@ namespace Index.Profiles.SpaceMarine2.Jobs
     protected ISet<string> LodMeshNames { get; set; }
     protected ISet<string> VolumeMeshNames { get; set; }
 
-    protected cdLIST PropList { get; set; }
+    protected cdLIST CdList { get; set; }
+    protected ClassList ClassList { get; set; }
 
     #endregion
 
@@ -64,6 +66,9 @@ namespace Index.Profiles.SpaceMarine2.Jobs
 
       LodMeshNames = Parameters.Get<ISet<string>>( "LodMeshSet" );
       VolumeMeshNames = Parameters.Get<ISet<string>>( "VolumeMeshSet" );
+
+      CdList = Parameters.Get<cdLIST>();
+      ClassList = Parameters.Get<ClassList>();
     }
 
     protected override async Task OnExecuting()
@@ -85,30 +90,17 @@ namespace Index.Profiles.SpaceMarine2.Jobs
 
     private HashSet<string> GatherProps()
     {
-      var assetReference = AssetReference;
-      var device = assetReference.Node.Device;
-
-      var cdListName = Path.ChangeExtension( assetReference.AssetName, ".cd_list" );
-
-      var cdListNode = FileSystem.EnumerateFiles()
-        .SingleOrDefault( x => Path.GetFileName( x.Name ) == cdListName );
-
-      if ( cdListNode is null )
+      if ( CdList is null || ClassList is null )
         return new HashSet<string>();
 
-      var stream = cdListNode.Open();
-      var reader = new NativeReader( stream, Endianness.LittleEndian );
-      PropList = Serializer<cdLIST>.Deserialize( reader );
-
-      var toLoadSet = new HashSet<string>();
-      foreach ( var prop in PropList )
+      var tplNames = ClassList.TplLookup.Select( x => x.Value + ".tpl" ).ToHashSet();
+      foreach ( var entry in CdList )
       {
-        var templateName = prop.Name.Replace( "|h", "__h_tpl" );
-        templateName = $"{device.Root.Name}/{templateName}";
-        toLoadSet.Add( templateName );
+        foreach ( var tpl in entry.NameTpls )
+          tplNames.Add( tpl + ".tpl" );
       }
 
-      return toLoadSet;
+      return tplNames;
     }
 
     private async Task<Dictionary<string, IMeshAsset>> LoadProps( ICollection<string> propsToLoad )
@@ -118,22 +110,45 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       SetIndeterminate( false );
 
       var loadedProps = new Dictionary<string, IMeshAsset>();
-      foreach ( var templateName in propsToLoad )
+      //foreach ( var templateName in propsToLoad )
+      //{
+      //  if ( !AssetManager.TryGetAssetReference( typeof( IMeshAsset ), templateName, out var templateAssetReference ) )
+      //  {
+      //    //Log.Logger.Error( "Could not find prop: {propName}", templateName );
+      //    IncreaseCompletedUnits( 1 );
+      //    continue;
+      //  }
+      //  else
+      //  {
+      //    var propTemplateAsset = await AssetManager.LoadAssetAsync<IMeshAsset>( templateAssetReference, AssetLoadContext );
+
+      //    loadedProps.Add( templateName, propTemplateAsset );
+      //    IncreaseCompletedUnits( 1 );
+      //  }
+      //}
+
+      var loadTasks = propsToLoad.Select( templateName => Task.Run( async () =>
       {
         if ( !AssetManager.TryGetAssetReference( typeof( IMeshAsset ), templateName, out var templateAssetReference ) )
         {
-          //Log.Logger.Error( "Could not find prop: {propName}", templateName );
+          Log.Logger.Error( "Could not find prop: {propName}", templateName );
           IncreaseCompletedUnits( 1 );
-          continue;
+          return;
         }
         else
         {
           var propTemplateAsset = await AssetManager.LoadAssetAsync<IMeshAsset>( templateAssetReference, AssetLoadContext );
+          if ( propTemplateAsset is null )
+            return;
 
-          loadedProps.Add( templateName, propTemplateAsset );
+          lock ( loadedProps )
+            loadedProps.Add( templateName, propTemplateAsset );
+
           IncreaseCompletedUnits( 1 );
         }
-      }
+      } ) );
+
+      await Task.WhenAll( loadTasks );
 
       return loadedProps;
     }
@@ -141,13 +156,30 @@ namespace Index.Profiles.SpaceMarine2.Jobs
     private void AddProps( Dictionary<string, IMeshAsset> loadedProps )
     {
       var deviceName = AssetReference.Node.Device.Root.Name;
-      var groups = PropList.GroupBy( x => x.Name );
-      foreach ( var group in groups )
+      var tplLookup = ClassList.TplLookup;
+      foreach ( var cdEntry in CdList )
       {
-        var templateName = group.Key.Replace( "|h", "__h_tpl" );
-        templateName = $"{deviceName}/{templateName}";
-        if ( !loadedProps.TryGetValue( templateName, out var propAsset ) )
+        var type = cdEntry.__type;
+
+        if ( !tplLookup.TryGetValue( type, out var templateName ) )
+        {
+          Log.Logger.Information( "Tpl lookup doesn't contain {0}.", templateName );
+          templateName = cdEntry.NameTpls.FirstOrDefault();
+        }
+        if ( templateName is null )
           continue;
+
+        if ( !loadedProps.TryGetValue( templateName + ".tpl", out var propAsset ) )
+        {
+          Log.Logger.Information( "Could not find tpl {0}.", templateName );
+          continue;
+        }
+
+        if ( propAsset is null )
+        {
+          Log.Logger.Information( "propAsset is null." );
+          continue;
+        }
 
         foreach ( var pair in propAsset.Textures )
           Textures.TryAdd( pair.Key, pair.Value );
@@ -182,34 +214,38 @@ namespace Index.Profiles.SpaceMarine2.Jobs
             mesh.MaterialIndex = 0;
         }
 
-        foreach ( var propReference in group )
-        {
-          var instanceName = propReference.Name;
-          var instanceMatrix = propReference.Matrix;
+        var propReference = cdEntry;
+        var instanceName = propReference.Name;
+        var instanceMatrix = propReference.Matrix;
 
-          var matrix = instanceMatrix.ToAssimp();
-          matrix.Transpose();
+        var matrix = instanceMatrix.ToAssimp();
+        matrix.Transpose();
 
-          var propNode = new Node( instanceName, Context.RootNode );
-          Context.RootNode.Children.Add( propNode );
-          propNode.Transform = matrix;
+        var propNode = new Node( instanceName, Context.RootNode );
+        Context.RootNode.Children.Add( propNode );
+        propNode.Transform = matrix;
 
-          AddPropNode( propScene.RootNode, propNode, meshLookup );
-        }
+        AddPropNode( propScene.RootNode, propNode, meshLookup );
       }
     }
 
     private void AddPropNode( Node originalNode, Node parent, Dictionary<int, int> meshLookup )
     {
-      var newNode = new Node( originalNode.Name, parent );
-      parent.Children.Add( newNode );
-      newNode.Transform = originalNode.Transform;
+      foreach ( var meshNode in originalNode.Children.Where( x => x.HasMeshes ) )
+      {
+        foreach ( var oldMeshIndex in originalNode.MeshIndices )
+          parent.MeshIndices.Add( meshLookup[ oldMeshIndex ] );
+      }
 
-      foreach ( var oldMeshIndex in originalNode.MeshIndices )
-        newNode.MeshIndices.Add( meshLookup[ oldMeshIndex ] );
+      //var newNode = new Node( originalNode.Name, parent );
+      //parent.Children.Add( newNode );
+      //newNode.Transform = originalNode.Transform;
 
-      foreach ( var child in originalNode.EnumerateChildren() )
-        AddPropNode( child, newNode, meshLookup );
+      //foreach ( var oldMeshIndex in originalNode.MeshIndices )
+      //  newNode.MeshIndices.Add( meshLookup[ oldMeshIndex ] );
+
+      //foreach ( var child in originalNode.EnumerateChildren() )
+      //  AddPropNode( child, newNode, meshLookup );
     }
 
     #endregion
