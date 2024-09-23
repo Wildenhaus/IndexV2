@@ -126,6 +126,14 @@ namespace Index.Modules.DataExplorer.ViewModels
       {
         Parent.ChildrenChecked++;
       }
+      else if ( previousValue == false && !newValue.HasValue )
+      {
+        Parent.ChildrenChecked++;
+      }
+      else if ( !previousValue.HasValue && newValue == false )
+      {
+        Parent.ChildrenChecked--;
+      }
 
       ASSERT( Parent.ChildrenChecked >= 0, "ChildrenChecked became negative." );
       ASSERT( Parent.ChildrenChecked <= Parent.Children.Count, "ChildrenChecked exceeded number of children." );
