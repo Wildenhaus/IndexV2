@@ -83,6 +83,7 @@ namespace Index.Jobs
         finally
         {
           _completedJobs++;
+          SetCompletedUnits( _completedJobs );
           job.Progress.PropertyChanged -= OnSubJobProgressPropertyChanged;
         }
 
