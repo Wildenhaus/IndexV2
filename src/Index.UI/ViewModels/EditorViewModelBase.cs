@@ -169,7 +169,7 @@ namespace Index.UI.ViewModels
 
         var jobParams = new ParameterCollection();
         jobParams.Set<IAsset>( "Asset", Asset );
-        jobParams.Set( Asset.AssetReference );
+        jobParams.Set( "AssetReference", Asset.AssetReference );
         jobParams.Set( "Options", options );
 
         var jobManager = Container.Resolve<IJobManager>();
