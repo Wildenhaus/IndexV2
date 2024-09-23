@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using DryIoc;
+using Index.Common;
 using Index.Domain.Models;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -40,9 +43,18 @@ namespace Index.App.ViewModels
       get
       {
         var assembly = GetType().Assembly;
-        var version = assembly.GetName().Version.ToString();
-        return $"v{version}";
+        return AssemblyHelpers.GetBuildString( assembly );
       }
+    }
+
+    public Color IconColor
+    {
+      get => Color.FromRgb(22,200,186);
+    }
+
+    public Brush IconBrush
+    {
+      get => new SolidColorBrush(IconColor);
     }
 
     #endregion
