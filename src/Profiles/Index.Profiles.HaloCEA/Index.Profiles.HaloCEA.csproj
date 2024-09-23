@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="echo $(FrameworkVersion)&#xD;&#xA;echo $(Platform)&#xD;&#xA;mkdir &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\win-x64\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\win-x64\GameProfiles\$(TargetName).dll&quot;&#xD;&#xA;mkdir &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net6.0-windows\GameProfiles\$(TargetName).dll&quot;" />
+    <Exec Command="echo $(FrameworkVersion)&#xD;&#xA;echo $(Platform)&#xD;&#xA;mkdir &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net8.0-windows7.0\win-x64\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net8.0-windows7.0\win-x64\GameProfiles\$(TargetName).dll&quot;&#xD;&#xA;mkdir &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net8.0-windows7.0\GameProfiles\&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)src\Index.App\bin\$(Configuration)\net8.0-windows7.0\GameProfiles\$(TargetName).dll&quot;" />
   </Target>
 
 </Project>
