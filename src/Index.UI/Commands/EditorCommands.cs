@@ -33,6 +33,7 @@ namespace Index.UI.Commands
     public static ICommand CloseTabCommand { get; private set; }
     public static ICommand CloseAllTabsCommand { get; private set; }
     public static ICommand CloseAllTabsButThisCommand { get; private set; }
+    public static ICommand CloseTabByViewModelTypeCommand { get; private set; }
 
     public static ICommand ExportAssetCommand { get; private set; }
     public static ICommand ExportAssetReferenceCommand { get; private set; }
@@ -49,6 +50,7 @@ namespace Index.UI.Commands
       CloseTabCommand = new DelegateCommand<IAssetReference>( CloseTab );
       CloseAllTabsCommand = new DelegateCommand( CloseAllTabs );
       CloseAllTabsButThisCommand = new DelegateCommand<IAssetReference>( CloseAllTabsButThis );
+      CloseTabByViewModelTypeCommand = new DelegateCommand<Type>( CloseTabByViewModelType );
 
       ExportAssetCommand = new DelegateCommand<IExportableAsset>( ExportAsset );
     }
@@ -108,6 +110,18 @@ namespace Index.UI.Commands
       }
     }
 
+    private static void CloseTabByViewModelType( Type viewModelType )
+    {
+      var regionManager = _container.Resolve<IRegionManager>();
+      var region = regionManager.Regions[ RegionKeys.EditorDocumentRegion ];
+
+      var view = FindTabByViewModelType( region, viewModelType );
+      if ( view is null )
+        return;
+
+      RemoveTabFromRegion( view, region );
+    }
+
     #endregion
 
     #region Tab Methods
@@ -128,6 +142,22 @@ namespace Index.UI.Commands
           continue;
 
         return editorView;
+      }
+
+      return null;
+    }
+
+    private static object FindTabByViewModelType( IRegion region, Type viewModelType )
+    {
+      foreach ( var regionView in region.Views )
+      {
+        var view = regionView as FrameworkElement;
+        if ( view is null )
+          continue;
+
+        var viewModel = view.DataContext;
+        if ( viewModel.GetType() == viewModelType )
+          return regionView;
       }
 
       return null;

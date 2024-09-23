@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Windows.Input;
 using Index.Domain.Assets;
+using Prism.Commands;
 using PropertyChanged;
 using static Index.Assertions;
 
@@ -18,8 +20,9 @@ namespace Index.Modules.DataExplorer.ViewModels
     #region Properties
 
     public override string Name => _assetNodeViewModel.Name;
-    private IAssetReference AssetReference => _assetNodeViewModel.AssetReference;
+    public IAssetReference AssetReference => _assetNodeViewModel.AssetReference;
     public Type AssetType => _assetNodeViewModel.AssetType;
+    public ICommand ToggleCheckedCommand { get; }
 
     [DoNotNotify] private bool IsUpdating { get; set; }
     [DoNotNotify] private int ChildrenChecked { get; set; }
@@ -49,6 +52,18 @@ namespace Index.Modules.DataExplorer.ViewModels
     {
       _isChecked = false;
       _assetNodeViewModel = assetNodeViewModel;
+
+      ToggleCheckedCommand = new DelegateCommand( ToggleChecked );
+    }
+
+    private void ToggleChecked()
+    {
+      if ( !IsChecked.HasValue )
+        IsChecked = true;
+      else if ( IsChecked == true )
+        IsChecked = false;
+      else
+        IsChecked = true;
     }
 
     #endregion

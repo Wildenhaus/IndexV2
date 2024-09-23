@@ -110,7 +110,7 @@
         </controls:IxTextBox>
 
         <TreeView Grid.Row="2"
-          ItemsSource="{Binding AssetNodesView}"
+          ItemsSource="{Binding NodesView}"
           VirtualizingPanel.IsContainerVirtualizable="True"
           VirtualizingPanel.IsVirtualizing="True"
           VirtualizingStackPanel.VirtualizationMode="Recycling"

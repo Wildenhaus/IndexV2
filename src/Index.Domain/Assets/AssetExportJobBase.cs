@@ -27,8 +27,9 @@ namespace Index.Domain.Assets
     {
       AssetManager = container.Resolve<IAssetManager>();
 
-      Asset = Parameters.Get<TAsset>( "Asset" );
-      AssetReference = Parameters.Get<IAssetReference>();
+      if ( Parameters.TryGet<TAsset>( "Asset", out var asset ) )
+        Asset = asset;
+      AssetReference = Parameters.Get<IAssetReference>( "AssetReference" );
 
       Options = Parameters.Get<TOptions>( "Options" );
 

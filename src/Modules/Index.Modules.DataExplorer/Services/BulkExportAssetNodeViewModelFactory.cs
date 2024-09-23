@@ -23,6 +23,28 @@ namespace Index.Modules.DataExplorer.Services
       return exportNodes;
     }
 
+    public List<BulkExportAssetNodeViewModel> CreateNodeSearchGraph( IEnumerable<BulkExportAssetNodeViewModel> nodes )
+    {
+      var flattenedList = new List<BulkExportAssetNodeViewModel>();
+
+      void FlattenNode( BulkExportAssetNodeViewModel node, List<BulkExportAssetNodeViewModel> result )
+      {
+        foreach ( var child in node.Children )
+        {
+          FlattenNode( child, result );
+        }
+
+        result.Add( node );
+      }
+
+      foreach ( var root in nodes )
+      {
+        FlattenNode( root, flattenedList );
+      }
+
+      return flattenedList;
+    }
+
     #endregion
 
     #region Private Methods

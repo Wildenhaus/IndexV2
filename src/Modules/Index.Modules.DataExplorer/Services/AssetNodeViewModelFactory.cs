@@ -39,7 +39,7 @@ namespace Index.Modules.DataExplorer.Services
       return rootCategories;
     }
 
-    public List<AssetNodeViewModel> CreateNodeSearchGraph( List<AssetNodeViewModel> nodes )
+    public List<AssetNodeViewModel> CreateNodeSearchGraph( IEnumerable<AssetNodeViewModel> nodes )
     {
       var flattenedList = new List<AssetNodeViewModel>();
 

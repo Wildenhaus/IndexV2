@@ -20,6 +20,12 @@ namespace Index.Jobs
 
     #endregion
 
+    #region Properties
+
+    protected bool ContinueOnSubJobFaulted { get; set; }
+
+    #endregion
+
     #region Constructor
 
     protected CompositeJobBase( IContainerProvider container, IParameterCollection parameters )
@@ -62,7 +68,9 @@ namespace Index.Jobs
         catch ( Exception ex )
         {
           HandleException( ex );
-          return;
+
+          if ( !ContinueOnSubJobFaulted )
+            return;
         }
         finally
         {

@@ -117,7 +117,7 @@ namespace Index.Domain.Assets.Meshes
 
         var parameters = new ParameterCollection();
         parameters.Set( "Asset", texture );
-        parameters.Set( texture.AssetReference );
+        parameters.Set( "AssetReference", texture.AssetReference );
         parameters.Set( "Options", Options.TextureOptions );
 
         var textureExportJobType = exportableTexture.ExportJobType;
