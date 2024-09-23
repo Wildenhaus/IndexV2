@@ -181,6 +181,8 @@ public class BulkExportViewModel : SearchableNodeGraphViewModel<BulkExportAssetN
         tabRegion.Activate( optionsTab );
         return false;
       }
+
+      optionsVm.SaveOptions();
     }
 
     return true;

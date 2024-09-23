@@ -14,6 +14,7 @@ namespace Index.UI.ViewModels
     public AssetExportOptions Options { get; }
     public string AssetTypeName { get; }
 
+    public void SaveOptions();
   }
 
   public class AssetExportOptionsTabViewModel<TOptions> : TabViewModelBase, IAssetExportOptionsTabViewModel
@@ -47,6 +48,11 @@ namespace Index.UI.ViewModels
     }
 
     #endregion
+
+    public void SaveOptions()
+    {
+      _base.SaveOptions();
+    }
 
   }
 
