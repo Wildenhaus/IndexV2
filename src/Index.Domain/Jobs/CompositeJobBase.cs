@@ -1,4 +1,5 @@
 ﻿using Index.Common;
+using Index.Domain.Jobs;
 using Prism.Ioc;
 using static System.Reflection.Metadata.BlobBuilder;
 
@@ -52,8 +53,15 @@ namespace Index.Jobs
     protected override async Task OnExecuting()
     {
       SetIndeterminate();
-      foreach ( (int jobKey, IJob job) in _jobs )
+
+      var queue = new Queue<(int jobKey, IJob job)>( _jobs );
+
+      var index = 0;
+      while ( queue.TryDequeue(out (int jobKey, IJob job) result ) )
       {
+        var jobKey = result.jobKey;
+        var job = result.job;
+
         if ( IsCancellationRequested )
           return;
 
@@ -85,6 +93,9 @@ namespace Index.Jobs
         }
 
         await OnSubJobCompleted( jobKey, job );
+
+        _jobs[ index ] = (jobKey, new CompletedJob());
+        index++;
       }
     }
 
