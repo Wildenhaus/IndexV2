@@ -17,7 +17,9 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       Name = $"Loading Template {assetReference.AssetName}";
       SetStatus( Name );
 
-      Parameters.Set<IAssetLoadContext>( new AssetLoadContext() );
+      if(!Parameters.TryGet<IAssetLoadContext>( out _ ))
+        Parameters.Set<IAssetLoadContext>( new AssetLoadContext() );
+
       Parameters.Set( "LodMeshSet", new HashSet<string>() );
       Parameters.Set( "VolumeMeshSet", new HashSet<string>() );
     }

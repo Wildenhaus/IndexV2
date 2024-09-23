@@ -89,7 +89,6 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       SetIndeterminate( false );
 
       var jobs = new List<Task>();
-      var jobSemaphore = new SemaphoreSlim( 5 );
       foreach ( var assetToLoad in toLoadSet )
       {
         lock ( Textures )
@@ -98,7 +97,6 @@ namespace Index.Profiles.SpaceMarine2.Jobs
             continue;
         }
 
-        jobSemaphore.Wait();
         var loadJob = AssetManager.LoadAsset<ITextureAsset>( assetToLoad, AssetLoadContext );
         loadJob.RegisterCompletionCallback( job =>
         {
@@ -108,7 +106,6 @@ namespace Index.Profiles.SpaceMarine2.Jobs
             var texName = Path.GetFileNameWithoutExtension( texture.AssetName.Replace(".resource", "") );
             Textures.Add(texName, texture );
             IncreaseCompletedUnits( 1 );
-            jobSemaphore.Release();
           }
         } );
         jobs.Add( loadJob.Completion );

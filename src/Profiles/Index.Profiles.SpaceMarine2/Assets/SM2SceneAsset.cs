@@ -46,10 +46,11 @@ namespace Index.Profiles.SpaceMarine2.Assets
 
     #region Overrides
 
-    public override IJob<SM2SceneAsset> LoadAsset( IAssetReference assetReference )
+    public override IJob<SM2SceneAsset> LoadAsset( IAssetReference assetReference, IAssetLoadContext assetLoadContext = null )
     {
       var parameters = new ParameterCollection();
       parameters.Set( assetReference );
+      parameters.Set( assetLoadContext );
 
       return JobManager.StartJob<LoadSceneJob>( parameters );
     }

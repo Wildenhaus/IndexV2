@@ -32,7 +32,7 @@ namespace Index.Profiles.SpaceMarine2.Assets
       _fileSystem = container.Resolve<IFileSystem>();
     }
 
-    public override IJob<TAsset> LoadAsset( IAssetReference assetReference )
+    public override IJob<TAsset> LoadAsset( IAssetReference assetReference, IAssetLoadContext assetLoadContext = null )
     {
       var asset = CreateAsset( assetReference );
 

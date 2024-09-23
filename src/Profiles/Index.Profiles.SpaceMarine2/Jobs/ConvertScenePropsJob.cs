@@ -163,7 +163,7 @@ namespace Index.Profiles.SpaceMarine2.Jobs
 
         if ( !tplLookup.TryGetValue( type, out var templateName ) )
         {
-          Log.Logger.Information( "Tpl lookup doesn't contain {0}.", templateName );
+          //Log.Logger.Information( "Tpl lookup doesn't contain {0}.", templateName );
           templateName = cdEntry.NameTpls.FirstOrDefault();
         }
         if ( templateName is null )

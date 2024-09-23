@@ -6,7 +6,7 @@ namespace Index.Domain.Assets
   public interface IAssetFactory
   {
 
-    IJob<IAsset> LoadAsset( IAssetReference assetReference );
+    IJob<IAsset> LoadAsset( IAssetReference assetReference, IAssetLoadContext assetLoadContext = null );
 
   }
 
@@ -14,10 +14,10 @@ namespace Index.Domain.Assets
     where TAsset : class, IAsset
   {
 
-    new IJob<TAsset> LoadAsset( IAssetReference assetReference );
+    new IJob<TAsset> LoadAsset( IAssetReference assetReference, IAssetLoadContext assetLoadContext = null );
 
-    IJob<IAsset> IAssetFactory.LoadAsset( IAssetReference assetReference )
-      => LoadAsset( assetReference );
+    IJob<IAsset> IAssetFactory.LoadAsset( IAssetReference assetReference, IAssetLoadContext assetLoadContext = null )
+      => LoadAsset( assetReference, assetLoadContext );
 
   }
 

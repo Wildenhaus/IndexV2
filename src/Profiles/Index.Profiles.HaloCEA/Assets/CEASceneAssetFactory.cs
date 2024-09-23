@@ -20,10 +20,11 @@ namespace Index.Profiles.HaloCEA.Assets
 
     #region Overrides
 
-    public override IJob<CEASceneAsset> LoadAsset( IAssetReference assetReference )
+    public override IJob<CEASceneAsset> LoadAsset( IAssetReference assetReference, IAssetLoadContext assetLoadContext = null )
     {
       var parameters = new ParameterCollection();
       parameters.Set( assetReference );
+      parameters.Set( assetLoadContext );
 
       return JobManager.StartJob<LoadSceneJob>( parameters );
     }

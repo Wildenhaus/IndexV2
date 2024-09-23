@@ -1,4 +1,5 @@
 ﻿using Assimp;
+using HelixToolkit.SharpDX.Core.Model.Scene;
 using Index.Jobs;
 using Index.Profiles.SpaceMarine2.Common;
 using Index.Profiles.SpaceMarine2.Meshes;
@@ -104,22 +105,29 @@ namespace Index.Profiles.SpaceMarine2.Jobs
 
       foreach ( var obj in Context.GeometryGraph.objects )
       {
-        if ( obj.Affixes is null )
-          continue;
+        var objName = obj.GetName();
 
-        var affixes = obj.Affixes.Split( "\n", StringSplitOptions.RemoveEmptyEntries );
-        foreach ( var affix in affixes )
+        if ( obj.Affixes is not null )
         {
-          if ( VolumeAffixes.Contains( affix ) )
+          var affixes = obj.Affixes.Split( "\n", StringSplitOptions.RemoveEmptyEntries );
+          foreach ( var affix in affixes )
           {
-            set.Add( obj.GetName() );
-            break;
-          }
-          else if ( obj.GetName().Contains("cdt", StringComparison.InvariantCultureIgnoreCase))
-          {
-            set.Add( obj.GetName() );
+            if ( VolumeAffixes.Contains( affix ) )
+            {
+              set.Add( objName );
+              break;
+            }
+            else if ( objName.Contains( "cdt", StringComparison.InvariantCultureIgnoreCase ) )
+              set.Add( objName );
+            else if ( objName.Contains( "_glr" ) )
+              set.Add( objName );
+
           }
         }
+        else if ( objName.Contains( "cdt", StringComparison.InvariantCultureIgnoreCase ) )
+          set.Add( objName );
+        else if ( objName.Contains( "_glr" ) )
+          set.Add( objName );
       }
 
       //EvaluateMesh( set, scene, scene.RootNode, IsVolumeMesh );

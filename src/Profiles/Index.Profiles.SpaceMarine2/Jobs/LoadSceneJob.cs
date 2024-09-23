@@ -35,7 +35,7 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       AddJob<ConvertGeometryJob>();
       AddJob<LoadGeometryTexturesJob>();
       AddJob<IdentifyMeshesJob>();
-      //AddJob<ConvertScenePropsJob>();
+      AddJob<ConvertScenePropsJob>();
       //AddJob<ConvertSceneLightsJob>();
     }
 

@@ -31,7 +31,8 @@ namespace Index.Profiles.SpaceMarine2.FileSystem.Files
       {
         if ( ResourceDescription is null ) return true;
         if ( string.IsNullOrEmpty( ResourceDescription.tpl ) ) return true;
-        if ( string.IsNullOrEmpty( ResourceDescription.tplData ) ) return true;
+        //if ( string.IsNullOrEmpty( ResourceDescription.tplData ) ) return true;
+        if ( DisplayName.StartsWith( "__x" ) ) return true;
 
         return false;
       }

@@ -49,12 +49,15 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       var name = Path.GetFileNameWithoutExtension( assetReference.AssetName );
       var template = Serializer<animTPL>.Deserialize( reader, new SerializationContext() );
 
-      var tplDataStream = tplDataFile.Open();
+      Stream tplDataStream;
+      if ( tplDataFile != null )
+        tplDataStream = tplDataFile.Open();
+      else
+        tplDataStream = tplFile.Open();
+
       var context = new SceneContext( name, template.GeometryGraph, tplDataStream );
-      //context.AddLodDefinitions( template.LodDefinitions );
 
       var textures = new Dictionary<string, ITextureAsset>();
-
 
       Parameters.Set( context );
       Parameters.Set( template );
@@ -80,10 +83,10 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       ASSERT( assetNode is not null, "Template AssetNode is null." );
 
       var tplDataFile = assetNode.ResourceDescription.tplData;
-      ASSERT( !string.IsNullOrWhiteSpace( tplDataFile ), "Template does not have an associated .tpl_data file." );
+      if ( string.IsNullOrWhiteSpace( tplDataFile ) )
+        return null;
 
       var tplDataFileNode = FileSystem.EnumerateFiles().SingleOrDefault( x => Path.GetFileName( x.Name ) == tplDataFile );
-      ASSERT( tplDataFileNode is not null, "TPL_DATA file not found." );
 
       return tplDataFileNode;
     }

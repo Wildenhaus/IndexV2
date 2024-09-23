@@ -70,6 +70,8 @@ namespace Index.Profiles.SpaceMarine2.Meshes
             AddVertices( buffer, meshBuffer );
             break;
           case GeometryElementType.Face:
+            if ( buffer.ElementSize != 6 ) // TODO: What is this buffer? Not faces. thunderhawk_body.tpl
+              continue;
             AddFaces( buffer, meshBuffer );
             break;
           case GeometryElementType.Interleaved:
