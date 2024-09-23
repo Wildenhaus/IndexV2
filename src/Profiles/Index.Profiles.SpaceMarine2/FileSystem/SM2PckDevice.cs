@@ -107,8 +107,8 @@ public class SM2PckDevice : FileSystemDeviceBase
         return BeginInitResourceNode( new SM2TemplateResourceFileNode( this, entry, parent ), taskList );
       case ".td":
         return BeginInitResourceNode( new SM2TextureDefinitionResourceFileNode(this, entry, parent ), taskList );
-      case ".scn":
-        return BeginInitResourceNode( new SM2SceneResourceFileNode( this, entry, parent ), taskList );
+      //case ".scn":
+      //  return BeginInitResourceNode( new SM2SceneResourceFileNode( this, entry, parent ), taskList );
       default:
         return new SM2FileSystemNode( this, entry, parent );
     }
