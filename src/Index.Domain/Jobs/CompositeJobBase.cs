@@ -75,10 +75,11 @@ namespace Index.Jobs
         }
         catch ( Exception ex )
         {
-          HandleException( ex );
-
           if ( !ContinueOnSubJobFaulted )
+          {
+            HandleException( job.Exception );
             return;
+          }
         }
         finally
         {
@@ -89,8 +90,11 @@ namespace Index.Jobs
 
         if ( job.State == JobState.Faulted )
         {
-          HandleException( job.Exception );
-          return;
+          if ( !ContinueOnSubJobFaulted )
+          {
+            HandleException( job.Exception );
+            return;
+          }
         }
 
         await OnSubJobCompleted( jobKey, job );
