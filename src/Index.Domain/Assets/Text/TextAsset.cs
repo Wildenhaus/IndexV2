@@ -3,6 +3,7 @@
 namespace Index.Domain.Assets.Text
 {
 
+  [AssetExportOptionsType(typeof(TextAssetExportOptions))]
   public class TextAsset : AssetBase, ITextAsset
   {
 

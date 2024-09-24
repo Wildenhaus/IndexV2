@@ -20,6 +20,7 @@ namespace Index.Domain.FileSystem
 
     public string Name { get; }
     public virtual string DisplayName => Name;
+    public virtual bool IsHidden => false;
     public bool IsDirectory
     {
       get => FirstChild is not null;
@@ -27,7 +28,9 @@ namespace Index.Domain.FileSystem
 
     public IFileSystemNode Parent { get; }
     public IFileSystemNode FirstChild { get; set; }
+    public IFileSystemNode LastChild { get; set; }
     public IFileSystemNode NextSibling { get; set; }
+
 
     #endregion
 
@@ -36,7 +39,7 @@ namespace Index.Domain.FileSystem
     protected FileSystemNodeBase( IFileSystemDevice device, string name, IFileSystemNode parent = null )
     {
       Device = device;
-      Name = name;
+      Name = ParseFileName( name );
       Parent = parent;
 
       Metadata = new ParameterCollection();
@@ -51,10 +54,12 @@ namespace Index.Domain.FileSystem
       if ( FirstChild is null )
       {
         FirstChild = node;
+        LastChild = node;
         return;
       }
 
-      FirstChild.AddSibling( node );
+      LastChild.AddSibling( node );
+      LastChild = node;
     }
 
     public void AddSibling( IFileSystemNode node )
@@ -120,6 +125,15 @@ namespace Index.Domain.FileSystem
 
     public void SetMetadata<T>( string key, T value )
       => Metadata.Set<T>( key, value );
+
+    #endregion
+
+    #region Private Methods
+
+    protected virtual string ParseFileName( string fileName )
+    {
+      return fileName;
+    }
 
     #endregion
 

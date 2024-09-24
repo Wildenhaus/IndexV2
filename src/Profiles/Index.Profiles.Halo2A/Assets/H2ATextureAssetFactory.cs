@@ -27,10 +27,11 @@ namespace Index.Profiles.Halo2A.Assets
 
     #region Overrides
 
-    public override IJob<DxgiTextureAsset> LoadAsset( IAssetReference assetReference )
+    public override IJob<DxgiTextureAsset> LoadAsset( IAssetReference assetReference, IAssetLoadContext assetLoadContext = null )
     {
       var parameters = new ParameterCollection();
       parameters.Set( assetReference );
+      parameters.Set( assetLoadContext );
 
       return JobManager.StartJob<LoadTextureJob>( parameters );
     }

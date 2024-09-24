@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Index.Domain.FileSystem;
 using Index.Modules.DataExplorer.ViewModels;
 
@@ -43,7 +44,7 @@ namespace Index.Modules.DataExplorer.Services
     {
       var viewModel = new FileTreeNodeViewModel( fileSystemNode );
 
-      foreach ( var child in fileSystemNode.EnumerateChildren( recursive: false ) )
+      foreach ( var child in fileSystemNode.EnumerateChildren( recursive: false ).Where(x => !x.IsHidden) )
         viewModel.Children.Add( CreateNode( child ) );
 
       return viewModel;

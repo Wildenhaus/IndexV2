@@ -18,6 +18,7 @@
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/TabView.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/TextBox.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/ToggleButton.xaml" />
+        <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/ToolTip.xaml" />
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/Base/Window.xaml" />
 
         <ResourceDictionary Source="/Index.UI;component/Themes/Templates/IxButton.xaml" />

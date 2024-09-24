@@ -66,7 +66,7 @@ namespace Index
       if ( _data is null )
         _data = new Dictionary<string, object>();
 
-      _data.Add( key, value );
+      _data[key] = value;
     }
 
     #endregion

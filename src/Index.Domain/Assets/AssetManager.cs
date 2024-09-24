@@ -1,4 +1,5 @@
-﻿using Index.Domain.FileSystem;
+﻿using System.Reflection;
+using Index.Domain.FileSystem;
 using Index.Domain.Jobs;
 using Index.Jobs;
 using Prism.Ioc;
@@ -15,6 +16,7 @@ namespace Index.Domain.Assets
     private readonly IJobManager _jobManager;
 
     private readonly Dictionary<Type, IAssetReferenceCollection> _references;
+    private readonly Dictionary<Type, Type> _exportOptionsViewTypeMapping;
 
     private bool _isInitialized;
 
@@ -37,6 +39,7 @@ namespace Index.Domain.Assets
       _jobManager = _container.Resolve<IJobManager>();
 
       _references = new Dictionary<Type, IAssetReferenceCollection>();
+      _exportOptionsViewTypeMapping = new Dictionary<Type, Type>();
     }
 
     #endregion
@@ -64,28 +67,35 @@ namespace Index.Domain.Assets
       ASSERT_NOT_NULL( assetReference );
       ASSERT( assetReference.AssetType.IsAssignableTo( typeof( TAsset ) ), $"Asset type mismatch." );
 
-      if ( loadContext is not null )
-      {
-        if ( loadContext.TryGetAsset<TAsset>( assetReference, out var loadedAsset ) )
-          return new CompletedJob<TAsset>( loadedAsset );
-      }
+      if ( loadContext is null )
+        loadContext = new AssetLoadContext();
 
       var factoryType = assetReference.AssetFactoryType;
       var factory = ( IAssetFactory<TAsset> ) _container.Resolve( factoryType );
 
-      var loadAssetJob = factory.LoadAsset( assetReference );
-      Task.WhenAny( loadAssetJob.Completion ).ContinueWith( t =>
+      lock ( loadContext )
       {
-        if ( loadAssetJob.State != JobState.Completed )
-          return;
+        if ( loadContext.TryGetAsset<TAsset>( assetReference, out var loadedAsset ) )
+          return new CompletedJob<TAsset>( loadedAsset );
 
-        if ( loadContext is not null )
+        if ( loadContext.TryGetAssetLoadingJob<TAsset>( assetReference, out var existingLoadJob ) )
+          return existingLoadJob;
+
+        var loadAssetJob = factory.LoadAsset( assetReference, loadContext );
+        loadContext.MarkAssetAsLoading( assetReference, loadAssetJob );
+
+        Task.WhenAny( loadAssetJob.Completion ).ContinueWith( t =>
         {
+          if ( loadAssetJob.State != JobState.Completed )
+            return;
+
           loadAssetJob.Result.AssetLoadContext = loadContext;
           loadContext.AddAsset( loadAssetJob.Result );
-        }
-      } );
-      return loadAssetJob;
+          loadContext.MarkAssetAsFinishedLoading<TAsset>( assetReference );
+        } );
+
+        return loadAssetJob;
+      }
     }
 
     public async Task<TAsset> LoadAssetAsync<TAsset>( IAssetReference assetReference, IAssetLoadContext loadContext = null )
@@ -129,6 +139,37 @@ namespace Index.Domain.Assets
         foreach ( var assetReference in referenceCollection.Value )
           yield return assetReference;
       }
+    }
+
+    public string GetAssetTypeName( Type assetType )
+    {
+      if ( !_references.TryGetValue( assetType, out var referenceCollection ) )
+        FAIL( "Asset Type not found: " + assetType.FullName );
+
+      return referenceCollection.AssetTypeName;
+    }
+
+    public Type GetAssetExportOptionsType( Type assetType )
+    {
+      ASSERT_NOT_NULL( assetType );
+
+      var attribute = assetType.GetCustomAttribute<AssetExportOptionsTypeAttribute>();
+      ASSERT_NOT_NULL( attribute );
+
+      var assetExportOptionsType = attribute.Type;
+      ASSERT_NOT_NULL( assetExportOptionsType );
+
+      return assetExportOptionsType;
+    }
+
+    public void RegisterViewTypeForExportOptionsType( Type exportOptionsType, Type viewType )
+    {
+      _exportOptionsViewTypeMapping.Add( exportOptionsType, viewType );
+    }
+
+    public Type GetViewTypeForExportOptionsType( Type exportOptionsType )
+    {
+      return _exportOptionsViewTypeMapping[ exportOptionsType ];
     }
 
     #endregion

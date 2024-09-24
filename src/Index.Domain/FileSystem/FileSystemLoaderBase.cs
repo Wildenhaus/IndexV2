@@ -14,6 +14,7 @@
 
     #region Properties
 
+    protected string BasePath => _basePath;
     protected IReadOnlyList<IFileSystemDevice> Devices => _loadedDevices;
 
     #endregion
@@ -87,6 +88,7 @@
       var excludeSet = new HashSet<string>( excludedFileNames.Select( x => x.ToLower() ) );
 
       extension = SanitizeExtension( extension );
+      var loadTasks = new List<Task>();
 
       foreach ( var filePath in Directory.EnumerateFiles( _basePath, extension, SearchOption.AllDirectories ) )
       {
@@ -98,8 +100,10 @@
         if ( !_deviceFileNames.Add( filePath ) )
           continue;
 
-        await LoadDevice( filePath, deviceFactory );
+        loadTasks.Add( LoadDevice( filePath, deviceFactory ));
       }
+
+      await Task.WhenAll(loadTasks);
     }
 
     private static string SanitizeExtension( string extension )

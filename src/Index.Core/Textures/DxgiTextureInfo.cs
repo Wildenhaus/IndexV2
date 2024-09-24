@@ -12,6 +12,7 @@
 
     public int FaceCount;
     public int MipCount;
+    public bool IsNotCubeMapOverride;
 
     public DxgiTextureFormat Format;
 
@@ -19,7 +20,7 @@
 
     #region Properties
 
-    public bool IsCubeMap => FaceCount > 1;
+    public bool IsCubeMap => FaceCount >= 6;
 
     #endregion
 

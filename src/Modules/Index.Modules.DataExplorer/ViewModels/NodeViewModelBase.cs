@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using Index.UI.Common;
 using Index.UI.Controls.Menus;
 using Prism.Mvvm;
 
@@ -16,7 +20,8 @@ namespace Index.Modules.DataExplorer.ViewModels
 
     #region Data Members
 
-    private readonly ObservableCollection<TViewModel> _children;
+    private NodeViewModelBase<TViewModel> _parent;
+    private readonly IxObservableCollection<TViewModel> _children;
 
     private bool _isSelected;
     private bool _isExpanded;
@@ -28,10 +33,17 @@ namespace Index.Modules.DataExplorer.ViewModels
 
     public abstract string Name { get; }
 
-    public ObservableCollection<TViewModel> Children
+    public TViewModel Parent
+    {
+      get => (TViewModel)_parent;
+    }
+
+    public IxObservableCollection<TViewModel> Children
     {
       get => _children;
     }
+
+    public ICollectionView ChildrenView { get; }
 
     public bool IsExpanded
     {
@@ -49,6 +61,16 @@ namespace Index.Modules.DataExplorer.ViewModels
     {
       get => _isVisible;
       set => SetProperty( ref _isVisible, value );
+    }
+
+    public bool IsParent
+    {
+      get => _children.Count != 0;
+    }
+
+    public bool IsChild
+    {
+      get => _parent is not null;
     }
 
     public bool IsLeaf
@@ -71,38 +93,24 @@ namespace Index.Modules.DataExplorer.ViewModels
     {
       _isExpanded = false;
       _isVisible = true;
-      _children = new ObservableCollection<TViewModel>();
+      _children = new IxObservableCollection<TViewModel>();
+
+      ChildrenView = CollectionViewSource.GetDefaultView( _children );
+      ChildrenView.Filter = ( node ) =>
+      {
+        var vm = node as NodeViewModelBase<TViewModel>;
+        return vm.IsVisible;
+      };
     }
 
     #endregion
 
     #region Public Methods
 
-    public bool ApplySearchCriteria( string searchTerm )
+    public void AddChild(TViewModel child)
     {
-      var isEmpty = string.IsNullOrEmpty( searchTerm );
-
-      if ( IsLeaf )
-      {
-        if ( isEmpty )
-          return IsVisible = true;
-        else
-          return IsVisible = IsMatchForSearchTerm( searchTerm );
-      }
-      else
-      {
-        var childrenVisible = false;
-
-        foreach ( var child in _children )
-          childrenVisible |= child.ApplySearchCriteria( searchTerm );
-
-        if ( isEmpty )
-          childrenVisible = true;
-
-        IsExpanded = !isEmpty && childrenVisible;
-        IsVisible = childrenVisible;
-        return childrenVisible;
-      }
+      child._parent = this;
+      _children.Add( child );
     }
 
     #endregion

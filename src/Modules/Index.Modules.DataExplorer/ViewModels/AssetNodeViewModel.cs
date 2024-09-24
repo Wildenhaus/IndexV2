@@ -1,4 +1,5 @@
-﻿using Index.Domain.Assets;
+﻿using System;
+using Index.Domain.Assets;
 using Index.UI.Commands;
 using Index.UI.Controls.Menus;
 using Prism.Commands;
@@ -23,6 +24,17 @@ namespace Index.Modules.DataExplorer.ViewModels
       get => _name;
     }
 
+    internal IAssetReference AssetReference
+    {
+      get => _assetReference;
+    }
+
+    public Type AssetType
+    {
+      get;
+      set;
+    }
+
     #endregion
 
     #region Constructor
@@ -30,7 +42,7 @@ namespace Index.Modules.DataExplorer.ViewModels
     public AssetNodeViewModel( IAssetReference assetReference )
     {
       _assetReference = assetReference;
-      _name = assetReference.Node.Name;
+      _name = assetReference.Node.DisplayName;
 
       DoubleClickCommand = new DelegateCommand( HandleDoubleClick );
     }
@@ -50,10 +62,10 @@ namespace Index.Modules.DataExplorer.ViewModels
         .AddItem( "Open", item =>
         {
           item.Command( EditorCommands.OpenTabCommand, _assetReference );
-        } )
-        .AddSeparator()
-        .AddItem( "Properties" )
-        .AddItem( "Extract" );
+        } );
+        //.AddSeparator()
+        //.AddItem( "Properties" )
+        //.AddItem( "Extract" );
     }
 
     #endregion

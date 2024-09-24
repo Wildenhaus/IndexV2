@@ -14,7 +14,7 @@ namespace Index.Profiles.HaloCEA.Assets
     {
     }
 
-    public override IJob<CEAShaderCodeAsset> LoadAsset( IAssetReference assetReference )
+    public override IJob<CEAShaderCodeAsset> LoadAsset( IAssetReference assetReference, IAssetLoadContext assetLoadContext = null )
     {
       var asset = new CEAShaderCodeAsset( assetReference );
       asset.TextStream = assetReference.Node.Open();

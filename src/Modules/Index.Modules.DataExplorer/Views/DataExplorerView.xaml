@@ -57,6 +57,22 @@
                                          Height="10" />
                     </Button.Content>
                 </Button>
+                <Button Width="20"
+                        Margin="0"
+                        Padding="0"
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        DockPanel.Dock="Right"
+                        ToolTip="Bulk Export"
+                        Command="{Binding OpenBulkExportCommand}">
+                    <Button.Content>
+                        <controls:IxIcon SegoeIcon="SaveCopy"
+                         Margin="0"
+                         Padding="0"
+                         Height="10" />
+                    </Button.Content>
+                </Button>
             </DockPanel>
             <Border.Effect>
                 <DropShadowEffect Direction="270"
@@ -94,17 +110,17 @@
         </controls:IxTextBox>
 
         <TreeView Grid.Row="2"
-                  ItemsSource="{Binding AssetNodes}"
-                  VirtualizingPanel.IsContainerVirtualizable="True"
-                  VirtualizingPanel.IsVirtualizing="True"
-                  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
-                  VirtualizingPanel.VirtualizationMode="Recycling">
+          ItemsSource="{Binding NodesView}"
+          VirtualizingPanel.IsContainerVirtualizable="True"
+          VirtualizingPanel.IsVirtualizing="True"
+          VirtualizingStackPanel.VirtualizationMode="Recycling"
+          ScrollViewer.CanContentScroll="True">
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <TextBlock Text="{Binding Name}">
+                <HierarchicalDataTemplate ItemsSource="{Binding ChildrenView, IsAsync=True}">
+                    <TextBlock Text="{Binding Name, Mode=OneWay}">
                         <TextBlock.InputBindings>
                             <MouseBinding Gesture="LeftDoubleClick"
-                                          Command="{Binding DoubleClickCommand}" />
+                                  Command="{Binding DoubleClickCommand}" />
                         </TextBlock.InputBindings>
                     </TextBlock>
                 </HierarchicalDataTemplate>
@@ -114,14 +130,12 @@
                        BasedOn="{StaticResource {x:Type TreeViewItem}}">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsVisible}"
-                                     Value="False">
+                        <DataTrigger Binding="{Binding IsVisible, Mode=OneWay}" Value="False">
                             <Setter Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </TreeView.ItemContainerStyle>
-
         </TreeView>
 
     </Grid>

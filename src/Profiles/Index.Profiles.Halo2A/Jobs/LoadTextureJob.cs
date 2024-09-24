@@ -79,7 +79,9 @@ namespace Index.Profiles.Halo2A.Jobs
 
       var textureDefinition = await GetTextureDefinitionAsset();
       if ( textureDefinition is null )
-        Log.Warning( "Failed to find a texture definition for {textureName}.", asset.AssetName );
+      {
+        //Log.Warning( "Failed to find a texture definition for {textureName}.", asset.AssetName );
+      }
       else
         asset.AdditionalData.Add( textureDefinition.AssetName, textureDefinition.TextStream );
 

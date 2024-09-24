@@ -46,10 +46,11 @@ namespace Index.Profiles.Halo2A.Assets
 
     #region Overrides
 
-    public override IJob<H2ATemplateAsset> LoadAsset( IAssetReference assetReference )
+    public override IJob<H2ATemplateAsset> LoadAsset( IAssetReference assetReference, IAssetLoadContext assetLoadContext = null )
     {
       var parameters = new ParameterCollection();
       parameters.Set( assetReference );
+      parameters.Set( assetLoadContext );
 
       return JobManager.StartJob<LoadTemplateJob>( parameters );
     }

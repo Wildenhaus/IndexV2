@@ -31,7 +31,7 @@ namespace Index.Profiles.Halo2A.Assets
     {
     }
 
-    public override IJob<TAsset> LoadAsset( IAssetReference assetReference )
+    public override IJob<TAsset> LoadAsset( IAssetReference assetReference, IAssetLoadContext assetLoadContext = null )
     {
       var asset = CreateAsset( assetReference );
       asset.TextStream = assetReference.Node.Open();
