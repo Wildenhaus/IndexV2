@@ -9,7 +9,7 @@ namespace Index.Profiles.SpaceMarine2.Assets
   public class SM2TextureDefinitionAsset : SM2TextAsset
   {
 
-    public override string TypeName => "Texture Definition";
+    public override string TypeName => "Material";
 
     public SM2TextureDefinitionAsset( IAssetReference assetReference ) 
       : base( assetReference )

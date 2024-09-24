@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Index.Domain.Assets;
+﻿using Index.Domain.Assets;
 using Index.Domain.Assets.Meshes;
 using Index.Jobs;
 using Index.Profiles.SpaceMarine2.Jobs;
@@ -17,7 +12,7 @@ namespace Index.Profiles.SpaceMarine2.Assets
 
     #region Properties
 
-    public override string TypeName => "Scene";
+    public override string TypeName => "Map (Work in Progress)";
 
     #endregion
 

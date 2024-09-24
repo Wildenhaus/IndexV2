@@ -13,7 +13,7 @@ namespace Index.Profiles.SpaceMarine2.Assets
   {
     #region Properties
 
-    public override string TypeName => "Template (Model)";
+    public override string TypeName => "Model";
 
     #endregion
 
