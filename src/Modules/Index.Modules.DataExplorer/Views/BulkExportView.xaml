@@ -106,11 +106,22 @@
             </StackPanel>
         </StackPanel>
 
-        <ProgressBar Grid.Row="1"
-                     Maximum="1"
-                     Value="{Binding ExportJob.Progress.PercentCompleted, Mode=OneWay}"
-                     IsIndeterminate="{Binding ExportJob.Progress.IsIndeterminate, Mode=OneWay}"
-                     Visibility="{Binding IsExporting, Mode=OneWay, Converter={StaticResource VisibilityConverter}}" />
+        <Grid Grid.Row="1" Visibility="{Binding IsExporting, Mode=OneWay, Converter={StaticResource VisibilityConverter}}">
+            <ProgressBar Maximum="1"
+                         Value="{Binding ExportJob.Progress.PercentCompleted, Mode=OneWay}"
+                         IsIndeterminate="{Binding ExportJob.Progress.IsIndeterminate, Mode=OneWay}" />
+            <TextBlock Text="{Binding ExportJob.Progress.PercentCompleted, Mode=OneWay, StringFormat='0.00%'}"
+                       Visibility="{Binding ExportJob.Progress.IsIndeterminate, Mode=OneWay, Converter={StaticResource InverseVisibilityConverter}}"
+                       TextAlignment="Center"
+                       VerticalAlignment="Center">
+                <TextBlock.Effect>
+                    <DropShadowEffect ShadowDepth="0"
+                          BlurRadius="10"
+                          Opacity="1"
+                          Color="#000" />
+                </TextBlock.Effect>
+            </TextBlock>
+        </Grid>
     </Grid>
 
 </UserControl>

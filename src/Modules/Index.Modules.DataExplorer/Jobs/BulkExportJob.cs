@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Index.Domain.Assets;
 using Index.Domain.Assets.Meshes;
 using Index.Domain.Assets.Text;
@@ -67,6 +68,12 @@ namespace Index.Modules.DataExplorer.Jobs
             break;
         }
       }
+    }
+
+    protected override Task OnCompleted()
+    {
+      Log.Information( "Bulk Export complete." );
+      return base.OnCompleted();
     }
 
     #endregion
