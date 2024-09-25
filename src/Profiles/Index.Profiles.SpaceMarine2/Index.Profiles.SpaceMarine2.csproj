@@ -15,7 +15,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\LibSaber\LibSaber.SpaceMarine2\LibSaber.SpaceMarine2.csproj" />
+		<ProjectReference Include="..\..\..\..\LibSaber\src\LibSaber.SpaceMarine2\LibSaber.SpaceMarine2.csproj" />
+		<ProjectReference Include="..\..\..\..\LibSaber\src\LibSaber\LibSaber.csproj" />
 		<ProjectReference Include="..\..\Index.Core\Index.Core.csproj" />
 		<ProjectReference Include="..\..\Index.Domain\Index.Domain.csproj" />
 	</ItemGroup>

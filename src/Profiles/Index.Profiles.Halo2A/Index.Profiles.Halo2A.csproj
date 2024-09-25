@@ -27,8 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\external\LibSaber\src\LibSaber.Halo2A\LibSaber.Halo2A.csproj" />
-    <ProjectReference Include="..\..\..\external\LibSaber\src\LibSaber\LibSaber.csproj" />
+    <ProjectReference Include="..\..\..\..\LibSaber\src\LibSaber.Halo2A\LibSaber.Halo2A.csproj" />
+    <ProjectReference Include="..\..\..\..\LibSaber\src\LibSaber\LibSaber.csproj" />
     <ProjectReference Include="..\..\Index.Core\Index.Core.csproj" />
     <ProjectReference Include="..\..\Index.Domain\Index.Domain.csproj" />
   </ItemGroup>
