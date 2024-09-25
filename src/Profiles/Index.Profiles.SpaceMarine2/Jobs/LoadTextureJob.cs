@@ -187,13 +187,13 @@ namespace Index.Profiles.SpaceMarine2.Jobs
         case SM2TextureFormat.R8U:
           return DxgiTextureFormat.DXGI_FORMAT_R8_UNORM;
         case SM2TextureFormat.R16:
-          return DxgiTextureFormat.DXGI_FORMAT_R16G16B16A16_SNORM;
+          return DxgiTextureFormat.DXGI_FORMAT_R16_SNORM;
         case SM2TextureFormat.R16G16:
-          return DxgiTextureFormat.DXGI_FORMAT_R16G16_UNORM;
+          return DxgiTextureFormat.DXGI_FORMAT_R16G16_SINT;
         case SM2TextureFormat.RGBA16161616F:
           return DxgiTextureFormat.DXGI_FORMAT_R16G16B16A16_FLOAT;
         case SM2TextureFormat.XT5:
-          return DxgiTextureFormat.DXGI_FORMAT_BC5_TYPELESS;
+          return DxgiTextureFormat.DXGI_FORMAT_BC3_UNORM;
         case SM2TextureFormat.XRGB8888:
           return DxgiTextureFormat.DXGI_FORMAT_B8G8R8X8_UNORM;
 
