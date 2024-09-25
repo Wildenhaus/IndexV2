@@ -121,12 +121,16 @@ namespace Index.Profiles.SpaceMarine2.Jobs
               set.Add( objName );
             else if ( objName.Contains( "_glr" ) )
               set.Add( objName );
+            else if ( objName.StartsWith( "rb_" ) )
+              set.Add( objName );
 
           }
         }
         else if ( objName.Contains( "cdt", StringComparison.InvariantCultureIgnoreCase ) )
           set.Add( objName );
         else if ( objName.Contains( "_glr" ) )
+          set.Add( objName );
+        else if ( objName.StartsWith( "rb_" ) )
           set.Add( objName );
       }
 
