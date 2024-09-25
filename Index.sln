@@ -31,8 +31,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Index.Modules.TextEditor", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Index.Profiles.Halo2A", "src\Profiles\Index.Profiles.Halo2A\Index.Profiles.Halo2A.csproj", "{F8805668-5CC1-4163-BA79-83B752CA4BE0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testbed", "Testbed\Testbed.csproj", "{DD2D3795-782B-4FCF-A22E-AFC5DBB8DF2E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Index.Profiles.SpaceMarine2", "src\Profiles\Index.Profiles.SpaceMarine2\Index.Profiles.SpaceMarine2.csproj", "{0DDF1EF5-F14E-4F6B-A7E9-F36A540D6401}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "external", "external", "{25D02D1E-250A-4270-9D1C-5C054455DE66}"
@@ -151,14 +149,6 @@ Global
 		{F8805668-5CC1-4163-BA79-83B752CA4BE0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F8805668-5CC1-4163-BA79-83B752CA4BE0}.Release|x64.ActiveCfg = Release|Any CPU
 		{F8805668-5CC1-4163-BA79-83B752CA4BE0}.Release|x64.Build.0 = Release|Any CPU
-		{DD2D3795-782B-4FCF-A22E-AFC5DBB8DF2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD2D3795-782B-4FCF-A22E-AFC5DBB8DF2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD2D3795-782B-4FCF-A22E-AFC5DBB8DF2E}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DD2D3795-782B-4FCF-A22E-AFC5DBB8DF2E}.Debug|x64.Build.0 = Debug|Any CPU
-		{DD2D3795-782B-4FCF-A22E-AFC5DBB8DF2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD2D3795-782B-4FCF-A22E-AFC5DBB8DF2E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD2D3795-782B-4FCF-A22E-AFC5DBB8DF2E}.Release|x64.ActiveCfg = Release|Any CPU
-		{DD2D3795-782B-4FCF-A22E-AFC5DBB8DF2E}.Release|x64.Build.0 = Release|Any CPU
 		{0DDF1EF5-F14E-4F6B-A7E9-F36A540D6401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0DDF1EF5-F14E-4F6B-A7E9-F36A540D6401}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DDF1EF5-F14E-4F6B-A7E9-F36A540D6401}.Debug|x64.ActiveCfg = Debug|Any CPU
