@@ -92,11 +92,18 @@ namespace Index.Modules.MeshEditor.ViewModels
         GroupModel.Dispatcher.Invoke( () =>
         {
           GroupModel.AddNode( helixScene.Root );
-          GroupModel.SceneNode.ForceUpdateTransformsAndBounds();
-          GroupModel.GroupNode.ForceUpdateTransformsAndBounds();
+          GroupModel.SceneNode.InvalidateRender();
         } );
 
         InitializeNodeCollection( nodes );
+
+        GroupModel.Dispatcher.Invoke( () =>
+        {
+          GroupModel.SceneNode.InvalidateRender();
+          GroupModel.SceneNode.ForceUpdateTransformsAndBounds();
+          GroupModel.GroupNode.ForceUpdateTransformsAndBounds();
+          GroupModel.SceneNode.InvalidateRender();
+        } );
       }
     }
 
