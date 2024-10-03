@@ -1,14 +1,30 @@
-﻿namespace Index.Domain.FileSystem
+﻿using System.Threading.Tasks.Dataflow;
+
+namespace Index.Domain.FileSystem
 {
 
   public abstract class FileSystemLoaderBase : IFileSystemLoader
   {
+
+    #region Constants
+
+    const int THREAD_COUNT = 4;
+
+    #endregion
+
+    #region Events
+
+    public event Action<double> ProgressChanged;
+
+    #endregion
 
     #region Data Members
 
     private string _basePath;
     private readonly HashSet<string> _deviceFileNames;
     private readonly List<IFileSystemDevice> _loadedDevices;
+
+    private Queue<IFileSystemDevice> _devicesToLoad;
 
     #endregion
 
@@ -25,6 +41,8 @@
     {
       _deviceFileNames = new HashSet<string>();
       _loadedDevices = new List<IFileSystemDevice>();
+
+      _devicesToLoad = new Queue<IFileSystemDevice>();
     }
 
     #endregion
@@ -44,6 +62,8 @@
       ASSERT( !string.IsNullOrWhiteSpace( _basePath ), "SetBasePath must be called before loading devices." );
 
       await OnLoadDevices();
+      await InitializeDevices();
+
       return _loadedDevices;
     }
 
@@ -58,29 +78,33 @@
       var result = await device.InitializeAsync();
 
       if ( result.IsSuccessful )
-        _loadedDevices.Add( device );
+      {
+        lock(_loadedDevices)
+          _loadedDevices.Add( device );
+      }
     }
 
-    protected async Task LoadDevice( string path, Func<string, IFileSystemDevice> deviceFactory )
+    protected Task LoadDevice( string path, Func<string, IFileSystemDevice> deviceFactory )
     {
       var device = deviceFactory( path );
-      var result = await device.InitializeAsync();
+      AddDeviceToLoadQueue( device );
 
-      if ( result.IsSuccessful )
-        _loadedDevices.Add( device );
+      return Task.CompletedTask;
     }
 
-    protected async Task LoadFileWithName( string name, Func<string, IFileSystemDevice> deviceFactory )
+    protected Task LoadFileWithName( string name, Func<string, IFileSystemDevice> deviceFactory )
     {
       foreach ( var filePath in Directory.EnumerateFiles( _basePath, name, SearchOption.AllDirectories ) )
       {
         var fileName = Path.GetFileNameWithoutExtension( filePath ).ToLower();
-        await LoadDevice( filePath, deviceFactory );
+        LoadDevice( filePath, deviceFactory );
         break;
       }
+
+      return Task.CompletedTask;
     }
 
-    protected async Task LoadFilesWithExtension( string extension, Func<string, IFileSystemDevice> deviceFactory, IEnumerable<string> excludedFileNames = null )
+    protected Task LoadFilesWithExtension( string extension, Func<string, IFileSystemDevice> deviceFactory, IEnumerable<string> excludedFileNames = null )
     {
       if ( excludedFileNames is null )
         excludedFileNames = Enumerable.Empty<string>();
@@ -88,7 +112,6 @@
       var excludeSet = new HashSet<string>( excludedFileNames.Select( x => x.ToLower() ) );
 
       extension = SanitizeExtension( extension );
-      var loadTasks = new List<Task>();
 
       foreach ( var filePath in Directory.EnumerateFiles( _basePath, extension, SearchOption.AllDirectories ) )
       {
@@ -100,10 +123,54 @@
         if ( !_deviceFileNames.Add( filePath ) )
           continue;
 
-        loadTasks.Add( LoadDevice( filePath, deviceFactory ));
+        LoadDevice( filePath, deviceFactory );
       }
 
-      await Task.WhenAll(loadTasks);
+      return Task.CompletedTask;
+    }
+
+    private void AddDeviceToLoadQueue( IFileSystemDevice device )
+    {
+      lock ( _devicesToLoad )
+        _devicesToLoad.Enqueue( device );
+    }
+
+    private async Task InitializeDevices()
+    {
+      int loadedDevicesCount = 0;
+      int totalDevicesCount = _devicesToLoad.Count;
+
+#if DEBUG
+      int threadCount = Environment.ProcessorCount;
+#else
+      int threadCount = 4;
+#endif
+
+      void IncrementLoadProgress()
+      {
+        var completed = Interlocked.Increment( ref loadedDevicesCount );
+        var progress = ( double ) completed / totalDevicesCount;
+        ProgressChanged?.Invoke( progress );
+      }
+
+      var initBlock = new ActionBlock<IFileSystemDevice>( async device =>
+      {
+        var result = await device.InitializeAsync();
+        if ( result.IsSuccessful )
+        {
+          lock ( _loadedDevices )
+            _loadedDevices.Add( device );
+        }
+
+        IncrementLoadProgress();
+      }, new() { EnsureOrdered = false, MaxDegreeOfParallelism = threadCount } );
+
+
+      while ( _devicesToLoad.TryDequeue( out var device ) )
+        initBlock.Post( device );
+
+      initBlock.Complete();
+      await initBlock.Completion;
     }
 
     private static string SanitizeExtension( string extension )
@@ -117,7 +184,7 @@
       return $"*.{extension}";
     }
 
-    #endregion
+#endregion
 
   }
 

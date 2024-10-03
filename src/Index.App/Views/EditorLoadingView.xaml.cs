@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 using Index.App.ViewModels;
 
 namespace Index.App.Views
@@ -39,6 +41,24 @@ namespace Index.App.Views
         Exception = e;
         Close();
       } );
+    }
+
+    public void AnimateProgress( double progress )
+    {
+      ScaleTransform scaleTransform = FillRectangle.RenderTransform as ScaleTransform;
+
+      if ( scaleTransform != null )
+      {
+        DoubleAnimation progressAnimation = new DoubleAnimation
+        {
+          To = progress,
+          Duration = TimeSpan.FromSeconds( 0.3 ),
+          AccelerationRatio = 0.3,
+          DecelerationRatio = 0.3
+        };
+
+        scaleTransform.BeginAnimation( ScaleTransform.ScaleYProperty, progressAnimation );
+      }
     }
 
   }

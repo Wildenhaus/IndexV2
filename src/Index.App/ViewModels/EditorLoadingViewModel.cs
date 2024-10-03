@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using DryIoc;
+using Index.App.Views;
 using Index.Common;
 using Index.Domain.Models;
-using Prism.Ioc;
 using Prism.Mvvm;
 
 namespace Index.App.ViewModels
@@ -49,12 +49,12 @@ namespace Index.App.ViewModels
 
     public Color IconColor
     {
-      get => Color.FromRgb(22,200,186);
+      get => Color.FromRgb( 22, 200, 186 );
     }
 
     public Brush IconBrush
     {
-      get => new SolidColorBrush(IconColor);
+      get => new SolidColorBrush( IconColor );
     }
 
     #endregion
@@ -92,11 +92,21 @@ namespace Index.App.ViewModels
 
     private async Task InitializeFileSystem()
     {
-      var loader = _environment.GameProfile.FileSystemLoader;
       var fileSystem = _environment.FileSystem;
-
+      var loader = _environment.GameProfile.FileSystemLoader;
       loader.SetBasePath( _environment.GamePath );
+
+      void SetLoadProgress( double progress )
+      {
+        Application.Current.Dispatcher.Invoke( () =>
+        {
+          ( Application.Current.Windows[ ^1 ] as EditorLoadingView )?.AnimateProgress( progress );
+        } );
+      }
+
+      loader.ProgressChanged += SetLoadProgress;
       await fileSystem.LoadDevices( loader );
+      loader.ProgressChanged -= SetLoadProgress;
     }
 
     private void InitializeAssetManager()

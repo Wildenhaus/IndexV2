@@ -38,7 +38,27 @@
                           Stroke="{Binding IconBrush}"
                           StrokeThickness="2"
                           Stretch="Uniform"
-                          Data="{Binding Source={StaticResource Path.IndexLogo}, Path=Data}" />
+                          Data="{Binding Source={StaticResource Path.IndexLogo}, Path=Data}">
+                        <Path.Fill>
+                            <VisualBrush>
+                                <VisualBrush.Visual>
+                                    <Grid>
+                                        <Rectangle Fill="Transparent"
+                                                   Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Path}}"
+                                                   Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Path}}" />
+                                        <Rectangle x:Name="FillRectangle" Fill="{Binding IconBrush}">
+                                            <Rectangle.RenderTransform>
+                                                <ScaleTransform ScaleY="0" ScaleX="1" />
+                                            </Rectangle.RenderTransform>
+                                            <Rectangle.RenderTransformOrigin>
+                                                <Point>0.5, 1</Point>
+                                            </Rectangle.RenderTransformOrigin>
+                                        </Rectangle>
+                                    </Grid>
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Path.Fill>
+                    </Path>
                 </Label>
 
                 <StackPanel Grid.Column="1"
