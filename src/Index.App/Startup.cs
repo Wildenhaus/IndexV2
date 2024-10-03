@@ -30,6 +30,8 @@ namespace Index.App
 
     #region Data Members
 
+    private SplashView _splash;
+
     protected Container Container { get; }
 
     #endregion
@@ -50,6 +52,8 @@ namespace Index.App
 
     public void Run()
     {
+      ShowSplash();
+
       RegisterServices();
       RunStartupFlow();
       RunEditor();
@@ -136,12 +140,16 @@ namespace Index.App
     private bool ShowLauncher()
     {
       var launcherView = Container.Resolve<LauncherView>();
+
+      HideSplash();
       return launcherView.ShowDialog() ?? false;
     }
 
     private bool InitializeEditor()
     {
       var loadingView = Container.Resolve<EditorLoadingView>();
+
+      HideSplash();
       var result = loadingView.ShowDialog();
 
       if ( result == false && loadingView.Exception != null )
@@ -197,6 +205,24 @@ namespace Index.App
       exceptionWindow.Content = exceptionView;
 
       exceptionWindow.ShowDialog();
+    }
+
+    private void ShowSplash()
+    {
+      if ( _splash is not null )
+        return;
+
+      _splash = new SplashView();
+      _splash.Show();
+    }
+
+    private void HideSplash()
+    {
+      if ( _splash is null )
+        return;
+
+      _splash.Close();
+      _splash = null;
     }
 
     #endregion

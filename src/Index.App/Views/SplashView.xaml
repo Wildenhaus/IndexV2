@@ -1,0 +1,43 @@
+﻿<Window x:Class="Index.App.Views.SplashView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Index.App.Views"
+        mc:Ignorable="d"
+        Title="Index" 
+        Height="300" 
+        Width="300"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        Style="{DynamicResource SplashWindowStyle}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style x:Key="SplashWindowStyle" TargetType="{x:Type Window}">
+                <Setter Property="AllowsTransparency" Value="True" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid Background="Transparent">
+        <Label Grid.Column="0"
+               Margin="8,0,0,0"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center">
+            <Path Width="120"
+                  Height="120"
+                  Stroke="{StaticResource Brushes.Background.Deep}"
+                  Fill="{StaticResource Brushes.Foreground.Static}"
+                  StrokeThickness="2"
+                  Stretch="Uniform"
+                  Data="{Binding Source={StaticResource Path.IndexLogo}, Path=Data}" />
+            <Label.Effect>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="0" />
+            </Label.Effect>
+        </Label>
+    </Grid>
+</Window>
