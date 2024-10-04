@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using Index.Common;
 using Index.Domain.Assets.Meshes;
 using Index.UI.ViewModels;
+using Microsoft.VisualBasic.Logging;
 using Prism.Commands;
 using Prism.Ioc;
 using SharpDX;
@@ -98,18 +100,47 @@ namespace Index.Modules.MeshEditor.ViewModels
 
     private void ZoomExtents()
     {
-      if ( !Scene.GroupModel.SceneNode.TryGetBound( out var bound ) )
+      const int MAX_RETRIES = 10;
+
+      var boundsCalculated = false;
+      BoundingBox bound = default;
+      for ( var i = 0; i < MAX_RETRIES; i++ )
+      {
+        Dispatcher.Invoke( () =>
+        {
+          boundsCalculated = Scene.GroupModel.SceneNode.TryGetBound( out bound );
+        }, System.Windows.Threading.DispatcherPriority.ApplicationIdle );
+
+        if ( !boundsCalculated )
+        {
+          Debug.WriteLine( "ZoomExtents failed. Attempt {0}", i );
+          continue;
+        }
+        else
+        {
+          Debug.WriteLineIf( i > 0, $"Bounds successfully updated after {i} attempts." );
+          break;
+        }
+      }
+
+      if(!boundsCalculated)
+      {
+        Serilog.Log.Error( "Failed to calculate bounds after 10 retries." +
+          "If the viewport is empty, try reloading the asset." );
         return;
+      }
 
       var maxWidth = Math.Max( Math.Max( bound.Width, bound.Height ), bound.Depth );
       var pos = bound.Center + new Vector3( 0, 0, maxWidth * 2 );
 
-      Camera.Dispatcher.Invoke( () =>
+      Camera.Dispatcher.BeginInvoke( () =>
       {
         Camera.Position = pos.ToPoint3D();
         Camera.LookDirection = ( bound.Center - pos ).ToVector3D();
         Camera.UpDirection = Vector3.UnitY.ToVector3D();
       } );
+
+      Debug.WriteLine( "ZoomExtents | MaxWidth: {0} | Pos: {1}", maxWidth, pos );
     }
 
     #endregion
