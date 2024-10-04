@@ -100,10 +100,9 @@ namespace Index.Modules.MeshEditor.ViewModels
           nodes.Add( nodeViewModel );
         }
 
-        GroupModel.Dispatcher.Invoke( () =>
+        GroupModel.Dispatcher.BeginInvoke( () =>
         {
           GroupModel.AddNode( helixScene.Root );
-          GroupModel.SceneNode.InvalidateRender();
         } );
 
         loadTexturesTask.Wait();
@@ -117,13 +116,22 @@ namespace Index.Modules.MeshEditor.ViewModels
 
         InitializeNodeCollection( nodes );
 
-        GroupModel.Dispatcher.Invoke( () =>
+        GroupModel.Dispatcher.BeginInvoke( () =>
         {
-          GroupModel.SceneNode.InvalidateRender();
           GroupModel.SceneNode.ForceUpdateTransformsAndBounds();
           GroupModel.GroupNode.ForceUpdateTransformsAndBounds();
           GroupModel.SceneNode.InvalidateRender();
         } );
+      }
+    }
+
+    public void ForceUpdateBounds()
+    {
+      GroupModel.InvalidateRender();
+      foreach ( var node in GroupModel.SceneNode.Traverse() )
+      {
+        if ( node is GeometryNode geoNode )
+          geoNode.Geometry.UpdateBounds();
       }
     }
 
