@@ -24,7 +24,17 @@ namespace Index.Modules.MeshEditor.Views
   public sealed partial class MeshView : UserControl, IDisposable
   {
 
+    #region Constants
+
+    private const double MaxPitch = 85.0;
+    private const double MinPitch = -85.0;
+
+    #endregion
+
     #region Data Members
+
+    private double _yaw = 0;
+    private double _pitch = 0;
 
     private bool _isMouseCaptured;
     private Point _lastMousePos;
@@ -278,30 +288,54 @@ namespace Index.Modules.MeshEditor.Views
       var dX = mousePos.X - lastPos.X;
       var dY = mousePos.Y - lastPos.Y;
 
-      Vector3D lookDir;
-      Vector3D upDir = new Vector3D( 0, 1, 0 );
-      Dispatcher.Invoke( () => { lookDir = Camera.LookDirection; }, DispatcherPriority.Send );
-      lookDir.Normalize();
+      _yaw += dX * 0.2;
 
-      var rightDir = Vector3D.CrossProduct( lookDir, upDir );
-      rightDir.Normalize();
-
-      var q1 = new Quaternion( -upDir, 0.5 * dX );
-      var q2 = new Quaternion( -rightDir, 0.5 * dY );
-      var q = q1 * q2;
-
-      var m = new Matrix3D();
-      m.Rotate( q );
+      _pitch -= dY * 0.2;
+      _pitch = Math.Max( MinPitch, Math.Min( MaxPitch, _pitch ) );
 
       Win32.SetCursorPosition( lastPos );
-      var newLookDir = m.Transform( lookDir );
-      var newUpDir = m.Transform( upDir );
+      UpdateCameraDirection();
+    }
+
+    private void UpdateCameraDirection()
+    {
+      double yawRadians = DegreesToRadians( _yaw );
+      double pitchRadians = DegreesToRadians( _pitch );
+
+      var lookDir = new Vector3D(
+        Math.Cos( pitchRadians ) * Math.Cos( yawRadians ),
+        Math.Sin( pitchRadians ),
+        Math.Cos( pitchRadians ) * Math.Sin( yawRadians )
+      );
+      lookDir.Normalize();
 
       Dispatcher.Invoke( () =>
       {
-        Camera.LookDirection = newLookDir;
-        Camera.UpDirection = newUpDir;
+        Camera.LookDirection = lookDir;
+        Camera.UpDirection = new Vector3D( 0, 1, 0 );
       }, DispatcherPriority.Send );
+    }
+
+    private void SetYawAndPitchFromCamera()
+    {
+      Dispatcher.Invoke( () =>
+      {
+        Vector3D lookDir = Camera.LookDirection;
+        lookDir.Normalize();
+
+        _pitch = RadiansToDegrees( Math.Asin( lookDir.Y ) );
+        _yaw = RadiansToDegrees( Math.Atan2( lookDir.Z, lookDir.X ) );
+      } );
+    }
+
+    private static double DegreesToRadians( double degrees )
+    {
+      return degrees * ( Math.PI / 180.0 );
+    }
+
+    private static double RadiansToDegrees( double radians )
+    {
+      return radians * ( 180.0 / Math.PI );
     }
 
     private void RecalculateMoveSpeed()
@@ -344,6 +378,7 @@ namespace Index.Modules.MeshEditor.Views
 
     protected override void OnGotMouseCapture( MouseEventArgs e )
     {
+      SetYawAndPitchFromCamera();
       if ( IsFlycamEnabled )
         _isFocusedEvent.Set();
     }
