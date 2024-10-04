@@ -125,6 +125,16 @@ namespace Index.Modules.MeshEditor.ViewModels
       }
     }
 
+    public void ForceUpdateBounds()
+    {
+      GroupModel.InvalidateRender();
+      foreach ( var node in GroupModel.SceneNode.Traverse() )
+      {
+        if ( node is GeometryNode geoNode )
+          geoNode.Geometry.UpdateBounds();
+      }
+    }
+
     #endregion
 
     #region Private Methods
