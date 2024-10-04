@@ -18,23 +18,21 @@ namespace Index.Domain.Assets.Textures
     public abstract int Height { get; }
 
     public TextureType TextureType { get; }
-    public IReadOnlyList<ITextureAssetImage> Images { get; }
+    public IReadOnlyList<ITextureAssetImage> Images { get; private set; }
     public IEnumerable<(string, string)> TextureInformation => GetTextureInformation();
 
     public Dictionary<string, Stream> AdditionalData { get; }
-
+    
     #endregion
 
     #region Constructor
 
     public TextureAssetBase(
       IAssetReference assetReference,
-      TextureType textureType,
-      IReadOnlyList<ITextureAssetImage> images )
+      TextureType textureType )
       : base( assetReference )
     {
       TextureType = textureType;
-      Images = images;
       AdditionalData = new Dictionary<string, Stream>();
     }
 
@@ -47,6 +45,13 @@ namespace Index.Domain.Assets.Textures
       foreach ( var image in Images )
         image?.Dispose();
     }
+
+    #endregion
+
+    #region Public Methods
+
+    public void SetPreviewImages( IReadOnlyList<ITextureAssetImage> images )
+      => Images = images;
 
     #endregion
 

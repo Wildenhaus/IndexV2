@@ -29,9 +29,8 @@ namespace Index.Domain.Assets.Textures.Dxgi
     public DxgiTextureAsset(
       IAssetReference assetReference,
       TextureType textureType,
-      IReadOnlyList<ITextureAssetImage> images,
       ScratchImage dxgiImage )
-      : base( assetReference, textureType, images )
+      : base( assetReference, textureType )
     {
       DxgiImage = dxgiImage;
 

@@ -22,6 +22,12 @@ namespace Index.Domain.Assets.Textures
 
     #endregion
 
+    #region Public Methods
+
+    void SetPreviewImages( IReadOnlyList<ITextureAssetImage> images );
+
+    #endregion
+
   }
 
 }

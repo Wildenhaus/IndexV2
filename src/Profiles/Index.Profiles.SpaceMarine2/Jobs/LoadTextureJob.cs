@@ -67,19 +67,8 @@ namespace Index.Profiles.SpaceMarine2.Jobs
       SetSubStatus( "Preparing DXGI Texture" );
       var dxgiImage = _dxgiTextureService.CreateDxgiImageFromRawTextureData( data, textureInfo );
 
-      SetSubStatus( "Generating Previews" );
-      var previewStreams = _dxgiTextureService.CreateJpegImageStreams( dxgiImage, includeMips: false );
-
-      var images = new List<ITextureAssetImage>();
-      for ( var i = 0; i < previewStreams.Length; i++ )
-      {
-        var previewStream = previewStreams[ i ];
-        var image = new TextureAssetImage( i, previewStream );
-        images.Add( image );
-      }
-
       var textureType = GetTextureType();
-      var asset = new DxgiTextureAsset( _assetReference, textureType, images, dxgiImage );
+      var asset = new DxgiTextureAsset( _assetReference, textureType, dxgiImage );
 
       var textureDefinition = await GetTextureDefinitionAsset();
       if ( textureDefinition is null )

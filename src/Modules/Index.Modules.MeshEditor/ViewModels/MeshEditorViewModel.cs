@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using Index.Common;
 using Index.Domain.Assets.Meshes;
-using Index.Jobs;
 using Index.UI.ViewModels;
 using Prism.Commands;
 using Prism.Ioc;
-using Serilog;
 using SharpDX;
 
 namespace Index.Modules.MeshEditor.ViewModels
@@ -42,7 +39,7 @@ namespace Index.Modules.MeshEditor.ViewModels
     {
       Camera = new PerspectiveCamera() { FarPlaneDistance = 300000 };
       EffectsManager = new DefaultEffectsManager();
-      Scene = new SceneViewModel();
+      Scene = new SceneViewModel( container );
 
       ZoomExtentsCommand = new DelegateCommand( ZoomExtents );
     }
