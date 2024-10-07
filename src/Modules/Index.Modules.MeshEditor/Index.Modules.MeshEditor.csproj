@@ -12,12 +12,17 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
+    <PackageReference Include="StirlingLabs.Assimp.Net" Version="23.4.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Index.Core\Index.Core.csproj" />
     <ProjectReference Include="..\..\Index.Domain\Index.Domain.csproj" />
     <ProjectReference Include="..\..\Index.UI\Index.UI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="StirlingLabs.assimp.native.win-x64" Version="5.2.5.4" />
   </ItemGroup>
 
 </Project>
