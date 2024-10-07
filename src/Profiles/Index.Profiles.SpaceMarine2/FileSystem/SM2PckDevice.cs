@@ -1,8 +1,10 @@
-﻿using Index.Domain.FileSystem;
+﻿using System.Threading.Tasks.Dataflow;
+using Index.Domain.FileSystem;
 using Index.Profiles.SpaceMarine2.FileSystem.Files;
 using LibSaber.IO;
 using LibSaber.SpaceMarine2.Serialization;
 using LibSaber.SpaceMarine2.Structures.Resources;
+using ResLoader = System.Threading.Tasks.Dataflow.ActionBlock<System.Func<System.Threading.Tasks.Task>>;
 
 namespace Index.Profiles.SpaceMarine2.FileSystem;
 
@@ -62,13 +64,16 @@ public class SM2PckDevice : FileSystemDeviceBase
     var fileName = _filePath.Replace( _basePath, "" );
     var rootNode = new SM2FileSystemNode( this, fileName );
 
-    var taskList = new List<Task>();
+    var resLoader = new ResLoader( async factory => await factory(),
+      new() { MaxDegreeOfParallelism = Environment.ProcessorCount } );
+
     foreach ( var entry in _zipFile.Entries.Values )
     {
-      CreateNode( entry, rootNode, taskList );
+      CreateNode( entry, rootNode, resLoader );
     }
 
-    Task.WaitAll( taskList.ToArray() );
+    resLoader.Complete();
+    resLoader.Completion.Wait();
 
     return rootNode;
   }
@@ -76,14 +81,14 @@ public class SM2PckDevice : FileSystemDeviceBase
   private void CreateNode( 
     fioZIP_CACHE_FILE.ENTRY entry, 
     IFileSystemNode parent,
-    List<Task> taskList)
+    ResLoader resLoader)
   {
     SM2FileSystemNode node = null;
 
     var ext = Path.GetExtension( entry.FileName );
 
     if ( ext == ".resource" )
-      node = CreateResourceFileNode( entry, parent, taskList );
+      node = CreateResourceFileNode( entry, parent, resLoader );
     else
       node = new SM2FileSystemNode( this, entry, parent );
 
@@ -94,7 +99,7 @@ public class SM2PckDevice : FileSystemDeviceBase
   private SM2FileSystemNode CreateResourceFileNode( 
     fioZIP_CACHE_FILE.ENTRY entry,
     IFileSystemNode parent,
-    List<Task> taskList)
+    ResLoader resLoader )
   {
     var fileName = entry.FileName.Replace( ".resource", "" );
     var resourceExt = Path.GetExtension( fileName );
@@ -102,22 +107,22 @@ public class SM2PckDevice : FileSystemDeviceBase
     switch(resourceExt)
     {
       case ".pct":
-        return BeginInitResourceNode( new SM2TextureResourceFileNode( this, entry, parent ), taskList );
+        return BeginInitResourceNode( new SM2TextureResourceFileNode( this, entry, parent ), resLoader );
       case ".tpl":
-        return BeginInitResourceNode( new SM2TemplateResourceFileNode( this, entry, parent ), taskList );
+        return BeginInitResourceNode( new SM2TemplateResourceFileNode( this, entry, parent ), resLoader );
       case ".td":
-        return BeginInitResourceNode( new SM2TextureDefinitionResourceFileNode(this, entry, parent ), taskList );
+        return BeginInitResourceNode( new SM2TextureDefinitionResourceFileNode(this, entry, parent ), resLoader );
       case ".scn":
-        return BeginInitResourceNode( new SM2SceneResourceFileNode( this, entry, parent ), taskList );
+        return BeginInitResourceNode( new SM2SceneResourceFileNode( this, entry, parent ), resLoader );
       default:
         return new SM2FileSystemNode( this, entry, parent );
     }
   }
 
-  private SM2FileSystemNode BeginInitResourceNode<TResDesc>(SM2ResourceFileNode<TResDesc> node, List<Task> taskList)
+  private SM2FileSystemNode BeginInitResourceNode<TResDesc>(SM2ResourceFileNode<TResDesc> node, ResLoader resLoader )
     where TResDesc : resDESC
   {
-    var task = Task.Run( () =>
+    resLoader.Post(() => Task.Run( () =>
     {
       var entry = node.Entry;
       using var descStream = _zipFile.GetFileStream( node.Entry );
@@ -137,9 +142,8 @@ public class SM2PckDevice : FileSystemDeviceBase
       }
 
       node.ResourceDescription = desc as TResDesc;
-    } );
+    } ) );
 
-    taskList.Add( task );
     return node;
   }
 
