@@ -7,6 +7,7 @@ namespace Index.Domain.Assets.Meshes
   {
     FBX,
     DAE,
+    GLTF2,
     STL,
     X3D,
     JSON,
@@ -32,6 +33,8 @@ namespace Index.Domain.Assets.Meshes
           return "assjson";
         case MeshExportFormat.XML:
           return "assxml";
+        case MeshExportFormat.GLTF2:
+          return "gltf2";
 
         default:
           throw new NotSupportedException( $"Assimp export format not supported: {format}" );
