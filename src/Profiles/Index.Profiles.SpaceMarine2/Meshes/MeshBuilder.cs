@@ -145,8 +145,8 @@ namespace Index.Profiles.SpaceMarine2.Meshes
       {
         Mesh.Vertices.Add( vertex.Position.ToAssimpVector3D() * scale + pos );
 
-        if ( vertex.Normal.HasValue )
-          Mesh.Normals.Add( vertex.Normal.Value.ToAssimpVector3D() );
+        if ( vertex.HasNormal )
+          Mesh.Normals.Add( vertex.Normal.ToAssimpVector3D() );
 
         if ( vertex.HasSkinningData )
           AddVertexSkinningData( vertex );
@@ -160,12 +160,12 @@ namespace Index.Profiles.SpaceMarine2.Meshes
       var boneIds = Submesh.BoneIds;
       var set = new HashSet<short>();
 
-      if ( vertex.Weight1.HasValue)
-        AddVertexWeight( vertex.Index1, vertex.Weight1.Value );
-      if ( vertex.Weight2.HasValue)
-        AddVertexWeight( vertex.Index2, vertex.Weight2.Value );
-      if ( vertex.Weight3.HasValue)
-        AddVertexWeight( vertex.Index3, vertex.Weight3.Value );
+      if ( vertex.HasWeight1)
+        AddVertexWeight( vertex.Index1, vertex.Weight1 );
+      if ( vertex.HasWeight2)
+        AddVertexWeight( vertex.Index2, vertex.Weight2 );
+      if ( vertex.HasWeight3)
+        AddVertexWeight( vertex.Index3, vertex.Weight3 );
       //if ( vertex.Weight4.HasValue)
       //  AddVertexWeight( vertex.Index4, vertex.Weight4.Value );
     }
@@ -196,18 +196,18 @@ namespace Index.Profiles.SpaceMarine2.Meshes
       var interleavedSerializer = new InterleavedDataSerializer( buffer );
       foreach ( var datum in interleavedSerializer.DeserializeRange( Reader, startIndex, endIndex ) )
       {
-        if ( datum.UV0.HasValue ) AddVertexUV( 0, datum.UV0.Value );
-        if ( datum.UV1.HasValue ) AddVertexUV( 1, datum.UV1.Value );
-        if ( datum.UV2.HasValue ) AddVertexUV( 2, datum.UV2.Value );
-        if ( datum.UV3.HasValue ) AddVertexUV( 3, datum.UV3.Value );
-        if ( datum.UV4.HasValue ) AddVertexUV( 4, datum.UV4.Value );
+        if ( datum.HasUV0 ) AddVertexUV( 0, datum.UV0 );
+        if ( datum.HasUV1 ) AddVertexUV( 1, datum.UV1 );
+        if ( datum.HasUV2 ) AddVertexUV( 2, datum.UV2 );
+        if ( datum.HasUV3 ) AddVertexUV( 3, datum.UV3 );
+        if ( datum.HasUV4 ) AddVertexUV( 4, datum.UV4 );
 
         // TODO: Assimp only allows 1 tangent channel.
-        if ( datum.Tangent0.HasValue ) AddVertexTangent( 0, datum.Tangent0.Value );
+        if ( datum.HasTangent0 ) AddVertexTangent( 0, datum.Tangent0 );
 
-        if ( datum.Color0.HasValue ) AddVertexColor( 0, datum.Color0.Value );
-        if ( datum.Color1.HasValue ) AddVertexColor( 1, datum.Color1.Value );
-        if ( datum.Color2.HasValue ) AddVertexColor( 2, datum.Color2.Value );
+        if ( datum.HasColor0 ) AddVertexColor( 0, datum.Color0 );
+        if ( datum.HasColor1 ) AddVertexColor( 1, datum.Color1 );
+        if ( datum.HasColor2 ) AddVertexColor( 2, datum.Color2 );
       }
     }
 
