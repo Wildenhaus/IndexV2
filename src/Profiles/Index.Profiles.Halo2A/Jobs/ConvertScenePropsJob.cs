@@ -130,7 +130,8 @@ namespace Index.Profiles.Halo2A.Jobs
         {
           var propTemplateAsset = await AssetManager.LoadAssetAsync<IMeshAsset>( templateAssetReference, AssetLoadContext );
 
-          loadedProps.Add( templateName, propTemplateAsset );
+          if(propTemplateAsset is not null)
+            loadedProps.Add( templateName, propTemplateAsset );
           IncreaseCompletedUnits( 1 );
         }
       }
